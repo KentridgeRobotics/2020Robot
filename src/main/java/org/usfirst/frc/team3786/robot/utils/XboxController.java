@@ -1,9 +1,9 @@
-package frc.robot.utils;
+package org.usfirst.frc.team3786.robot.utils;
 
 import java.util.HashMap;
 
-import frc.robot.utils.XboxPovButton;
-import frc.robot.utils.XboxPovButton.POVDirection;
+import org.usfirst.frc.team3786.robot.utils.XboxPovButton.POVDirection;
+
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
@@ -55,7 +55,7 @@ public class XboxController {
 		buttonMenu = new JoystickButton(controller, XboxControllerButton.MENU.getId());
 		buttonStickLeft = new JoystickButton(controller, XboxControllerButton.STICK_LEFT.getId());
 		buttonStickRight = new JoystickButton(controller, XboxControllerButton.STICK_RIGHT.getId());
-        buttonPovUp = new XboxPovButton(controller, POVDirection.UP);
+		buttonPovUp = new XboxPovButton(controller, POVDirection.UP);
 		buttonPovRight = new XboxPovButton(controller, POVDirection.RIGHT);
 		buttonPovDown = new XboxPovButton(controller, POVDirection.DOWN);
 		buttonPovLeft = new XboxPovButton(controller, POVDirection.LEFT);
