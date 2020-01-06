@@ -7,6 +7,12 @@ public class XboxPovButton extends Button {
 	private final edu.wpi.first.wpilibj.XboxController controller;
 	private final POVDirection povDirection;
 
+	/**
+	 * Create an Xbox POV button for triggering commands.
+	 *
+	 * @param joystick     The XboxController object that has the button
+	 * @param povDirection The POV angle
+	 */
 	public XboxPovButton(edu.wpi.first.wpilibj.XboxController controller, POVDirection povDirection) {
 		this.controller = controller;
 		this.povDirection = povDirection;
@@ -21,17 +27,13 @@ public class XboxPovButton extends Button {
 	public boolean get() {
 		switch (povDirection) {
 		case UP:
-			return (controller.getPOV(0) == 315 || controller.getPOV(0) == 0 || controller.getPOV(0) == 45) ? true
-					: false;
+			return (controller.getPOV(0) == 315 || controller.getPOV(0) == 0 || controller.getPOV(0) == 45) ? true : false;
 		case RIGHT:
-			return (controller.getPOV(0) == 45 || controller.getPOV(0) == 90 || controller.getPOV(0) == 135) ? true
-					: false;
+			return (controller.getPOV(0) == 45 || controller.getPOV(0) == 90 || controller.getPOV(0) == 135) ? true : false;
 		case DOWN:
-			return (controller.getPOV(0) == 135 || controller.getPOV(0) == 180 || controller.getPOV(0) == 225) ? true
-					: false;
+			return (controller.getPOV(0) == 135 || controller.getPOV(0) == 180 || controller.getPOV(0) == 225) ? true : false;
 		case LEFT:
-			return (controller.getPOV(0) == 225 || controller.getPOV(0) == 270 || controller.getPOV(0) == 315) ? true
-					: false;
+			return (controller.getPOV(0) == 225 || controller.getPOV(0) == 270 || controller.getPOV(0) == 315) ? true : false;
 		default:
 			return false;
 		}

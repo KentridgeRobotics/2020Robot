@@ -9,13 +9,13 @@ public class OI {
 
 	public static XboxController getPrimaryController() {
 		if (primaryController == null)
-			primaryController = new XboxController(Mappings.primaryControllerId);
+			primaryController = XboxController.getInstance(Mappings.primaryControllerId.getValue());
 		return primaryController;
 	}
 
 	public static XboxController getSecondaryController() {
 		if (secondaryController == null)
-			secondaryController = new XboxController(Mappings.secondaryControllerId);
+			secondaryController = XboxController.getInstance(Mappings.secondaryControllerId.getValue());
 		return secondaryController;
 	}
 
@@ -25,6 +25,11 @@ public class OI {
 
 	public static double getLeftThrottle() { // We're doing tank drive to start
 		return primaryController.getLeftStickY();
+	}
+
+	protected static void updateControllers() {
+		primaryController = XboxController.getInstance(Mappings.primaryControllerId.getValue());
+		secondaryController = XboxController.getInstance(Mappings.secondaryControllerId.getValue());
 	}
 
 }

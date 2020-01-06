@@ -48,8 +48,7 @@ public class Gyroscope implements Runnable {
 					if (calibData.length >= 22) {
 						imu.setSensorOffsets(calibData);
 						FileTime ft = Files.getLastModifiedTime(configFile.toPath());
-						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM.dd.yy HH:mm:ss")
-								.withZone(ZoneId.systemDefault());
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM.dd.yy HH:mm:ss").withZone(ZoneId.systemDefault());
 						String formattedTime = formatter.format(ft.toInstant());
 						System.out.println("Loaded Gyro Calibration from: " + formattedTime);
 					} else {
@@ -94,6 +93,13 @@ public class Gyroscope implements Runnable {
 
 	public CalData getCalibration() {
 		return imu.getCalibration();
+	}
+
+	public boolean isCalibrated() {
+		CalData calibration = getCalibration();
+		if (calibration.accel > 1 && calibration.gyro > 2 && calibration.mag > 2 && calibration.sys > 1)
+			return true;
+		return false;
 	}
 
 	public void run() {
@@ -151,8 +157,7 @@ public class Gyroscope implements Runnable {
 						if (new File(directory, Mappings.gyroCalibrationFileName + ".old").isFile()) {
 							for (int i = 1; i > 0; i++) {
 								if (!(new File(directory, Mappings.gyroCalibrationFileName + ".old" + i).isFile())) {
-									configFile.renameTo(
-											new File(directory, Mappings.gyroCalibrationFileName + ".old" + i));
+									configFile.renameTo(new File(directory, Mappings.gyroCalibrationFileName + ".old" + i));
 									oldFile = Mappings.gyroCalibrationFileName + ".old" + i;
 									break;
 								}

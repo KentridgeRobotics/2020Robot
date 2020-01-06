@@ -9,13 +9,19 @@ package org.usfirst.frc.team3786.robot;
 
 import java.util.Arrays;
 
+import org.usfirst.frc.team3786.robot.commands.DriveCommand;
+import org.usfirst.frc.team3786.robot.subsystems.DriveSubsystem;
+import org.usfirst.frc.team3786.robot.subsystems.NeoDriveSubsystem;
 import org.usfirst.frc.team3786.robot.subsystems.vision.Cameras;
 import org.usfirst.frc.team3786.robot.utils.Gyroscope;
+import org.usfirst.frc.team3786.robot.utils.config.Config;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,48 +32,56 @@ import edu.wpi.first.wpilibj.command.Scheduler;
  */
 public class Robot extends TimedRobot {
 
+	public static final int TEAM = 3786;
+
 	public static Robot instance;
 
+	public static DriveSubsystem drive;
+	public static Command driveCommand;
 	public static Gyroscope gyro;
 
 	/**
-	 * This function is run when the robot is first started up and should be used
-	 * for any initialization code.
+	 * This function is run when the robot is first started up and should be
+	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
+		Config.setup();
 		Mappings.setupDefaultMappings();
 		gyro = Gyroscope.getInstance();
+		drive = NeoDriveSubsystem.getInstance();
+		driveCommand = DriveCommand.getInstance();
 		Cameras.setup();
 	}
 
 	/**
-	 * This function is called every robot packet, no matter the mode. Use this for
-	 * items like diagnostics that you want ran during disabled, autonomous,
+	 * This function is called every robot packet, no matter the mode. Use this
+	 * for items like diagnostics that you want ran during disabled, autonomous,
 	 * teleoperated and test.
 	 *
-	 * <p>
-	 * This runs after the mode specific periodic functions, but before LiveWindow
-	 * and SmartDashboard integrated updating.
+	 * This runs after the mode specific periodic functions, but before
+	 * LiveWindow and SmartDashboard integrated updating.
 	 */
 	@Override
 	public void robotPeriodic() {
 		Scheduler.getInstance().run();
 		gyro.run();
+		SmartDashboard.putNumber("current_heading", Gyroscope.getInstance().getHeadingContinuous());
 	}
 
 	/**
-	 * This function is called when disabling.
+	 * This function is called when entering teleop.
 	 */
 	@Override
-	public void disabledInit() {
+	public void teleopInit() {
+		driveCommand.start();
 	}
 
 	/**
-	 * This function is called periodically while disabled.
+	 * This function is called periodically during operator control.
 	 */
 	@Override
-	public void disabledPeriodic() {
+	public void teleopPeriodic() {
 	}
 
 	/**
@@ -85,17 +99,17 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This function is called when entering teleop.
+	 * This function is called when disabling.
 	 */
 	@Override
-	public void teleopInit() {
+	public void disabledInit() {
 	}
 
 	/**
-	 * This function is called periodically during operator control.
+	 * This function is called periodically while disabled.
 	 */
 	@Override
-	public void teleopPeriodic() {
+	public void disabledPeriodic() {
 	}
 
 	/**
