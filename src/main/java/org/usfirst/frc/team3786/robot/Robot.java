@@ -9,9 +9,6 @@ package org.usfirst.frc.team3786.robot;
 
 import java.util.Arrays;
 
-import org.usfirst.frc.team3786.robot.commands.DriveCommand;
-import org.usfirst.frc.team3786.robot.subsystems.DriveSubsystem;
-import org.usfirst.frc.team3786.robot.subsystems.NeoDriveSubsystem;
 import org.usfirst.frc.team3786.robot.subsystems.vision.Cameras;
 import org.usfirst.frc.team3786.robot.utils.Gyroscope;
 import org.usfirst.frc.team3786.robot.utils.config.Config;
@@ -19,7 +16,6 @@ import org.usfirst.frc.team3786.robot.utils.config.Config;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -36,8 +32,6 @@ public class Robot extends TimedRobot {
 
 	public static Robot instance;
 
-	public static DriveSubsystem drive;
-	public static Command driveCommand;
 	public static Gyroscope gyro;
 
 	/**
@@ -49,8 +43,6 @@ public class Robot extends TimedRobot {
 		Config.setup();
 		Mappings.setupDefaultMappings();
 		gyro = Gyroscope.getInstance();
-		drive = NeoDriveSubsystem.getInstance();
-		driveCommand = DriveCommand.getInstance();
 		Cameras.setup();
 	}
 
@@ -74,7 +66,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopInit() {
-		driveCommand.start();
 	}
 
 	/**

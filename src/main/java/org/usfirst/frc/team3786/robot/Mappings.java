@@ -12,11 +12,11 @@ public class Mappings {
 	public final static Mapping<Double> controllerDeadzone = new Mapping<Double>("controller_deadzone", 0.13, value -> {XboxController.setDeadzone(value);});
 
 	// CAN IDs
-	public final static Mapping<Integer> leftMotorId = new Mapping<Integer>("left_motor", 1, () -> {Robot.drive.setupMotors();});
-	public final static Mapping<Integer> rightMotorId = new Mapping<Integer>("right_motor", 2, () -> {Robot.drive.setupMotors();});
+	public final static Mapping<Integer> leftMotorId = new Mapping<Integer>("left_motor", 1);
+	public final static Mapping<Integer> rightMotorId = new Mapping<Integer>("right_motor", 2);
 
 	// Other
-	public final static Mapping<Double> driveRampRate = new Mapping<Double>("drive_ramp_rate", 0.4, value -> {Robot.drive.setRampRate(value);});
+	public final static Mapping<Double> driveRampRate = new Mapping<Double>("drive_ramp_rate", 0.4);
 
 	// Digital IO
 
