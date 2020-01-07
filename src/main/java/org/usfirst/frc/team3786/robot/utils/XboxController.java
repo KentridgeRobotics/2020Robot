@@ -1,9 +1,9 @@
-package frc.robot.utils;
+package org.usfirst.frc.team3786.robot.utils;
 
 import java.util.HashMap;
 
-import frc.robot.utils.XboxPovButton;
-import frc.robot.utils.XboxPovButton.POVDirection;
+import org.usfirst.frc.team3786.robot.utils.XboxPovButton.POVDirection;
+
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
@@ -28,19 +28,24 @@ public class XboxController {
 	public XboxPovButton buttonPovDown;
 	public XboxPovButton buttonPovLeft;
 
-	private static final double deadzone = 0.13;
+	private static double deadzone = 0.13;
 
-	public XboxController() {
-		this(0);
-	}
-
-	public XboxController(int id) {
+	private XboxController(int id) {
 		controller = new edu.wpi.first.wpilibj.XboxController(id);
 		setupButtons();
 		instances.put(id, this);
 	}
 
+	/**
+	 * Get the instance of XboxController with the given ID
+	 * 
+	 * @param  id ID of XboxController
+	 * 
+	 * @return    XboxController
+	 */
 	public static XboxController getInstance(int id) {
+		if (!instances.containsKey(id))
+			return new XboxController(id);
 		return instances.get(id);
 	}
 
@@ -55,12 +60,26 @@ public class XboxController {
 		buttonMenu = new JoystickButton(controller, XboxControllerButton.MENU.getId());
 		buttonStickLeft = new JoystickButton(controller, XboxControllerButton.STICK_LEFT.getId());
 		buttonStickRight = new JoystickButton(controller, XboxControllerButton.STICK_RIGHT.getId());
-        buttonPovUp = new XboxPovButton(controller, POVDirection.UP);
+		buttonPovUp = new XboxPovButton(controller, POVDirection.UP);
 		buttonPovRight = new XboxPovButton(controller, POVDirection.RIGHT);
 		buttonPovDown = new XboxPovButton(controller, POVDirection.DOWN);
 		buttonPovLeft = new XboxPovButton(controller, POVDirection.LEFT);
 	}
 
+	/**
+	 * Set global XboxController deadzone
+	 * 
+	 * @param deadzone Global deadzone
+	 */
+	public static void setDeadzone(double deadzone) {
+		XboxController.deadzone = deadzone;
+	}
+
+	/**
+	 * Gets the adjusted left stick X value
+	 * 
+	 * @return Left stick X value
+	 */
 	public double getLeftStickX() {
 		double n = controller.getX(Hand.kLeft);
 		if (Math.abs(n) <= deadzone)
@@ -71,6 +90,11 @@ public class XboxController {
 		}
 	}
 
+	/**
+	 * Gets the adjusted left stick Y value
+	 * 
+	 * @return Left stick Y value
+	 */
 	public double getLeftStickY() {
 		double n = controller.getY(Hand.kLeft);
 		if (Math.abs(n) <= deadzone)
@@ -81,6 +105,11 @@ public class XboxController {
 		}
 	}
 
+	/**
+	 * Gets the adjusted right stick X value
+	 * 
+	 * @return Right stick X value
+	 */
 	public double getRightStickX() {
 		double n = controller.getX(Hand.kRight);
 		if (Math.abs(n) <= deadzone)
@@ -91,6 +120,11 @@ public class XboxController {
 		}
 	}
 
+	/**
+	 * Gets the adjusted right stick Y value
+	 * 
+	 * @return Right stick Y value
+	 */
 	public double getRightStickY() {
 		double n = controller.getY(Hand.kRight);
 		if (Math.abs(n) <= deadzone)
@@ -101,10 +135,20 @@ public class XboxController {
 		}
 	}
 
+	/**
+	 * Gets the adjusted left trigger value
+	 * 
+	 * @return Left trigger value
+	 */
 	public double getLeftTrigger() {
 		return controller.getTriggerAxis(Hand.kLeft);
 	}
 
+	/**
+	 * Gets the adjusted right trigger value
+	 * 
+	 * @return Right trigger value
+	 */
 	public double getRightTrigger() {
 		return controller.getTriggerAxis(Hand.kRight);
 	}
