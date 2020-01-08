@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3786.robot;
 
-import org.usfirst.frc.team3786.robot.OI;
+import org.usfirst.frc.team3786.robot.subsystems.ShooterSubsystem;
 import org.usfirst.frc.team3786.robot.utils.XboxController;
 import org.usfirst.frc.team3786.robot.utils.config.Mapping;
 
@@ -14,6 +14,9 @@ public class Mappings {
 	// CAN IDs
 	public final static Mapping<Integer> leftMotorId = new Mapping<Integer>("left_motor", 1);
 	public final static Mapping<Integer> rightMotorId = new Mapping<Integer>("right_motor", 2);
+	public final static Mapping<Integer> shooterId = new Mapping<Integer>("shooter", 3, () -> {ShooterSubsystem.getInstance().setupShooterMotors();});
+	public final static Mapping<Integer> holdId = new Mapping<Integer>("holdId", 4, () -> {ShooterSubsystem.getInstance().setupShooterMotors();});
+	public final static Mapping<Integer> pitchId = new Mapping<Integer>("pitchId", 5, () -> {ShooterSubsystem.getInstance().setupShooterMotors();});
 
 	// Other
 	public final static Mapping<Double> driveRampRate = new Mapping<Double>("drive_ramp_rate", 0.4);
