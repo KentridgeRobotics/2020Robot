@@ -5,9 +5,9 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package com.chargerrobotics.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import com.chargerrobotics.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**

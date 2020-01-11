@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package com.chargerrobotics.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
