@@ -16,4 +16,21 @@ package com.chargerrobotics;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    //XboxController ids
+    public static final int primary = 0;
+    public static final int secondary = 1;
+
+    //CAN Id's
+    public static final int shooterID = 5;
+
+    //shooter constants
+    public static final int shooterTargetRPM = 500;
+    public static final double shooterkP = 1.0;
+    public static final double shooterkI = 0.0;
+    public static final double shooterkD = 0.0;
+    public static final double shooterFeedForward = 1.0;
+    public static final double shooterStaticGain = 0.0;
+    public static final double shooterVelocityGain = 0.0;
+    public static final double shooterMinOutput = -1.0;
+    public static final double shooterMaxOutput = 1.0;
 }

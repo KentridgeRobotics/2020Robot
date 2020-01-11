@@ -10,7 +10,11 @@ package com.chargerrobotics;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import com.chargerrobotics.commands.ExampleCommand;
+import com.chargerrobotics.commands.shooter.ShooterOffCommand;
+import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.subsystems.ExampleSubsystem;
+import com.chargerrobotics.subsystems.ShooterSubsystem;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -20,10 +24,14 @@ import edu.wpi.first.wpilibj2.command.Command;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  // The robot's subsystems are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
 
+  // The robot's commands are defined here...
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private final ShooterOnCommand shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
+  private final ShooterOffCommand shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
 
 
 
@@ -42,6 +50,12 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    com.chargerrobotics.utils.XboxController primary = new com.chargerrobotics.utils.XboxController(Constants.primary);
+    primary.buttonA.whenPressed(shooterOnCommand);
+    primary.buttonB.whenPressed(shooterOffCommand);
+
+    com.chargerrobotics.utils.XboxController secondary = new com.chargerrobotics.utils.XboxController(Constants.secondary);
+    
   }
 
 
