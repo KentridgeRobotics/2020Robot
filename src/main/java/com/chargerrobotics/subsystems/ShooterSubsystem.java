@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -42,7 +41,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public void periodic() {
         super.periodic();
         shooterPIDController.setReference(isRunning ? Constants.shooterTargetRPM : 0.0, ControlType.kVelocity);
-        SmartDashboard.putNumber("ShooterPosition", shooterEncoder.getVelocity());
     }
 
 }
