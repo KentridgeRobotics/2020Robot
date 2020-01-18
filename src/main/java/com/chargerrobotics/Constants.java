@@ -21,11 +21,16 @@ public final class Constants {
     public static final int secondary = 1;
 
     //CAN Id's
-    public static final int shooterID = 5;
+    // 1: Power distribution panel PDP
+    // 2? Pneumatic Control Module (PCM)
+    // 1x: drive, motor controllers: 11-14, odds are left, evens are right
+    // 2x: shooter?
+    // 3x: ?
+    public static final int shooterID = 7;
 
     //shooter constants
-    public static final int shooterTargetRPM = 500;
-    public static final double shooterkP = 1.0;
+    public static final double shooterTargetRPM = 7000.0;
+    public static final double shooterkP = 0.01;
     public static final double shooterkI = 0.0;
     public static final double shooterkD = 0.0;
     public static final double shooterFeedForward = 1.0;
