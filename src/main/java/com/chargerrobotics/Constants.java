@@ -30,9 +30,9 @@ public final class Constants {
 
     //shooter constants
     public static final double shooterTargetRPM = 7000.0;
-    public static final double shooterkP = 0.01;
-    public static final double shooterkI = 0.0;
-    public static final double shooterkD = 0.0;
+    public static final double shooterkP = 0.0004;
+    public static final double shooterkI = 0.0000007;
+    public static final double shooterkD = 0.05;
     public static final double shooterFeedForward = 1.0;
     public static final double shooterStaticGain = 0.0;
     public static final double shooterVelocityGain = 0.0;
