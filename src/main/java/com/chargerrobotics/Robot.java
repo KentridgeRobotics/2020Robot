@@ -7,7 +7,6 @@
 
 package com.chargerrobotics;
 
-import com.chargerrobotics.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -21,8 +20,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
 
   private RobotContainer robotContainer;
-
-  private DriveSubsystem driveSubsystem;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -82,7 +79,6 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    driveSubsystem = DriveSubsystem.getInstance();
   }
 
   /**
