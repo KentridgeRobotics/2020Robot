@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import com.chargerrobotics.commands.ExampleCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
+import com.chargerrobotics.commands.ColorSpinnerCommand;
 import com.chargerrobotics.subsystems.ExampleSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
 
@@ -32,6 +33,7 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final ShooterOnCommand shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
   private final ShooterOffCommand shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
+  private final ColorSpinnerCommand colorSpinnerCommand = new ColorSpinnerCommand();
 
 
 
@@ -53,6 +55,7 @@ public class RobotContainer {
     com.chargerrobotics.utils.XboxController primary = new com.chargerrobotics.utils.XboxController(Constants.primary);
     primary.buttonA.whenPressed(shooterOnCommand);
     primary.buttonB.whenPressed(shooterOffCommand);
+    primary.buttonX.whileHeld(colorSpinnerCommand);
 
     com.chargerrobotics.utils.XboxController secondary = new com.chargerrobotics.utils.XboxController(Constants.secondary);
     
