@@ -26,7 +26,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public ShooterSubsystem() {
         shooter = new CANSparkMax(Constants.shooterID, MotorType.kBrushless);
-//        shooterEncoder = shooter.getEncoder();
+        shooterEncoder = shooter.getEncoder();
         shooterPIDController = shooter.getPIDController();
         shooterPIDController.setP(Constants.shooterkP);
         shooterPIDController.setI(Constants.shooterkI);
@@ -42,15 +42,8 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         super.periodic();
-        if (isRunning) {
-            shooter.set(1.0);
-        }
-        else {
-            shooter.set(0.0);
-        }
-        //shooter.set(0.2);
- //       shooterPIDController.setReference(isRunning ? Constants.shooterTargetRPM : 0.0, ControlType.kVelocity);
- //       SmartDashboard.putNumber("ShooterPosition", shooterEncoder.getVelocity());
+        shooterPIDController.setReference(isRunning ? Constants.shooterTargetRPM : 0.0, ControlType.kVelocity);
+        SmartDashboard.putNumber("Shooter Velocity", shooterEncoder.getVelocity());
     }
 
 }
