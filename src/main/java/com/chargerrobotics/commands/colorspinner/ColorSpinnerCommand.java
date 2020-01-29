@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.chargerrobotics.commands;
+package com.chargerrobotics.commands.colorspinner;
 
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 
@@ -32,7 +32,7 @@ public class ColorSpinnerCommand extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(final boolean interrupted) {
     ColorSpinnerSubsystem.getInstance().setRunning(false);
   }
 

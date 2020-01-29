@@ -8,15 +8,14 @@
 package com.chargerrobotics;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-import com.chargerrobotics.commands.ExampleCommand;
+import com.chargerrobotics.utils.XboxController;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
-import com.chargerrobotics.commands.ColorSpinnerCommand;
-import com.chargerrobotics.subsystems.ExampleSubsystem;
+import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
+import com.chargerrobotics.commands.drive.BrakeCommand;
+import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
 
-import edu.wpi.first.wpilibj2.command.Command;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -25,17 +24,28 @@ import edu.wpi.first.wpilibj2.command.Command;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  //subsystems
   private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
+  private final DriveSubsystem driveSubsystem = DriveSubsystem.getInstance();
 
-  // The robot's commands are defined here...
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  //commands
   private final ShooterOnCommand shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
   private final ShooterOffCommand shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
+  private final BrakeCommand brakeCommand = new BrakeCommand(driveSubsystem);
+
   private final ColorSpinnerCommand colorSpinnerCommand = new ColorSpinnerCommand();
 
+  //controllers
+  public final static XboxController primary = new XboxController(Constants.primary);
+  public final static XboxController secondary = new XboxController(Constants.secondary);
 
+  public static XboxController getPrimary() {
+    return primary;
+  }
+
+  public static XboxController getSecondary() {
+    return secondary;
+  }
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -52,23 +62,12 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    com.chargerrobotics.utils.XboxController primary = new com.chargerrobotics.utils.XboxController(Constants.primary);
-    primary.buttonA.whenPressed(shooterOnCommand);
-    primary.buttonB.whenPressed(shooterOffCommand);
-    primary.buttonX.whileHeld(colorSpinnerCommand);
+    //primary
+    primary.buttonB.whileHeld(brakeCommand);
 
-    com.chargerrobotics.utils.XboxController secondary = new com.chargerrobotics.utils.XboxController(Constants.secondary);
-    
-  }
-
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    //secondary
+    secondary.buttonA.whenPressed(shooterOnCommand);
+    secondary.buttonB.whenPressed(shooterOffCommand);
+    secondary.buttonX.whileHeld(colorSpinnerCommand);
   }
 }
