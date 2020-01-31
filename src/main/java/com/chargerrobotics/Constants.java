@@ -42,4 +42,8 @@ public final class Constants {
     public static final double shooterVelocityGain = 0.0;
     public static final double shooterMinOutput = -1.0;
     public static final double shooterMaxOutput = 1.0;
+    
+    //File Names
+    public static final String dataStoragePath = "/home/lvuser";
+    public static final String configFileName = "config.yml";
 }
