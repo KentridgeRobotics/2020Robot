@@ -9,6 +9,9 @@ package com.chargerrobotics;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -33,6 +36,9 @@ public class Robot extends TimedRobot {
 		// and put our
 		// autonomous chooser on the dashboard.
 		robotContainer = new RobotContainer();
+		CameraServer.getInstance().startAutomaticCapture();
+		CvSink cvSink = CameraServer.getInstance().getVideo();
+		CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
 	}
 
 	/**
