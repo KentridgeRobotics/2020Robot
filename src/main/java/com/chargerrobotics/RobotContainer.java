@@ -8,16 +8,18 @@
 package com.chargerrobotics;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 
 import com.chargerrobotics.commands.ExampleCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
+import com.chargerrobotics.commands.drive.ManualDriveCommand;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
+import com.chargerrobotics.utils.XboxController;
 
 
 /**
@@ -30,8 +32,7 @@ public class RobotContainer {
   //subsystems
   private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
   private final DriveSubsystem driveSubsystem = DriveSubsystem.getInstance();
-
-  //commands
+  private final ManualDriveCommand manualDriveCommand = new ManualDriveCommand(driveSubsystem);
   private final ShooterOnCommand shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
   private final ShooterOffCommand shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
   private final BrakeCommand brakeCommand = new BrakeCommand(driveSubsystem);
@@ -88,13 +89,5 @@ public class RobotContainer {
     SmartDashboard.putNumber("RpmSetpoint", kRpmSetpoint);
 
   }
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
-  }
+  
 }
