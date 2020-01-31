@@ -10,13 +10,15 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+
 public class ShooterSubsystem extends SubsystemBase {
     private static ShooterSubsystem instance;
     private CANSparkMax shooter;
     private CANPIDController shooterPIDController;
-     private CANEncoder shooterEncoder;
+    private CANEncoder shooterEncoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
     private boolean isRunning;
+
 
     public static ShooterSubsystem getInstance() {
         if(instance == null)
@@ -28,22 +30,41 @@ public class ShooterSubsystem extends SubsystemBase {
         shooter = new CANSparkMax(Constants.shooterID, MotorType.kBrushless);
         shooterEncoder = shooter.getEncoder();
         shooterPIDController = shooter.getPIDController();
-        shooterPIDController.setP(Constants.shooterkP);
-        shooterPIDController.setI(Constants.shooterkI);
-        shooterPIDController.setP(Constants.shooterkD);
-        shooterPIDController.setFF(Constants.shooterFeedForward);
         shooterPIDController.setOutputRange(Constants.shooterMinOutput, Constants.shooterMaxOutput);
+    }
+
+    public void WSetP(double P) {
+        shooterPIDController.setP(P);
+    }
+
+    public void WSetI(double I) {
+        shooterPIDController.setI(I);
+    }
+
+    public void WSetD(double D) {
+        shooterPIDController.setD(D);
+    }
+
+    public void WSetF(double F) {
+        shooterPIDController.setFF(F);
+    }
+
+    public void WSetSetPoint(double Point) {
+
     }
 
     public void setRunning(boolean isRunning) {
         this.isRunning = isRunning;
     }
-
     @Override
     public void periodic() {
         super.periodic();
-        shooterPIDController.setReference(isRunning ? Constants.shooterTargetRPM : 0.0, ControlType.kVelocity);
-        SmartDashboard.putNumber("Shooter Velocity", shooterEncoder.getVelocity());
+        SmartDashboard.putNumber("ShooterSpeed", shooterEncoder.getVelocity());
+        shooterPIDController.setP(SmartDashboard.getNumber("GainP", 0));
+        shooterPIDController.setI(SmartDashboard.getNumber("GainI", 0));
+        shooterPIDController.setD(SmartDashboard.getNumber("GainD", 0));
+        shooterPIDController.setFF(SmartDashboard.getNumber("GainF", 0));
+        shooterPIDController.setReference(SmartDashboard.getNumber("RpmSetpoint", 0), ControlType.kVelocity);
     }
 
 }
