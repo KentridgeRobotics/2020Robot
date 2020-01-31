@@ -31,7 +31,6 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterEncoder = shooter.getEncoder();
         shooterPIDController = shooter.getPIDController();
         shooterPIDController.setOutputRange(Constants.shooterMinOutput, Constants.shooterMaxOutput);
-        shooter.setOpenLoopRampRate(3);
     }
 
     public void WSetP(double P) {
