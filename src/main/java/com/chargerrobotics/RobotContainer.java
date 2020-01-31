@@ -7,6 +7,7 @@
 
 package com.chargerrobotics;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +40,8 @@ public class RobotContainer {
 	private final BrakeCommand brakeCommand = new BrakeCommand(driveSubsystem);
 
 	private final ColorSpinnerCommand colorSpinnerCommand = new ColorSpinnerCommand();
+	
+	private final Compressor compressor = new Compressor();
 
 	// controllers
 	private final static XboxController primary = new XboxController(Constants.primary);
@@ -60,6 +63,7 @@ public class RobotContainer {
 		// Configure the button bindings
 		configureButtonBindings();
 		setupDashboardValues();
+		compressor.setClosedLoopControl(true);
 	}
 
 	/**
