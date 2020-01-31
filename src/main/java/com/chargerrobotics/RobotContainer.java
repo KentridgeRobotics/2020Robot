@@ -10,9 +10,7 @@ package com.chargerrobotics;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 
-import com.chargerrobotics.commands.ExampleCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -75,10 +73,6 @@ public class RobotContainer {
 	private void configureButtonBindings() {
 		// primary
 		primary.buttonB.whileHeld(brakeCommand);
-
-		com.chargerrobotics.utils.XboxController secondary = new com.chargerrobotics.utils.XboxController(
-				Constants.secondary);
-
 	}
 
 	public static final double kP = 5e-5;
