@@ -8,13 +8,18 @@
 package com.chargerrobotics;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import com.chargerrobotics.utils.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+
+import com.chargerrobotics.commands.ExampleCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
+import com.chargerrobotics.commands.drive.ManualDriveCommand;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
+import com.chargerrobotics.utils.XboxController;
 
 
 /**
@@ -27,8 +32,7 @@ public class RobotContainer {
   //subsystems
   private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
   private final DriveSubsystem driveSubsystem = DriveSubsystem.getInstance();
-
-  //commands
+  private final ManualDriveCommand manualDriveCommand = new ManualDriveCommand(driveSubsystem);
   private final ShooterOnCommand shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
   private final ShooterOffCommand shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
   private final BrakeCommand brakeCommand = new BrakeCommand(driveSubsystem);
@@ -53,6 +57,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    setupDashboardValues();
   }
 
   /**
@@ -65,9 +70,24 @@ public class RobotContainer {
     //primary
     primary.buttonB.whileHeld(brakeCommand);
 
-    //secondary
-    secondary.buttonA.whenPressed(shooterOnCommand);
-    secondary.buttonB.whenPressed(shooterOffCommand);
-    secondary.buttonX.whileHeld(colorSpinnerCommand);
+    com.chargerrobotics.utils.XboxController secondary = new com.chargerrobotics.utils.XboxController(Constants.secondary);
+    
   }
+
+  public static final double kP = 5e-5;
+  public static final double kI = 1e-6;
+  public static final double kD = 0;
+  public static final double kF = 0;
+  public static final double kRpmSetpoint = 1000;
+
+  private void setupDashboardValues() {
+
+    SmartDashboard.putNumber("GainP", kP);
+    SmartDashboard.putNumber("GainI", kI);
+    SmartDashboard.putNumber("GainD", kD);
+    SmartDashboard.putNumber("GainF", kF);
+    SmartDashboard.putNumber("RpmSetpoint", kRpmSetpoint);
+
+  }
+  
 }
