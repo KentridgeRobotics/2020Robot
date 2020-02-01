@@ -32,7 +32,7 @@ public class Config {
 	}
 
 	public static void reload() {
-		configFile.mkdirs();
+		configFile.getParentFile().mkdirs();
 		if (!configFile.isFile()) {
 			try {
 				configFile.createNewFile();

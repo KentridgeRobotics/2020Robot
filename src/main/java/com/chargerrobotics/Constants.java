@@ -26,9 +26,10 @@ public final class Constants {
     // 1x: drive, motor controllers: 11-14, odds are left, evens are right
     // 2x: shooter?
     // 3x: ?
-    public static final int shooterID = 5;
+    public static final int shooterID1 = 7;
+    public static final int shooterID2 = 8;
     public static final int leftRearDrive = 14;
-    public static final int leftFrontDrive = 21; //was 13
+    public static final int leftFrontDrive = 13;
     public static final int rightRearDrive = 12;
     public static final int rightFrontDrive = 11;
 

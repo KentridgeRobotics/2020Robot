@@ -97,12 +97,11 @@ public class DriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         super.periodic();
-        tankDrive(leftThrottle, rightThrottle);
+        //tankDrive(leftThrottle, rightThrottle);
         SmartDashboard.putNumber("leftFrontPower", leftFront.getAppliedOutput());
         SmartDashboard.putNumber("rightFrontPower", rightFront.getAppliedOutput());
         SmartDashboard.putNumber("rightFrontCurrent", rightFront.getOutputCurrent());
         SmartDashboard.putNumber("leftFrontCurrent", leftFront.getOutputCurrent());
-        System.err.println("Running in Drive Periodic");
     }
 
     public void initDefaultCommand() {
