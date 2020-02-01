@@ -15,7 +15,9 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
-import com.chargerrobotics.commands.ClimberCommand;
+import com.chargerrobotics.commands.LimelightCommand;
+import com.chargerrobotics.commands.ClimberDownCommand;
+import com.chargerrobotics.commands.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
@@ -40,6 +42,8 @@ public class RobotContainer {
 	private static final boolean colorSpinnerEnabled = true;
 	private static final boolean climberEnabled = true;
 
+	private LimelightCommand limelightCommand;
+
 	// Drive
 	private DriveSubsystem driveSubsystem;
 	private ManualDriveCommand manualDriveCommand;
@@ -56,7 +60,8 @@ public class RobotContainer {
 
 	// Climber Spinner
 	private ClimberSubsystem climberSubsystem;
-	private ClimberCommand climberCommand;
+	private ClimberUpCommand climberUpCommand;
+	private ClimberDownCommand climberDownCommand;
 
 	private final Compressor compressor = new Compressor(Constants.pneumaticControlModule);
 
@@ -72,6 +77,7 @@ public class RobotContainer {
 		setupBindings();
 		setupCamera();
 		compressor.setClosedLoopControl(true);
+		limelightCommand = new LimelightCommand();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
 			manualDriveCommand = new ManualDriveCommand(driveSubsystem);
@@ -88,7 +94,8 @@ public class RobotContainer {
 		}
 		if (climberEnabled) {
 			climberSubsystem = ClimberSubsystem.getInstance();
-			climberCommand = new ClimberCommand(climberSubsystem);
+			climberUpCommand = new ClimberUpCommand(climberSubsystem);
+			climberDownCommand = new ClimberDownCommand(climberSubsystem);
 		}
 	}
 
@@ -108,9 +115,12 @@ public class RobotContainer {
 	private void setupBindings() {
 		// primary
 		primary.buttonB.whileHeld(brakeCommand);
-
-		primary.buttonA.whenPressed(shooterOnCommand);
-		primary.buttonB.whenPressed(shooterOffCommand);
+		primary.buttonY.whileHeld(limelightCommand);
+		primary.buttonPovUp.whileHeld(climberUpCommand);
+		primary.buttonPovDown.whileHeld(climberDownCommand);
+		//secondary
+		secondary.buttonA.whenPressed(shooterOnCommand);
+		secondary.buttonB.whenPressed(shooterOffCommand);
 	}
 
 }

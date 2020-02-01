@@ -7,7 +7,8 @@
 
 package com.chargerrobotics.subsystems;
 
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimberSubsystem extends SubsystemBase {
@@ -15,9 +16,8 @@ public class ClimberSubsystem extends SubsystemBase {
 	 * Creates a new ClimberSubsystem.
 	 */
 
-	private static ClimberSubsystem instance;
-	private boolean isRunning;
-	private Solenoid hookSolenoid;
+  private static ClimberSubsystem instance;
+  private DoubleSolenoid hookSolenoid;
 
 	public static ClimberSubsystem getInstance() {
 		if (instance == null)
@@ -25,14 +25,21 @@ public class ClimberSubsystem extends SubsystemBase {
 		return instance;
 	}
 
-	public ClimberSubsystem() {
-		hookSolenoid = new Solenoid(1);
-	}
+  public ClimberSubsystem() {
+    hookSolenoid = new DoubleSolenoid(2, 0, 1);
+  }
 
-	public void setRunning(boolean isRunning) {
-		this.isRunning = isRunning;
-		hookSolenoid.set(this.isRunning);
-	}
+  public void setUp() {
+    hookSolenoid.set(DoubleSolenoid.Value.kForward);
+  }
+
+  public void setDown() {
+    hookSolenoid.set(DoubleSolenoid.Value.kReverse);
+  }
+
+  public void setStop() {
+    hookSolenoid.set(DoubleSolenoid.Value.kOff);
+  }
 
 	@Override
 	public void periodic() {
