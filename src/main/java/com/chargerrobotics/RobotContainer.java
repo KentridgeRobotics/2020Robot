@@ -33,15 +33,15 @@ import com.chargerrobotics.utils.XboxController;
 public class RobotContainer {
 	// subsystems
 	private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
-	//private final DriveSubsystem driveSubsystem = DriveSubsystem.getInstance();
-	//private final ManualDriveCommand manualDriveCommand = new ManualDriveCommand(driveSubsystem);
+	private final DriveSubsystem driveSubsystem = DriveSubsystem.getInstance();
+	private final ManualDriveCommand manualDriveCommand = new ManualDriveCommand(driveSubsystem);
 	private final ShooterOnCommand shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
 	private final ShooterOffCommand shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
-	//private final BrakeCommand brakeCommand = new BrakeCommand(driveSubsystem);
+	private final BrakeCommand brakeCommand = new BrakeCommand(driveSubsystem);
 
 	private final ColorSpinnerCommand colorSpinnerCommand = new ColorSpinnerCommand();
 	
-	//private final Compressor compressor = new Compressor(2);
+	private final Compressor compressor = new Compressor(2);
 
 	// controllers
 	private final static XboxController primary = new XboxController(Constants.primary);
@@ -63,7 +63,7 @@ public class RobotContainer {
 		// Configure the button bindings
 		configureButtonBindings();
 		setupDashboardValues();
-		//compressor.setClosedLoopControl(true);
+		compressor.setClosedLoopControl(true);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class RobotContainer {
 	 */
 	private void configureButtonBindings() {
 		// primary
-    //primary.buttonB.whileHeld(brakeCommand);
+    primary.buttonB.whileHeld(brakeCommand);
     primary.buttonA.whenPressed(shooterOnCommand);
     primary.buttonB.whenPressed(shooterOffCommand);
 	}
