@@ -130,4 +130,8 @@ public class RobotContainer {
 		secondary.buttonB.whenPressed(shooterOffCommand);
 	}
 
+	public void setDefaultDriveCommand() {
+		CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, manualDriveCommand);
+	}
+
 }
