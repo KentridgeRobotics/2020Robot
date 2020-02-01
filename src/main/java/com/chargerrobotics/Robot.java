@@ -14,6 +14,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -37,7 +38,8 @@ public class Robot extends TimedRobot {
 		// and put our
 		// autonomous chooser on the dashboard.
 		robotContainer = new RobotContainer();
-		CameraServer.getInstance().startAutomaticCapture();
+		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+		cam.setConnectVerbose(0);
 		CvSink cvSink = CameraServer.getInstance().getVideo();
 		CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
 	}

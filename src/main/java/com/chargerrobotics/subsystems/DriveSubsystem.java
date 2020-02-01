@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -23,6 +24,8 @@ public class DriveSubsystem extends SubsystemBase {
     private SpeedControllerGroup leftDriveGroup;
     private SpeedControllerGroup rightDriveGroup;
 
+    private double leftThrottle;
+    private double rightThrottle;
 
     private boolean brake;
 
@@ -54,6 +57,11 @@ public class DriveSubsystem extends SubsystemBase {
         differentialDrive.setDeadband(0.0);
     }
 
+    public void setThrottle(double left, double right) {
+        leftThrottle = left;
+        rightThrottle = right;
+    }
+
     public void setBrake(boolean brake) {
         this.brake = brake;
         if (this.brake) {
@@ -74,17 +82,26 @@ public class DriveSubsystem extends SubsystemBase {
         if(this.brake) {
             leftPower*=0.0;
             rightPower*=0.0;
+            SmartDashboard.putBoolean("Brake Mode?", true);
         }
         else {
             leftPower*=0.6;
             rightPower*=0.6;
+            SmartDashboard.putBoolean("Brake Mode?", false);
         }
+        SmartDashboard.putNumber("TankDriveLeftPower", leftPower);
+        SmartDashboard.putNumber("TankDriveRightPower", rightPower);
         differentialDrive.tankDrive(leftPower, rightPower);
     }
 
     @Override
     public void periodic() {
         super.periodic();
+        //tankDrive(leftThrottle, rightThrottle);
+        SmartDashboard.putNumber("leftFrontPower", leftFront.getAppliedOutput());
+        SmartDashboard.putNumber("rightFrontPower", rightFront.getAppliedOutput());
+        SmartDashboard.putNumber("rightFrontCurrent", rightFront.getOutputCurrent());
+        SmartDashboard.putNumber("leftFrontCurrent", leftFront.getOutputCurrent());
     }
 
     public void initDefaultCommand() {

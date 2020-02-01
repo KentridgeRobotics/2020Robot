@@ -20,6 +20,8 @@ import com.chargerrobotics.commands.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
+import com.chargerrobotics.commands.shooter.ShooterOffCommand;
+import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
 import com.chargerrobotics.utils.Config;
@@ -46,7 +48,7 @@ public class RobotContainer {
 	private final ClimberDownCommand climberDownCommand = new ClimberDownCommand();
 	private final ClimberUpCommand climberUpCommand = new ClimberUpCommand();
 	
-	private final Compressor compressor = new Compressor();
+	private final Compressor compressor = new Compressor(2);
 
 	// controllers
 	private final static XboxController primary = new XboxController(Constants.primary);
