@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
+import com.chargerrobotics.commands.LimelightCommand;
+import com.chargerrobotics.commands.ClimberDownCommand;
+import com.chargerrobotics.commands.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
@@ -38,6 +41,9 @@ public class RobotContainer {
 	private final BrakeCommand brakeCommand = new BrakeCommand(driveSubsystem);
 
 	private final ColorSpinnerCommand colorSpinnerCommand = new ColorSpinnerCommand();
+	private final LimelightCommand limelightCommand = new LimelightCommand();
+	private final ClimberDownCommand climberDownCommand = new ClimberDownCommand();
+	private final ClimberUpCommand climberUpCommand = new ClimberUpCommand();
 	
 	private final Compressor compressor = new Compressor();
 
@@ -73,6 +79,9 @@ public class RobotContainer {
 	private void configureButtonBindings() {
 		// primary
 		primary.buttonB.whileHeld(brakeCommand);
+		primary.buttonY.whileHeld(limelightCommand);
+		primary.buttonPovUp.whileHeld(climberUpCommand);
+		primary.buttonPovDown.whileHeld(climberDownCommand);
 	}
 
 	public static final double kP = 5e-5;
