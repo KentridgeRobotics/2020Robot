@@ -10,6 +10,7 @@ package com.chargerrobotics;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
@@ -98,6 +99,10 @@ public class RobotContainer {
 		SmartDashboard.putNumber("GainF", kF);
 		SmartDashboard.putNumber("RpmSetpoint", kRpmSetpoint);
 
+	}
+
+	public void setDefaultDriveCommand() {
+		CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, manualDriveCommand);
 	}
 
 }
