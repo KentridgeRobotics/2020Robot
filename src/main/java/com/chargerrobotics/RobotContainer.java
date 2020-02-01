@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
+import com.chargerrobotics.commands.LimelightCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
@@ -38,6 +39,7 @@ public class RobotContainer {
 	private final BrakeCommand brakeCommand = new BrakeCommand(driveSubsystem);
 
 	private final ColorSpinnerCommand colorSpinnerCommand = new ColorSpinnerCommand();
+	private final LimelightCommand limelightCommand = new LimelightCommand();
 	
 	private final Compressor compressor = new Compressor();
 
@@ -73,6 +75,7 @@ public class RobotContainer {
 	private void configureButtonBindings() {
 		// primary
 		primary.buttonB.whileHeld(brakeCommand);
+		primary.buttonY.whileHeld(limelightCommand);
 	}
 
 	public static final double kP = 5e-5;

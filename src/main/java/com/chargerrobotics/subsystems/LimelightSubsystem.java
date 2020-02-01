@@ -13,29 +13,43 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class ExampleSubsystem extends SubsystemBase {
+public class LimelightSubsystem extends SubsystemBase {
   /**
-   * Creates a new ExampleSubsystem.
+   * Creates a new LimelightSubsystem.
    */
   private NetworkTable table;
-  private NetworkTableEntry tx;
-  private NetworkTableEntry ty; 
+  private NetworkTableEntry tx, ty, tv; 
+  private boolean isRunning;
+  private static LimelightSubsystem instance;
 
-  public ExampleSubsystem() {
+  private double x, y, v;
+
+  public LimelightSubsystem() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
-    tx = table.getEntry("tx"), ty = table.getEntry("ty");
+    tx = table.getEntry("tx");
+    ty = table.getEntry("ty");
+    tv = table.getEntry("tv");
+  }
+
+  public static LimelightSubsystem getInstance() {
+    if (instance == null) instance = new LimelightSubsystem();
+    return instance;
+  }
+
+  public void setRunning(boolean isRunning) {
+    this.isRunning = isRunning;
+    //if (v == 1.0) DriveSubsystem.getInstance().tankDrive(x, y);
   }
 
   @Override
   public void periodic() {
     super.periodic();
-    double x = tx.getDouble(0.0);
-    double y = ty.getDouble(0.0);
-    double area = ta.getDouble(0.0);
-
-    //post to smart dashboard periodically
-    SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightArea", area);
+    if (isRunning) {
+      x = tx.getDouble(0.0);
+      y = ty.getDouble(0.0);
+      v = tv.getDouble(0.0);
+      SmartDashboard.putNumber("LimelightX", x);
+      SmartDashboard.putNumber("LimelightY", y);
+    }
   }
 }
