@@ -16,14 +16,15 @@ import edu.wpi.first.wpilibj.GenericHID;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.commands.LimelightCommand;
-import com.chargerrobotics.commands.ClimberDownCommand;
-import com.chargerrobotics.commands.ClimberUpCommand;
+import com.chargerrobotics.commands.climber.ClimberDownCommand;
+import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
+import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
 import com.chargerrobotics.utils.Config;
 import com.chargerrobotics.utils.XboxController;
@@ -37,11 +38,14 @@ import com.chargerrobotics.utils.XboxController;
  */
 public class RobotContainer {
 
+	private static final boolean limelightEnabled = true;
 	private static final boolean driveEnabled = true;
 	private static final boolean shooterEnabled = true;
 	private static final boolean colorSpinnerEnabled = true;
 	private static final boolean climberEnabled = true;
 
+	// Limelight
+	private LimelightSubsystem limelightSubsystem;
 	private LimelightCommand limelightCommand;
 
 	// Drive
@@ -77,7 +81,10 @@ public class RobotContainer {
 		setupBindings();
 		setupCamera();
 		compressor.setClosedLoopControl(true);
-		limelightCommand = new LimelightCommand();
+		if (limelightEnabled) {
+			limelightSubsystem = LimelightSubsystem.getInstance();
+			limelightCommand = new LimelightCommand(limelightSubsystem);
+		}
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
 			manualDriveCommand = new ManualDriveCommand(driveSubsystem);
