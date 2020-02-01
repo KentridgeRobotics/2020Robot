@@ -16,7 +16,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private CANSparkMax shooter;
     private CANPIDController shooterPIDController;
     private CANEncoder shooterEncoder;
-    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
+    public double kP, kI, kD, setPoint, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
+    private double prevP, prevI, prevD, prevSetPoint;
     private boolean isRunning;
 
 
@@ -59,12 +60,18 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         super.periodic();
+        kP = SmartDashboard.getNumber("GainP", 0);
+        kI = SmartDashboard.getNumber("GainI", 0);
+        kD = SmartDashboard.getNumber("GainD", 0);
+        setPoint = SmartDashboard.getNumber("RpmSetpoint", 0);
+        if (kP != prevP) {WSetP(kP);}
+        if (kI != prevI) {WSetI(kI);}
+        if (kD != prevD) {WSetD(kD);}
+        if (setPoint != prevSetPoint) {shooterPIDController.setReference(setPoint, ControlType.kVelocity);}
         SmartDashboard.putNumber("ShooterSpeed", shooterEncoder.getVelocity());
-        shooterPIDController.setP(SmartDashboard.getNumber("GainP", 0));
-        shooterPIDController.setI(SmartDashboard.getNumber("GainI", 0));
-        shooterPIDController.setD(SmartDashboard.getNumber("GainD", 0));
-        shooterPIDController.setFF(SmartDashboard.getNumber("GainF", 0));
-        shooterPIDController.setReference(SmartDashboard.getNumber("RpmSetpoint", 0), ControlType.kVelocity);
+        prevP = kP;
+        prevI = kI;
+        prevD = kD;
+        prevSetPoint = setPoint;
     }
-
 }
