@@ -7,26 +7,23 @@
 
 package com.chargerrobotics;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-
-import com.chargerrobotics.commands.ExampleCommand;
-import com.chargerrobotics.commands.shooter.ShooterOffCommand;
-import com.chargerrobotics.commands.shooter.ShooterOnCommand;
-import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
+import com.chargerrobotics.commands.shooter.ShooterOffCommand;
+import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
 import com.chargerrobotics.utils.XboxController;
 
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in the {@link Robot} periodic methods (other than the
+ * scheduler calls). Instead, the structure of the robot (including subsystems,
+ * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   //subsystems
@@ -37,7 +34,7 @@ public class RobotContainer {
   private final ShooterOffCommand shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
   private final BrakeCommand brakeCommand = new BrakeCommand(driveSubsystem);
 
-  private final ColorSpinnerCommand colorSpinnerCommand = new ColorSpinnerCommand();
+  //private final ColorSpinnerCommand colorSpinnerCommand = new ColorSpinnerCommand();
 
   //controllers
   public final static XboxController primary = new XboxController(Constants.primary);
@@ -57,7 +54,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    setupDashboardValues();
+    CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, manualDriveCommand);
   }
 
   /**
@@ -68,26 +65,12 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //primary
-    primary.buttonB.whileHeld(brakeCommand);
+    //primary.buttonB.whileHeld(brakeCommand);
 
-    com.chargerrobotics.utils.XboxController secondary = new com.chargerrobotics.utils.XboxController(Constants.secondary);
-    
-  }
-
-  public static final double kP = 5e-5;
-  public static final double kI = 1e-6;
-  public static final double kD = 0;
-  public static final double kF = 0;
-  public static final double kRpmSetpoint = 1000;
-
-  private void setupDashboardValues() {
-
-    SmartDashboard.putNumber("GainP", kP);
-    SmartDashboard.putNumber("GainI", kI);
-    SmartDashboard.putNumber("GainD", kD);
-    SmartDashboard.putNumber("GainF", kF);
-    SmartDashboard.putNumber("RpmSetpoint", kRpmSetpoint);
-
+    //secondary
+    primary.buttonA.whenPressed(shooterOnCommand);
+    primary.buttonB.whenPressed(shooterOffCommand);
+    //secondary.buttonX.whileHeld(colorSpinnerCommand);
   }
   
 }

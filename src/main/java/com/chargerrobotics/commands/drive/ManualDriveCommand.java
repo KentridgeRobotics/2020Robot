@@ -4,6 +4,7 @@ import com.chargerrobotics.RobotContainer;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.utils.XboxController;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ManualDriveCommand extends CommandBase {
@@ -13,14 +14,18 @@ public class ManualDriveCommand extends CommandBase {
 
     public ManualDriveCommand (DriveSubsystem driveSubsystem) {
         this.driveSubsystem = driveSubsystem;
+        addRequirements(driveSubsystem);
     }
+
     @Override
     public void initialize() {
     }
 
     @Override
     public void execute() {
-        driveSubsystem.tankDrive(primary.getLeftStickY(), primary.getRightStickY());
+        SmartDashboard.putNumber("leftStick", primary.getLeftStickY());
+        SmartDashboard.putNumber("rightStick", primary.getRightStickY());
+        driveSubsystem.setThrottle(primary.getLeftStickY(), -primary.getRightStickY());
     }
 
     @Override
