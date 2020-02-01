@@ -1,6 +1,7 @@
 package com.chargerrobotics.subsystems;
 
 import com.chargerrobotics.Constants;
+import com.chargerrobotics.utils.NetworkMapping;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
@@ -16,7 +17,12 @@ public class ShooterSubsystem extends SubsystemBase {
     private CANSparkMax shooter;
     private CANPIDController shooterPIDController;
     private CANEncoder shooterEncoder;
-    public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
+    public double kIz, kMaxOutput, kMinOutput, maxRPM;
+    public final NetworkMapping<Integer> kP = new NetworkMapping<Integer>("shooter_p", 0, val -> {WSetP(val);});
+    public final NetworkMapping<Integer> kI = new NetworkMapping<Integer>("shooter_i", 0, val -> {WSetI(val);});
+    public final NetworkMapping<Integer> kD = new NetworkMapping<Integer>("shooter_d", 0, val -> {WSetD(val);});
+    public final NetworkMapping<Integer> kF = new NetworkMapping<Integer>("shooter_f", 0, val -> {WSetF(val);});
+    public final NetworkMapping<Integer> kSetPoint = new NetworkMapping<Integer>("shooter_rpm_setpoint", 0, val -> {WSetSetPoint(val);});
     private boolean isRunning;
 
 
@@ -49,8 +55,8 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterPIDController.setFF(F);
     }
 
-    public void WSetSetPoint(double Point) {
-
+    public void WSetSetPoint(double setPoint) {
+    	shooterPIDController.setReference(setPoint, ControlType.kVelocity);
     }
 
     public void setRunning(boolean isRunning) {
@@ -60,11 +66,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public void periodic() {
         super.periodic();
         SmartDashboard.putNumber("ShooterSpeed", shooterEncoder.getVelocity());
-        shooterPIDController.setP(SmartDashboard.getNumber("GainP", 0));
-        shooterPIDController.setI(SmartDashboard.getNumber("GainI", 0));
-        shooterPIDController.setD(SmartDashboard.getNumber("GainD", 0));
-        shooterPIDController.setFF(SmartDashboard.getNumber("GainF", 0));
-        shooterPIDController.setReference(SmartDashboard.getNumber("RpmSetpoint", 0), ControlType.kVelocity);
     }
 
 }
