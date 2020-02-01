@@ -2,13 +2,12 @@ package com.chargerrobotics.subsystems;
 
 import com.chargerrobotics.Constants;
 import com.chargerrobotics.utils.NetworkMapping;
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -17,7 +16,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private static ShooterSubsystem instance;
     private CANSparkMax shooter1;
     private CANSparkMax shooter2;
-    private CANPIDController shooterPIDController;
+    private CANPIDController shooterPIDController1;
+    private CANPIDController shooterPIDController2;
     public double kIz, kMaxOutput, kMinOutput, maxRPM;
     public final NetworkMapping<Double> kP = new NetworkMapping<Double>("shooter_p", Constants.shooterkP, val -> {setPIDP(val);});
     public final NetworkMapping<Double> kI = new NetworkMapping<Double>("shooter_i", Constants.shooterkI, val -> {setPIDI(val);});
@@ -36,9 +36,14 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterSubsystem() {
         shooter1 = new CANSparkMax(Constants.shooterID1, MotorType.kBrushless);
         shooter2 = new CANSparkMax(Constants.shooterID2, MotorType.kBrushless);
-        shooter2.follow(shooter1, true);
-        shooterPIDController = shooter1.getPIDController();
-        shooterPIDController.setOutputRange(Constants.shooterMinOutput, Constants.shooterMaxOutput);
+        shooterPIDController1 = shooter1.getPIDController();
+        shooterPIDController2 = shooter2.getPIDController();
+        shooter1.setInverted(true);
+        shooter2.setInverted(false);
+        shooter1.setIdleMode(IdleMode.kCoast);
+        shooter2.setIdleMode(IdleMode.kCoast);
+        shooterPIDController1.setOutputRange(Constants.shooterMinOutput, Constants.shooterMaxOutput);
+        shooterPIDController2.setOutputRange(Constants.shooterMinOutput, Constants.shooterMaxOutput);
         setPIDP(kP.getValue());
         setPIDI(kI.getValue());
         setPIDD(kD.getValue());
@@ -47,23 +52,28 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     private void setPIDP(double P) {
-        shooterPIDController.setP(P);
+        shooterPIDController1.setP(P);
+        shooterPIDController2.setP(P);
     }
 
     private void setPIDI(double I) {
-        shooterPIDController.setI(I);
+        shooterPIDController1.setI(I);
+        shooterPIDController2.setI(I);
     }
 
     private void setPIDD(double D) {
-        shooterPIDController.setD(D);
+        shooterPIDController1.setD(D);
+        shooterPIDController2.setD(D);
     }
 
     private void setPIDF(double F) {
-        shooterPIDController.setFF(F);
+        shooterPIDController1.setFF(F);
+        shooterPIDController2.setFF(F);
     }
 
     private void setPIDTarget(double setPoint) {
-    	shooterPIDController.setReference(setPoint, ControlType.kVelocity);
+    	shooterPIDController1.setReference(setPoint, ControlType.kVelocity);
+    	shooterPIDController2.setReference(setPoint, ControlType.kVelocity);
     }
 
     public void setSetPoint(double val) {
@@ -77,7 +87,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public double getAverageVelocity() {
-        return (shooter1.getEncoder().getVelocity() - shooter2.getEncoder().getVelocity()) / 2;
+        return (shooter1.getEncoder().getVelocity() + shooter2.getEncoder().getVelocity()) / 2;
     }
 
     @Override
