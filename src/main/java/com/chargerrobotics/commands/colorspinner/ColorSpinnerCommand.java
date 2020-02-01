@@ -12,33 +12,35 @@ import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ColorSpinnerCommand extends CommandBase {
-  /**
-   * Creates a new ColorSpinnerCommand.
-   */
-  public ColorSpinnerCommand() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+	
+	private final ColorSpinnerSubsystem colorSpinnerSubsystem;
+	/**
+	 * Creates a new ColorSpinnerCommand.
+	 */
+	public ColorSpinnerCommand(ColorSpinnerSubsystem colorSpinnerSubsystem) {
+		this.colorSpinnerSubsystem = colorSpinnerSubsystem;
+	}
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    ColorSpinnerSubsystem.getInstance().setRunning(true);
-  }
+	// Called when the command is initially scheduled.
+	@Override
+	public void initialize() {
+		colorSpinnerSubsystem.setRunning(true);
+	}
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-  }
+	// Called every time the scheduler runs while the command is scheduled.
+	@Override
+	public void execute() {
+	}
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(final boolean interrupted) {
-    ColorSpinnerSubsystem.getInstance().setRunning(false);
-  }
+	// Called once the command ends or is interrupted.
+	@Override
+	public void end(final boolean interrupted) {
+		colorSpinnerSubsystem.setRunning(false);
+	}
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+	// Returns true when the command should end.
+	@Override
+	public boolean isFinished() {
+		return false;
+	}
 }

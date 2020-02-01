@@ -7,12 +7,9 @@
 
 package com.chargerrobotics;
 
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.UsbCamera;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,7 +22,7 @@ public class Robot extends TimedRobot {
 
 	public static final int TEAM = 3786;
 
-	private RobotContainer robotContainer;
+	public static RobotContainer robotContainer;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -33,14 +30,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		// Instantiate our RobotContainer. This will perform all our button bindings,
-		// and put our
-		// autonomous chooser on the dashboard.
 		robotContainer = new RobotContainer();
-		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
-		cam.setConnectVerbose(0);
-		CvSink cvSink = CameraServer.getInstance().getVideo();
-		CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
 	}
 
 	/**
@@ -117,5 +107,14 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+	}
+
+	/**
+	 * Main initialization function. Do not perform any initialization here.
+	 *
+	 * DO NOT MODIFY
+	 */
+	public static void main(String... args) {
+		RobotBase.startRobot(Robot::new);
 	}
 }

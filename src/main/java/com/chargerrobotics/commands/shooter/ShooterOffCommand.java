@@ -5,21 +5,20 @@ import com.chargerrobotics.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ShooterOffCommand extends CommandBase {
-    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private final ShooterSubsystem shooterSubsystem;
+	private final ShooterSubsystem shooterSubsystem;
 
-    public ShooterOffCommand(ShooterSubsystem shooterSubsystem) {
-        this.shooterSubsystem = shooterSubsystem;
-    }
+	public ShooterOffCommand(ShooterSubsystem shooterSubsystem) {
+		this.shooterSubsystem = shooterSubsystem;
+	}
 
-    @Override
-    public void initialize() {
-        super.initialize();
-        shooterSubsystem.setRunning(false);
-    }
+	@Override
+	public void initialize() {
+		super.initialize();
+		shooterSubsystem.setRunning(false);
+	}
 
-    @Override
-    public boolean isFinished() {
-        return true;
-    }
+	@Override
+	public boolean isFinished() {
+		return true;
+	}
 }
