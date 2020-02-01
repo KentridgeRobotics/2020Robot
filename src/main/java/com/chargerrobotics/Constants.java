@@ -27,7 +27,6 @@ public final class Constants {
     // 2x: shooter?
     // 3x: ?
     public static final int shooterID = 7;
-    public static final int secShooterID = 8;
     public static final int leftRearDrive = 14;
     public static final int leftFrontDrive = 13;
     public static final int rightRearDrive = 12;
