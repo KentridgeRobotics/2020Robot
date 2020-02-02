@@ -7,6 +7,9 @@
 
 package com.chargerrobotics;
 
+import java.util.Arrays;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -35,19 +38,35 @@ public class Robot extends TimedRobot {
 	}
 
 	/**
-	 * This function is called once each time the robot enters Disabled mode.
+	 * This function is called once each time the robot enters operator control mode.
+	 */
+	@Override
+	public void teleopInit() {
+	}
+
+	/**
+	 * This function is called periodically during operator control.
+	 */
+	@Override
+	public void teleopPeriodic() {
+	}
+
+	/**
+	 * This function is called once each time the robot enters disabled mode.
 	 */
 	@Override
 	public void disabledInit() {
 	}
 
+	/**
+	 * This function is called periodically when the robot is disabled.
+	 */
 	@Override
 	public void disabledPeriodic() {
 	}
 
 	/**
-	 * This autonomous runs the autonomous command selected by your
-	 * {@link RobotContainer} class.
+	 * This function is called once each time the robot enters autonomous mode.
 	 */
 	@Override
 	public void autonomousInit() {
@@ -60,25 +79,11 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 	}
 
-	@Override
-	public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
-	}
-
 	/**
-	 * This function is called periodically during operator control.
+	 * This function is called once each time the robot enters test mode.
 	 */
 	@Override
-	public void teleopPeriodic() {
-
-	}
-
-	@Override
 	public void testInit() {
-		// Cancels all running commands at the start of test mode.
 		CommandScheduler.getInstance().cancelAll();
 	}
 
@@ -87,6 +92,25 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+	}
+
+	public static ColorWheelColor getColorWheelColor() {
+		String data = DriverStation.getInstance().getGameSpecificMessage();
+		return data.length() > 0 ? ColorWheelColor.valueOf(data.charAt(0)) : null;
+	}
+
+	public static enum ColorWheelColor {
+		BLUE('B'), GREEN('G'), RED('R'), YELLOW('Y');
+
+		private final int id;
+
+		private ColorWheelColor(char c) {
+			this.id = c;
+		}
+
+		public static ColorWheelColor valueOf(char c) {
+			return Arrays.stream(values()).filter(color -> color.id == c).findFirst().orElse(null);
+		}
 	}
 
 	/**
