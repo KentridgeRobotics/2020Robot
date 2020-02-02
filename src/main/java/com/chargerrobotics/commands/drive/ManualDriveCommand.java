@@ -8,28 +8,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ManualDriveCommand extends CommandBase {
-    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private final DriveSubsystem driveSubsystem;
-    private XboxController primary = RobotContainer.getPrimary();
+	private final DriveSubsystem driveSubsystem;
+	private XboxController primary = RobotContainer.primary;
 
-    public ManualDriveCommand (DriveSubsystem driveSubsystem) {
-        this.driveSubsystem = driveSubsystem;
-        addRequirements(driveSubsystem);
-    }
+	public ManualDriveCommand(DriveSubsystem driveSubsystem) {
+		this.driveSubsystem = driveSubsystem;
+		addRequirements(driveSubsystem);
+	}
 
-    @Override
-    public void initialize() {
-    }
+	@Override
+	public void initialize() {
+	}
 
-    @Override
-    public void execute() {
-        SmartDashboard.putNumber("leftStick", primary.getLeftStickY());
-        SmartDashboard.putNumber("rightStick", primary.getRightStickY());
-        driveSubsystem.setThrottle(primary.getLeftStickY(), -primary.getRightStickY());
-    }
+	@Override
+	public void execute() {
+		SmartDashboard.putNumber("leftStick", primary.getLeftStickY());
+		SmartDashboard.putNumber("rightStick", primary.getRightStickY());
+		driveSubsystem.setThrottle(primary.getLeftStickY(), -primary.getRightStickY());
+	}
 
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+	@Override
+	public boolean isFinished() {
+		return false;
+	}
 }
