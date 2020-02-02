@@ -13,12 +13,15 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.commands.LimelightCommand;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
+import com.chargerrobotics.commands.colorspinner.ColorTargetCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
@@ -61,6 +64,7 @@ public class RobotContainer {
 	// Color Spinner
 	private ColorSpinnerSubsystem colorSpinnerSubsystem;
 	private ColorSpinnerCommand colorSpinnerCommand;
+	private ColorTargetCommand colorTargetCommand;
 
 	// Climber Spinner
 	private ClimberSubsystem climberSubsystem;
@@ -98,6 +102,7 @@ public class RobotContainer {
 		if (colorSpinnerEnabled) {
 			colorSpinnerSubsystem = ColorSpinnerSubsystem.getInstance();
 			colorSpinnerCommand = new ColorSpinnerCommand(colorSpinnerSubsystem);
+			colorTargetCommand = new ColorTargetCommand(colorSpinnerSubsystem);
 		}
 		if (climberEnabled) {
 			climberSubsystem = ClimberSubsystem.getInstance();
