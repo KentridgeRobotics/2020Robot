@@ -8,6 +8,7 @@
 package com.chargerrobotics;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import com.chargerrobotics.commands.ExampleCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
@@ -17,6 +18,7 @@ import com.chargerrobotics.subsystems.ExampleSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -58,7 +60,12 @@ public class RobotContainer {
     primary.buttonX.whileHeld(colorSpinnerCommand);
 
     com.chargerrobotics.utils.XboxController secondary = new com.chargerrobotics.utils.XboxController(Constants.secondary);
-    
+
+    Joystick tirtiary = new Joystick(Constants.tirtiary);
+    JoystickButton colorSpinnerButton1 = new JoystickButton(tirtiary, 1);
+    JoystickButton colorSpinnerButton2 = new JoystickButton(tirtiary, 2);
+    colorSpinnerButton1.whileHeld(colorSpinnerCommand);
+    colorSpinnerButton2.whileHeld(colorSpinnerCommand);
   }
 
 

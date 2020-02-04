@@ -20,6 +20,9 @@ public final class Constants {
     public static final int primary = 0;
     public static final int secondary = 1;
 
+    //Generic HID controller ids
+    public static final int tirtiary = 2;  //Toggle button controller seperate form the Xbox controllers
+
     //CAN Id's
     public static final int shooterID = 5;
 
