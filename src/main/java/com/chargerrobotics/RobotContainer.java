@@ -82,9 +82,6 @@ public class RobotContainer {
 	 */
 	public RobotContainer() {
 		Config.setup();
-		setupBindings();
-		setupCamera();
-		compressor.setClosedLoopControl(true);
 		if (limelightEnabled) {
 			limelightSubsystem = LimelightSubsystem.getInstance();
 			limelightCommand = new LimelightCommand(limelightSubsystem);
@@ -109,6 +106,9 @@ public class RobotContainer {
 			climberUpCommand = new ClimberUpCommand(climberSubsystem);
 			climberDownCommand = new ClimberDownCommand(climberSubsystem);
 		}
+		setupBindings();
+		setupCamera();
+		compressor.setClosedLoopControl(true);
 	}
 
 	public void setupCamera() {
@@ -126,17 +126,25 @@ public class RobotContainer {
 	 */
 	private void setupBindings() {
 		// primary
+		if (driveEnabled) {
 		primary.buttonB.whileHeld(brakeCommand);
+		}
 		primary.buttonY.whileHeld(limelightCommand);
-		primary.buttonPovUp.whileHeld(climberUpCommand);
-		primary.buttonPovDown.whileHeld(climberDownCommand);
+		if (climberEnabled) {
+			primary.buttonPovUp.whileHeld(climberUpCommand);
+			primary.buttonPovDown.whileHeld(climberDownCommand);
+		}
 		//secondary
-		secondary.buttonA.whenPressed(shooterOnCommand);
-		secondary.buttonB.whenPressed(shooterOffCommand);
+		if (shooterEnabled) {
+			secondary.buttonA.whenPressed(shooterOnCommand);
+			secondary.buttonB.whenPressed(shooterOffCommand);
+		}
 	}
 
 	public void setDefaultDriveCommand() {
-		CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, manualDriveCommand);
+		if (driveEnabled) {
+			CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, manualDriveCommand);
+		}
 	}
 
 }
