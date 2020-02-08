@@ -27,6 +27,8 @@ public class DriveSubsystem extends SubsystemBase {
 	private double rightThrottle;
 
 	private boolean brake;
+	private boolean boost;
+	private boolean slow;
 
 	public static DriveSubsystem getInstance() {
 		if (instance == null)
@@ -76,29 +78,41 @@ public class DriveSubsystem extends SubsystemBase {
 		}
 	}
 
+	public void setBoost(boolean boost) {
+		this.boost = boost;
+	}
+
+	public void setSlow(boolean slow) {
+		this.slow = slow;
+	}
+
 	public void tankDrive(double leftPower, double rightPower) {
 		if (this.brake) {
 			leftPower *= 0.0;
 			rightPower *= 0.0;
-			SmartDashboard.putBoolean("Brake Mode?", true);
-		} else {
-			leftPower *= 0.6;
-			rightPower *= 0.6;
-			SmartDashboard.putBoolean("Brake Mode?", false);
+		} else if (!this.boost) {
+			if (this.slow) {
+				leftPower *= 0.3;
+				rightPower *= 0.3;
+			}
+			else {
+				leftPower *= 0.6;
+				rightPower *= 0.6;
+			}
 		}
 		SmartDashboard.putNumber("TankDriveLeftPower", leftPower);
 		SmartDashboard.putNumber("TankDriveRightPower", rightPower);
 		differentialDrive.tankDrive(leftPower, rightPower);
 	}
 
+	public void arcadeDrive(double throttle, double turnRate) {
+		differentialDrive.arcadeDrive(throttle, turnRate);
+	}
+
 	@Override
 	public void periodic() {
 		super.periodic();
-		// tankDrive(leftThrottle, rightThrottle);
-		SmartDashboard.putNumber("leftFrontPower", leftFront.getAppliedOutput());
-		SmartDashboard.putNumber("rightFrontPower", rightFront.getAppliedOutput());
-		SmartDashboard.putNumber("rightFrontCurrent", rightFront.getOutputCurrent());
-		SmartDashboard.putNumber("leftFrontCurrent", leftFront.getOutputCurrent());
+		tankDrive(leftThrottle, rightThrottle);
 	}
 
 	public void initDefaultCommand() {

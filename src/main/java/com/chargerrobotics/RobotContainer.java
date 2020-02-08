@@ -18,12 +18,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.commands.LimelightCommand;
+import com.chargerrobotics.commands.autonomous.VisionTurn;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
 import com.chargerrobotics.commands.colorspinner.ColorTargetCommand;
+import com.chargerrobotics.commands.drive.BoostCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
+import com.chargerrobotics.commands.drive.SlowCommand;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
@@ -42,11 +45,13 @@ import com.chargerrobotics.utils.XboxController;
 public class RobotContainer {
 
 	private static final boolean limelightEnabled = true;
-	private static final boolean driveEnabled = true;
-	private static final boolean shooterEnabled = true;
-	private static final boolean colorSpinnerEnabled = true;
-	private static final boolean climberEnabled = true;
-	private static final boolean chomperEnabled = true;
+	private static final boolean driveEnabled = false;
+	private static final boolean shooterEnabled = false;
+	private static final boolean colorSpinnerEnabled = false;
+	private static final boolean climberEnabled = false;
+
+	// Vision Test
+	public VisionTurn visionTurnTest;
 
 	// Limelight
 	private LimelightSubsystem limelightSubsystem;
@@ -56,6 +61,8 @@ public class RobotContainer {
 	private DriveSubsystem driveSubsystem;
 	private ManualDriveCommand manualDriveCommand;
 	private BrakeCommand brakeCommand;
+	private BoostCommand boostCommand;
+	private SlowCommand slowCommand;
 
 	// Shooter
 	private ShooterSubsystem shooterSubsystem;
@@ -72,10 +79,7 @@ public class RobotContainer {
 	private ClimberUpCommand climberUpCommand;
 	private ClimberDownCommand climberDownCommand;
 
-	//Chomper Subsystem
-	private ClimberDownCommand chomperCommand;
-
-	private final Compressor compressor = new Compressor(Constants.pneumaticControlModule);
+	private Compressor compressor = null;
 
 	// controllers
 	public final static XboxController primary = new XboxController(Constants.primary);
@@ -86,9 +90,6 @@ public class RobotContainer {
 	 */
 	public RobotContainer() {
 		Config.setup();
-		setupBindings();
-		setupCamera();
-		compressor.setClosedLoopControl(true);
 		if (limelightEnabled) {
 			limelightSubsystem = LimelightSubsystem.getInstance();
 			limelightCommand = new LimelightCommand(limelightSubsystem);
@@ -97,6 +98,8 @@ public class RobotContainer {
 			driveSubsystem = DriveSubsystem.getInstance();
 			manualDriveCommand = new ManualDriveCommand(driveSubsystem);
 			brakeCommand = new BrakeCommand(driveSubsystem);
+			boostCommand = new BoostCommand(driveSubsystem);
+			slowCommand = new SlowCommand(driveSubsystem);
 		}
 		if (shooterEnabled) {
 			shooterSubsystem = ShooterSubsystem.getInstance();
@@ -109,10 +112,17 @@ public class RobotContainer {
 			colorTargetCommand = new ColorTargetCommand(colorSpinnerSubsystem);
 		}
 		if (climberEnabled) {
+			compressor = new Compressor(Constants.pneumaticControlModule);
 			climberSubsystem = ClimberSubsystem.getInstance();
-			climberUpCommand = new ClimberUpCommand(climberSubsystem);
-			climberDownCommand = new ClimberDownCommand(climberSubsystem);
+			climberUpCommand = new ClimberUpCommand();
+			climberDownCommand = new ClimberDownCommand();
+			compressor.setClosedLoopControl(true);
 		}
+		setupBindings();
+		setupCamera();
+
+		//Vision Testing
+		visionTurnTest = new VisionTurn(this.limelightSubsystem, this.driveSubsystem);
 	}
 
 	public void setupCamera() {
@@ -130,18 +140,30 @@ public class RobotContainer {
 	 */
 	private void setupBindings() {
 		// primary
+		if (driveEnabled) {
 		primary.buttonB.whileHeld(brakeCommand);
-		primary.buttonY.whileHeld(limelightCommand);
-		primary.buttonPovUp.whileHeld(climberUpCommand);
-		primary.buttonPovDown.whileHeld(climberDownCommand);
+		primary.buttonBumperRight.whileHeld(boostCommand);
+		primary.buttonBumperLeft.whileHeld(slowCommand);
+		}
+		if (limelightEnabled) {
+			primary.buttonY.whileHeld(limelightCommand);
+
+		}
+		if (climberEnabled) {
+			climberSubsystem.setStop();
+			primary.buttonPovUp.whileHeld(climberUpCommand);
+			primary.buttonPovDown.whileHeld(climberDownCommand);
+		}
 		//secondary
 		secondary.buttonA.whenPressed(shooterOnCommand);
 		secondary.buttonB.whenPressed(shooterOffCommand);
-		secondary.buttonX.whenPressed(chomperCommand);
+		//secondary.buttonX.whenPressed(chomperCommand);
 	}
 
 	public void setDefaultDriveCommand() {
-		CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, manualDriveCommand);
+		if (driveEnabled) {
+			CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, manualDriveCommand);
+		}
 	}
 
 }
