@@ -7,19 +7,27 @@
 
 package com.chargerrobotics;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.commands.LimelightCommand;
-import com.chargerrobotics.commands.ClimberDownCommand;
-import com.chargerrobotics.commands.ClimberUpCommand;
+import com.chargerrobotics.commands.climber.ClimberDownCommand;
+import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
+import com.chargerrobotics.commands.colorspinner.ColorTargetCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
+import com.chargerrobotics.subsystems.ClimberSubsystem;
+import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
+import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
 import com.chargerrobotics.utils.Config;
 import com.chargerrobotics.utils.XboxController;
@@ -32,42 +40,82 @@ import com.chargerrobotics.utils.XboxController;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-	// subsystems
-	private final ShooterSubsystem shooterSubsystem = ShooterSubsystem.getInstance();
-	private final DriveSubsystem driveSubsystem = DriveSubsystem.getInstance();
-	private final ManualDriveCommand manualDriveCommand = new ManualDriveCommand(driveSubsystem);
-	private final ShooterOnCommand shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
-	private final ShooterOffCommand shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
-	private final BrakeCommand brakeCommand = new BrakeCommand(driveSubsystem);
 
-	private final ColorSpinnerCommand colorSpinnerCommand = new ColorSpinnerCommand();
-	private final LimelightCommand limelightCommand = new LimelightCommand();
-	private final ClimberDownCommand climberDownCommand = new ClimberDownCommand();
-	private final ClimberUpCommand climberUpCommand = new ClimberUpCommand();
-	
-	private final Compressor compressor = new Compressor();
+	private static final boolean limelightEnabled = true;
+	private static final boolean driveEnabled = true;
+	private static final boolean shooterEnabled = true;
+	private static final boolean colorSpinnerEnabled = true;
+	private static final boolean climberEnabled = true;
+
+	// Limelight
+	private LimelightSubsystem limelightSubsystem;
+	private LimelightCommand limelightCommand;
+
+	// Drive
+	private DriveSubsystem driveSubsystem;
+	private ManualDriveCommand manualDriveCommand;
+	private BrakeCommand brakeCommand;
+
+	// Shooter
+	private ShooterSubsystem shooterSubsystem;
+	private ShooterOnCommand shooterOnCommand;
+	private ShooterOffCommand shooterOffCommand;
+
+	// Color Spinner
+	private ColorSpinnerSubsystem colorSpinnerSubsystem;
+	private ColorSpinnerCommand colorSpinnerCommand;
+	private ColorTargetCommand colorTargetCommand;
+
+	// Climber Spinner
+	private ClimberSubsystem climberSubsystem;
+	private ClimberUpCommand climberUpCommand;
+	private ClimberDownCommand climberDownCommand;
+
+	private final Compressor compressor = new Compressor(Constants.pneumaticControlModule);
 
 	// controllers
-	private final static XboxController primary = new XboxController(Constants.primary);
-	private final static XboxController secondary = new XboxController(Constants.secondary);
-
-	public static XboxController getPrimary() {
-		return primary;
-	}
-
-	public static XboxController getSecondary() {
-		return secondary;
-	}
+	public final static XboxController primary = new XboxController(Constants.primary);
+	public final static XboxController secondary = new XboxController(Constants.secondary);
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
 		Config.setup();
-		// Configure the button bindings
-		configureButtonBindings();
-		setupDashboardValues();
+		if (limelightEnabled) {
+			limelightSubsystem = LimelightSubsystem.getInstance();
+			limelightCommand = new LimelightCommand(limelightSubsystem);
+		}
+		if (driveEnabled) {
+			driveSubsystem = DriveSubsystem.getInstance();
+			manualDriveCommand = new ManualDriveCommand(driveSubsystem);
+			brakeCommand = new BrakeCommand(driveSubsystem);
+		}
+		if (shooterEnabled) {
+			shooterSubsystem = ShooterSubsystem.getInstance();
+			shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
+			shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
+		}
+		if (colorSpinnerEnabled) {
+			colorSpinnerSubsystem = ColorSpinnerSubsystem.getInstance();
+			colorSpinnerCommand = new ColorSpinnerCommand(colorSpinnerSubsystem);
+			colorTargetCommand = new ColorTargetCommand(colorSpinnerSubsystem);
+		}
+		if (climberEnabled) {
+			climberSubsystem = ClimberSubsystem.getInstance();
+			climberUpCommand = new ClimberUpCommand(climberSubsystem);
+			climberDownCommand = new ClimberDownCommand(climberSubsystem);
+		}
+		setupBindings();
+		setupCamera();
 		compressor.setClosedLoopControl(true);
+	}
+
+	public void setupCamera() {
+		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+		cam.setConnectVerbose(0);
+		CvSink cvSink = CameraServer.getInstance().getVideo();
+		CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
 	}
 
 	/**
@@ -76,28 +124,27 @@ public class RobotContainer {
 	 * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
 	 * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
 	 */
-	private void configureButtonBindings() {
+	private void setupBindings() {
 		// primary
+		if (driveEnabled) {
 		primary.buttonB.whileHeld(brakeCommand);
+		}
 		primary.buttonY.whileHeld(limelightCommand);
-		primary.buttonPovUp.whileHeld(climberUpCommand);
-		primary.buttonPovDown.whileHeld(climberDownCommand);
+		if (climberEnabled) {
+			primary.buttonPovUp.whileHeld(climberUpCommand);
+			primary.buttonPovDown.whileHeld(climberDownCommand);
+		}
+		//secondary
+		if (shooterEnabled) {
+			secondary.buttonA.whenPressed(shooterOnCommand);
+			secondary.buttonB.whenPressed(shooterOffCommand);
+		}
 	}
 
-	public static final double kP = 5e-5;
-	public static final double kI = 1e-6;
-	public static final double kD = 0;
-	public static final double kF = 0;
-	public static final double kRpmSetpoint = 1000;
-
-	private void setupDashboardValues() {
-
-		SmartDashboard.putNumber("GainP", kP);
-		SmartDashboard.putNumber("GainI", kI);
-		SmartDashboard.putNumber("GainD", kD);
-		SmartDashboard.putNumber("GainF", kF);
-		SmartDashboard.putNumber("RpmSetpoint", kRpmSetpoint);
-
+	public void setDefaultDriveCommand() {
+		if (driveEnabled) {
+			CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, manualDriveCommand);
+		}
 	}
 
 }
