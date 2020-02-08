@@ -42,6 +42,18 @@ public class LimelightSubsystem extends SubsystemBase {
 		// if (v == 1.0) DriveSubsystem.getInstance().tankDrive(x, y);
 	}
 
+	public double getX() {
+		return x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public double getV() {
+		return v;
+	}
+
 	@Override
 	public void periodic() {
 		super.periodic();
