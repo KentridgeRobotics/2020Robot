@@ -46,6 +46,7 @@ public class RobotContainer {
 	private static final boolean shooterEnabled = true;
 	private static final boolean colorSpinnerEnabled = true;
 	private static final boolean climberEnabled = true;
+	private static final boolean chomperEnabled = true;
 
 	// Limelight
 	private LimelightSubsystem limelightSubsystem;
@@ -70,6 +71,9 @@ public class RobotContainer {
 	private ClimberSubsystem climberSubsystem;
 	private ClimberUpCommand climberUpCommand;
 	private ClimberDownCommand climberDownCommand;
+
+	//Chomper Subsystem
+	private ClimberDownCommand chomperCommand;
 
 	private final Compressor compressor = new Compressor(Constants.pneumaticControlModule);
 
@@ -133,6 +137,7 @@ public class RobotContainer {
 		//secondary
 		secondary.buttonA.whenPressed(shooterOnCommand);
 		secondary.buttonB.whenPressed(shooterOffCommand);
+		secondary.buttonX.whenPressed(chomperCommand);
 	}
 
 	public void setDefaultDriveCommand() {
