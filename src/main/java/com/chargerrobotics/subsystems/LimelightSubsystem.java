@@ -51,6 +51,7 @@ public class LimelightSubsystem extends SubsystemBase {
       v = tv.getDouble(0.0);
       SmartDashboard.putNumber("LimelightX", x);
       SmartDashboard.putNumber("LimelightY", y);
+      SmartDashboard.putNumber("LimelightV", v);
     }
   }
 }
