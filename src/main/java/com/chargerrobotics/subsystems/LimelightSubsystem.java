@@ -7,6 +7,7 @@
 
 package com.chargerrobotics.subsystems;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
@@ -18,7 +19,7 @@ public class LimelightSubsystem extends SubsystemBase {
 	 * Creates a new LimelightSubsystem.
 	 */
 	private NetworkTable table;
-	private NetworkTableEntry tx, ty, tv;
+	private NetworkTableEntry tx, ty, tv, leds;
 	private boolean isRunning;
 	private static LimelightSubsystem instance;
 
@@ -29,12 +30,19 @@ public class LimelightSubsystem extends SubsystemBase {
 		tx = table.getEntry("tx");
 		ty = table.getEntry("ty");
 		tv = table.getEntry("tv");
+		leds = table.getEntry("ledMode");
 	}
 
 	public static LimelightSubsystem getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new LimelightSubsystem();
+			CommandScheduler.getInstance().registerSubsystem(instance);
+		}
 		return instance;
+	}
+
+	public void setLEDStatus(boolean enabled) {
+		leds.setDouble(enabled ? 0.0 : 1.0);
 	}
 
 	public void setRunning(boolean isRunning) {

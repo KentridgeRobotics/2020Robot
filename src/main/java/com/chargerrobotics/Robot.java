@@ -9,10 +9,13 @@ package com.chargerrobotics;
 
 import java.util.Arrays;
 
+import com.chargerrobotics.subsystems.LimelightSubsystem;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
@@ -36,6 +39,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		robotContainer = new RobotContainer();
+		SmartDashboard.putData(CommandScheduler.getInstance());
 	}
 
 	/**
@@ -65,6 +69,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopInit() {
+		robotContainer.setTeleop();
 	}
 
 	/**
@@ -79,6 +84,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledInit() {
+		robotContainer.setDisabled();
 	}
 
 	/**
@@ -93,7 +99,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		this.robotContainer.visionTurnTest.execute();
+		robotContainer.setAutonomous();
 	}
 
 	/**
