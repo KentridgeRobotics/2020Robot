@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.commands.LimelightCommand;
+import com.chargerrobotics.commands.autonomous.VisionTurn;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -48,6 +49,9 @@ public class RobotContainer {
 	private static final boolean shooterEnabled = false;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
+
+	// Vision Test
+	public VisionTurn visionTurnTest;
 
 	// Limelight
 	private LimelightSubsystem limelightSubsystem;
@@ -110,12 +114,15 @@ public class RobotContainer {
 		if (climberEnabled) {
 			compressor = new Compressor(Constants.pneumaticControlModule);
 			climberSubsystem = ClimberSubsystem.getInstance();
-			climberUpCommand = new ClimberUpCommand(climberSubsystem);
-			climberDownCommand = new ClimberDownCommand(climberSubsystem);
+			climberUpCommand = new ClimberUpCommand();
+			climberDownCommand = new ClimberDownCommand();
 			compressor.setClosedLoopControl(true);
 		}
 		setupBindings();
 		setupCamera();
+
+		//Vision Testing
+		visionTurnTest = new VisionTurn(this.limelightSubsystem, this.driveSubsystem);
 	}
 
 	public void setupCamera() {
