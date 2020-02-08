@@ -155,10 +155,9 @@ public class RobotContainer {
 			primary.buttonPovDown.whileHeld(climberDownCommand);
 		}
 		//secondary
-		if (shooterEnabled) {
-			secondary.buttonA.whenPressed(shooterOnCommand);
-			secondary.buttonB.whenPressed(shooterOffCommand);
-		}
+		secondary.buttonA.whenPressed(shooterOnCommand);
+		secondary.buttonB.whenPressed(shooterOffCommand);
+		//secondary.buttonX.whenPressed(chomperCommand);
 	}
 
 	public void setDefaultDriveCommand() {
