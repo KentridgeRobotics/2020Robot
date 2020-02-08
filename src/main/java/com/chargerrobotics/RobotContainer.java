@@ -22,8 +22,10 @@ import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
 import com.chargerrobotics.commands.colorspinner.ColorTargetCommand;
+import com.chargerrobotics.commands.drive.BoostCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
+import com.chargerrobotics.commands.drive.SlowCommand;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
@@ -55,6 +57,8 @@ public class RobotContainer {
 	private DriveSubsystem driveSubsystem;
 	private ManualDriveCommand manualDriveCommand;
 	private BrakeCommand brakeCommand;
+	private BoostCommand boostCommand;
+	private SlowCommand slowCommand;
 
 	// Shooter
 	private ShooterSubsystem shooterSubsystem;
@@ -90,6 +94,8 @@ public class RobotContainer {
 			driveSubsystem = DriveSubsystem.getInstance();
 			manualDriveCommand = new ManualDriveCommand(driveSubsystem);
 			brakeCommand = new BrakeCommand(driveSubsystem);
+			boostCommand = new BoostCommand(driveSubsystem);
+			slowCommand = new SlowCommand(driveSubsystem);
 		}
 		if (shooterEnabled) {
 			shooterSubsystem = ShooterSubsystem.getInstance();
@@ -129,12 +135,15 @@ public class RobotContainer {
 		// primary
 		if (driveEnabled) {
 		primary.buttonB.whileHeld(brakeCommand);
+		primary.buttonBumperRight.whileHeld(boostCommand);
+		primary.buttonBumperLeft.whileHeld(slowCommand);
 		}
 		if (limelightEnabled) {
 			primary.buttonY.whileHeld(limelightCommand);
 
 		}
 		if (climberEnabled) {
+			climberSubsystem.setStop();
 			primary.buttonPovUp.whileHeld(climberUpCommand);
 			primary.buttonPovDown.whileHeld(climberDownCommand);
 		}
