@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.chargerrobotics.commands;
+package com.chargerrobotics.commands.climber;
 
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 

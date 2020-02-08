@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.commands.LimelightCommand;
+import com.chargerrobotics.commands.autonomous.VisionTurn;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -44,10 +45,13 @@ import com.chargerrobotics.utils.XboxController;
 public class RobotContainer {
 
 	private static final boolean limelightEnabled = true;
-	private static final boolean driveEnabled = true;
-	private static final boolean shooterEnabled = true;
-	private static final boolean colorSpinnerEnabled = true;
-	private static final boolean climberEnabled = true;
+	private static final boolean driveEnabled = false;
+	private static final boolean shooterEnabled = false;
+	private static final boolean colorSpinnerEnabled = false;
+	private static final boolean climberEnabled = false;
+
+	// Vision Test
+	public VisionTurn visionTurnTest;
 
 	// Limelight
 	private LimelightSubsystem limelightSubsystem;
@@ -75,7 +79,7 @@ public class RobotContainer {
 	private ClimberUpCommand climberUpCommand;
 	private ClimberDownCommand climberDownCommand;
 
-	private final Compressor compressor = new Compressor(Constants.pneumaticControlModule);
+	private Compressor compressor = null;
 
 	// controllers
 	public final static XboxController primary = new XboxController(Constants.primary);
@@ -108,13 +112,17 @@ public class RobotContainer {
 			colorTargetCommand = new ColorTargetCommand(colorSpinnerSubsystem);
 		}
 		if (climberEnabled) {
+			compressor = new Compressor(Constants.pneumaticControlModule);
 			climberSubsystem = ClimberSubsystem.getInstance();
-			climberUpCommand = new ClimberUpCommand(climberSubsystem);
-			climberDownCommand = new ClimberDownCommand(climberSubsystem);
+			climberUpCommand = new ClimberUpCommand();
+			climberDownCommand = new ClimberDownCommand();
+			compressor.setClosedLoopControl(true);
 		}
 		setupBindings();
 		setupCamera();
-		compressor.setClosedLoopControl(true);
+
+		//Vision Testing
+		visionTurnTest = new VisionTurn(this.limelightSubsystem, this.driveSubsystem);
 	}
 
 	public void setupCamera() {
@@ -137,7 +145,10 @@ public class RobotContainer {
 		primary.buttonBumperRight.whileHeld(boostCommand);
 		primary.buttonBumperLeft.whileHeld(slowCommand);
 		}
-		primary.buttonY.whileHeld(limelightCommand);
+		if (limelightEnabled) {
+			primary.buttonY.whileHeld(limelightCommand);
+
+		}
 		if (climberEnabled) {
 			climberSubsystem.setStop();
 			primary.buttonPovUp.whileHeld(climberUpCommand);
