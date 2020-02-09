@@ -12,33 +12,36 @@ import com.chargerrobotics.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ClimberDownCommand extends CommandBase {
-  /**
-   * Creates a new ClimberCommand.
-   */
-  public ClimberDownCommand() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    ClimberSubsystem.getInstance().setDown();
-  }
+	private final ClimberSubsystem climberSubsystem;
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-  }
+	/**
+	 * Creates a new ClimberCommand.
+	 */
+	public ClimberDownCommand(ClimberSubsystem climberSubsystem) {
+		this.climberSubsystem = climberSubsystem;
+	}
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    ClimberSubsystem.getInstance().setStop();
-  }
+	// Called when the command is initially scheduled.
+	@Override
+	public void initialize() {
+		climberSubsystem.setDown();
+	}
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+	// Called every time the scheduler runs while the command is scheduled.
+	@Override
+	public void execute() {
+	}
+
+	// Called once the command ends or is interrupted.
+	@Override
+	public void end(boolean interrupted) {
+		climberSubsystem.setStop();
+	}
+
+	// Returns true when the command should end.
+	@Override
+	public boolean isFinished() {
+		return false;
+	}
 }

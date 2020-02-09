@@ -45,10 +45,10 @@ import com.chargerrobotics.utils.XboxController;
 public class RobotContainer {
 
 	private static final boolean limelightEnabled = true;
-	private static final boolean driveEnabled = false;
-	private static final boolean shooterEnabled = false;
-	private static final boolean colorSpinnerEnabled = false;
-	private static final boolean climberEnabled = false;
+	private static final boolean driveEnabled = true;
+	private static final boolean shooterEnabled = true;
+	private static final boolean colorSpinnerEnabled = true;
+	private static final boolean climberEnabled = true;
 
 	// Vision Test
 	public VisionTurn visionTurnTest;
@@ -113,15 +113,15 @@ public class RobotContainer {
 		}
 		if (climberEnabled) {
 			compressor = new Compressor(Constants.pneumaticControlModule);
-			climberSubsystem = ClimberSubsystem.getInstance();
-			climberUpCommand = new ClimberUpCommand();
-			climberDownCommand = new ClimberDownCommand();
 			compressor.setClosedLoopControl(true);
+			climberSubsystem = ClimberSubsystem.getInstance();
+			climberUpCommand = new ClimberUpCommand(climberSubsystem);
+			climberDownCommand = new ClimberDownCommand(climberSubsystem);
 		}
 		setupBindings();
 		setupCamera();
 
-		//Vision Testing
+		// Vision Testing
 		visionTurnTest = new VisionTurn(this.limelightSubsystem, this.driveSubsystem);
 	}
 
@@ -141,23 +141,24 @@ public class RobotContainer {
 	private void setupBindings() {
 		// primary
 		if (driveEnabled) {
-		primary.buttonB.whileHeld(brakeCommand);
-		primary.buttonBumperRight.whileHeld(boostCommand);
-		primary.buttonBumperLeft.whileHeld(slowCommand);
+			primary.buttonB.whileHeld(brakeCommand);
+			primary.buttonBumperRight.whileHeld(boostCommand);
+			primary.buttonBumperLeft.whileHeld(slowCommand);
 		}
 		if (limelightEnabled) {
 			primary.buttonY.whileHeld(limelightCommand);
-
 		}
 		if (climberEnabled) {
 			climberSubsystem.setStop();
 			primary.buttonPovUp.whileHeld(climberUpCommand);
 			primary.buttonPovDown.whileHeld(climberDownCommand);
 		}
-		//secondary
-		secondary.buttonA.whenPressed(shooterOnCommand);
-		secondary.buttonB.whenPressed(shooterOffCommand);
-		//secondary.buttonX.whenPressed(chomperCommand);
+		// secondary
+		if (shooterEnabled) {
+			secondary.buttonA.whenPressed(shooterOnCommand);
+			secondary.buttonB.whenPressed(shooterOffCommand);
+		}
+		// secondary.buttonX.whenPressed(chomperCommand);
 	}
 
 	public void setDefaultDriveCommand() {
