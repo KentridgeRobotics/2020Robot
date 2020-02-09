@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.commands.LimelightCommand;
+import com.chargerrobotics.commands.autonomous.VisionTurn;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -49,6 +50,9 @@ public class RobotContainer {
 	private static final boolean colorSpinnerEnabled = true;
 	private static final boolean climberEnabled = true;
 
+	// Vision Test
+	public VisionTurn visionTurnTest;
+
 	// Limelight
 	private LimelightSubsystem limelightSubsystem;
 	private LimelightCommand limelightCommand;
@@ -75,7 +79,7 @@ public class RobotContainer {
 	private ClimberUpCommand climberUpCommand;
 	private ClimberDownCommand climberDownCommand;
 
-	private final Compressor compressor = new Compressor(Constants.pneumaticControlModule);
+	private Compressor compressor = null;
 
 	// controllers
 	public final static XboxController primary = new XboxController(Constants.primary);
@@ -108,13 +112,17 @@ public class RobotContainer {
 			colorTargetCommand = new ColorTargetCommand(colorSpinnerSubsystem);
 		}
 		if (climberEnabled) {
+			compressor = new Compressor(Constants.pneumaticControlModule);
+			compressor.setClosedLoopControl(true);
 			climberSubsystem = ClimberSubsystem.getInstance();
 			climberUpCommand = new ClimberUpCommand(climberSubsystem);
 			climberDownCommand = new ClimberDownCommand(climberSubsystem);
 		}
 		setupBindings();
 		setupCamera();
-		compressor.setClosedLoopControl(true);
+
+		// Vision Testing
+		visionTurnTest = new VisionTurn(this.limelightSubsystem, this.driveSubsystem);
 	}
 
 	public void setupCamera() {
@@ -133,9 +141,9 @@ public class RobotContainer {
 	private void setupBindings() {
 		// primary
 		if (driveEnabled) {
-		primary.buttonB.whileHeld(brakeCommand);
-		primary.buttonBumperRight.whileHeld(boostCommand);
-		primary.buttonBumperLeft.whileHeld(slowCommand);
+			primary.buttonB.whileHeld(brakeCommand);
+			primary.buttonBumperRight.whileHeld(boostCommand);
+			primary.buttonBumperLeft.whileHeld(slowCommand);
 		}
 		if (limelightEnabled) {
 			primary.buttonY.whileHeld(limelightCommand);
@@ -145,11 +153,12 @@ public class RobotContainer {
 			primary.buttonPovUp.whileHeld(climberUpCommand);
 			primary.buttonPovDown.whileHeld(climberDownCommand);
 		}
-		//secondary
+		// secondary
 		if (shooterEnabled) {
 			secondary.buttonA.whenPressed(shooterOnCommand);
 			secondary.buttonB.whenPressed(shooterOffCommand);
 		}
+		// secondary.buttonX.whenPressed(chomperCommand);
 	}
 
 	public void setDefaultDriveCommand() {

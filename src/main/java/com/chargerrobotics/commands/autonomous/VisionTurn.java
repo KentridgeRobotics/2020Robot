@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class VisionTurn extends PIDCommand {
+  private LimelightSubsystem limelight;
+
   /**
    * Creates a new VisionTurn.
    */
@@ -35,6 +37,14 @@ public class VisionTurn extends PIDCommand {
         });
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
+    limelight = limelightSubsystem;
+  }
+
+  @Override
+  public void execute() {
+    // TODO Auto-generated method stub
+    System.out.print("Error: " + this.getController().getPositionError());
+    System.out.println("\t"+"X: "+limelight.getX());
   }
 
   // Returns true when the command should end.
