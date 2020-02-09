@@ -137,7 +137,9 @@ public class RobotContainer {
 		primary.buttonBumperRight.whileHeld(boostCommand);
 		primary.buttonBumperLeft.whileHeld(slowCommand);
 		}
-		primary.buttonY.whileHeld(limelightCommand);
+		if (limelightEnabled) {
+			primary.buttonY.whileHeld(limelightCommand);
+		}
 		if (climberEnabled) {
 			climberSubsystem.setStop();
 			primary.buttonPovUp.whileHeld(climberUpCommand);
