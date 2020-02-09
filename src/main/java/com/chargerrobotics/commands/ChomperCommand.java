@@ -5,27 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.chargerrobotics.commands.climber;
+package com.chargerrobotics.commands;
 
-import com.chargerrobotics.subsystems.ClimberSubsystem;
+import com.chargerrobotics.subsystems.ChomperSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ClimberDownCommand extends CommandBase {
+public class ChomperCommand extends CommandBase {
 
-	private final ClimberSubsystem climberSubsystem;
+	private final ChomperSubsystem chomperSubsystem;
 
 	/**
-	 * Creates a new ClimberCommand.
+	 * Creates a new LimelightCommand.
 	 */
-	public ClimberDownCommand(ClimberSubsystem climberSubsystem) {
-		this.climberSubsystem = climberSubsystem;
+	public ChomperCommand(ChomperSubsystem chomperSubsystem) {
+		this.chomperSubsystem = chomperSubsystem;
 	}
 
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		climberSubsystem.setDown();
+		chomperSubsystem.setRunning(true);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -36,7 +36,7 @@ public class ClimberDownCommand extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		climberSubsystem.setStop();
+		chomperSubsystem.setRunning(false);
 	}
 
 	// Returns true when the command should end.
