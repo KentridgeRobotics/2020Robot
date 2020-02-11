@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.chargerrobotics.commands;
+package com.chargerrobotics.commands.chomper;
 
 import com.chargerrobotics.subsystems.ChomperSubsystem;
 
