@@ -78,6 +78,11 @@ public class DriveSubsystem extends SubsystemBase {
 		}
 	}
 
+	public void setSpeeds(double left, double right) {
+		leftDriveGroup.set(left);
+		rightDriveGroup.set(right);
+	}
+
 	public void setBoost(boolean boost) {
 		this.boost = boost;
 	}

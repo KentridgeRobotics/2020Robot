@@ -50,12 +50,11 @@ public class RobotContainer {
 	private static final boolean colorSpinnerEnabled = true;
 	private static final boolean climberEnabled = true;
 
-	// Vision Test
-	public VisionTurn visionTurnTest;
-
 	// Limelight
 	private LimelightSubsystem limelightSubsystem;
 	private LimelightCommand limelightCommand;
+	// Vision Test
+	public VisionTurn visionTurnTest;
 
 	// Drive
 	private DriveSubsystem driveSubsystem;
@@ -90,16 +89,21 @@ public class RobotContainer {
 	 */
 	public RobotContainer() {
 		Config.setup();
-		if (limelightEnabled) {
-			limelightSubsystem = LimelightSubsystem.getInstance();
-			limelightCommand = new LimelightCommand(limelightSubsystem);
-		}
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
 			manualDriveCommand = new ManualDriveCommand(driveSubsystem);
 			brakeCommand = new BrakeCommand(driveSubsystem);
 			boostCommand = new BoostCommand(driveSubsystem);
 			slowCommand = new SlowCommand(driveSubsystem);
+		}
+		if (limelightEnabled) {
+			limelightSubsystem = LimelightSubsystem.getInstance();
+			limelightCommand = new LimelightCommand(limelightSubsystem);
+			limelightSubsystem.setRunning(true);
+			if (driveEnabled) {
+				//Vision Testing
+				visionTurnTest = new VisionTurn(limelightSubsystem, driveSubsystem);
+			}
 		}
 		if (shooterEnabled) {
 			shooterSubsystem = ShooterSubsystem.getInstance();
@@ -120,9 +124,6 @@ public class RobotContainer {
 		}
 		setupBindings();
 		setupCamera();
-
-		// Vision Testing
-		visionTurnTest = new VisionTurn(this.limelightSubsystem, this.driveSubsystem);
 	}
 
 	public void setupCamera() {
@@ -165,6 +166,26 @@ public class RobotContainer {
 		if (driveEnabled) {
 			CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, manualDriveCommand);
 		}
+	}
+
+	public void setTeleop() {
+		if (driveEnabled) {
+			//manualDriveCommand.schedule();
+			if (limelightEnabled)
+				limelightSubsystem.setLEDStatus(false);
+		}
+	}
+
+	public void setAutonomous() {
+		if (driveEnabled && limelightEnabled) {
+			limelightSubsystem.setLEDStatus(true);
+			visionTurnTest.schedule();
+		}
+	}
+
+	public void setDisabled() {
+		if (limelightEnabled)
+			limelightSubsystem.setLEDStatus(false);
 	}
 
 }
