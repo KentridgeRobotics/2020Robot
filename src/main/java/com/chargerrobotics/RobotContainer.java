@@ -160,6 +160,12 @@ public class RobotContainer {
 		// secondary.buttonX.whenPressed(chomperCommand);
 	}
 
+	public void setDefaultDriveCommand() {
+		if (driveEnabled) {
+			CommandScheduler.getInstance().setDefaultCommand(driveSubsystem, manualDriveCommand);
+		}
+	}
+
 	public void setTeleop() {
 		if (driveEnabled) {
 			//manualDriveCommand.schedule();
