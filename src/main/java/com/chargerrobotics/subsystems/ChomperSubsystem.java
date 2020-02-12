@@ -8,11 +8,8 @@
 package com.chargerrobotics.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.*;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.drive.*;
+
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,7 +17,7 @@ public class ChomperSubsystem extends SubsystemBase {
   
   private static ChomperSubsystem instance;
   private boolean isRunning;
-  private final CANSparkMax chomperMotor;
+  private final WPI_TalonSRX chomperMotor;
 
   /**
    * Creates a new Chomper.
@@ -34,7 +31,7 @@ public class ChomperSubsystem extends SubsystemBase {
   }
 
   public ChomperSubsystem() {
-    chomperMotor = new CANSparkMax(32, MotorType.kBrushless);
+    chomperMotor = new WPI_TalonSRX(32);
   }
 
   public void setRunning(final boolean isRunning) {
