@@ -129,6 +129,8 @@ public class RobotContainer {
 	public void setupCamera() {
 		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
 		cam.setConnectVerbose(0);
+		CvSink cvSink = CameraServer.getInstance().getVideo();
+		CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
 	}
 
 	/**
