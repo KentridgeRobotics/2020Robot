@@ -36,6 +36,7 @@ public final class Constants {
 	public static final int leftRearDrive = 14;
 	public static final int shooterID1 = 21;
 	public static final int shooterID2 = 22;
+	public static final int shooterHoodID = 23;
 	public static final int colorSpinner = 31;
 
 	// Shooter Constants
@@ -48,6 +49,20 @@ public final class Constants {
 	public static final double shooterVelocityGain = 0.0;
 	public static final double shooterMinOutput = -1.0;
 	public static final double shooterMaxOutput = 1.0;
+
+	// Shooter Hood Constants
+	public static final int hoodPIDLoopId = 0;
+	public static final int hoodGainSlot = 0;
+	public static final int hoodTimeOutMs = 30;
+	public static final boolean hoodSensorPhase = true;
+	public static final boolean hoodMotorInverted = false;
+	public static final int hoodErrorThreshold = 0;
+	public static final int ticksPerRev = 500; //just a test number
+	public static final double hoodP = 0.1;
+	public static final double hoodI = 0.0;
+	public static final double hoodD = 0.0;
+	public static final double hoodF = 0.0;
+
 
 	// File Names
 	public static final String dataStoragePath = "/home/lvuser";
