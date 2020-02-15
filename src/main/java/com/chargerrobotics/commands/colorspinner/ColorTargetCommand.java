@@ -48,9 +48,11 @@ public class ColorTargetCommand extends CommandBase {
 	@Override
 	public boolean isFinished() {
 		String receivedColor = ColorSpinnerSerialListener.getInstance().getColor();
-		if (receivedColor != null) 
+		if (receivedColor != null) {
+			System.out.println(receivedColor);
 			return ColorWheelColor.valueOf(receivedColor.charAt(0)) == target;
-		else
+		} else {
 			return false;
+		}
 	}
 }
