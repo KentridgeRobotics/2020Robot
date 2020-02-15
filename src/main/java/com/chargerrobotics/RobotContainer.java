@@ -94,6 +94,7 @@ public class RobotContainer {
 	 */
 	public RobotContainer() {
 		Config.setup();
+		serialSubsystem = serialSubsystem.getInstance();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
 			manualDriveCommand = new ManualDriveCommand(driveSubsystem);
@@ -126,9 +127,6 @@ public class RobotContainer {
 			climberSubsystem = ClimberSubsystem.getInstance();
 			climberUpCommand = new ClimberUpCommand(climberSubsystem);
 			climberDownCommand = new ClimberDownCommand(climberSubsystem);
-		}
-		if (serialEnabled) {
-			serialSubsystem = new SerialSubsystem("");
 		}
 		setupBindings();
 		setupCamera();
