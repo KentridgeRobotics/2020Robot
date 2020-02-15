@@ -10,6 +10,7 @@ package com.chargerrobotics.commands.colorspinner;
 import com.chargerrobotics.Robot;
 import com.chargerrobotics.Robot.ColorWheelColor;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
+import com.chargerrobotics.utils.ColorSpinnerSerialListener;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -28,10 +29,8 @@ public class ColorTargetCommand extends CommandBase {
 	@Override
 	public void initialize() {
 		target = Robot.getColorWheelColor();
-		if (target != null)
-			colorSpinnerSubsystem.setRunning(true);
-		else
-			this.cancel();
+		if (target != null) colorSpinnerSubsystem.setRunning(true);
+		else this.cancel();
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -42,16 +41,16 @@ public class ColorTargetCommand extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(final boolean interrupted) {
-		if (!interrupted)
-			colorSpinnerSubsystem.setRunning(false);
+		if (!interrupted) colorSpinnerSubsystem.setRunning(false);
 	}
 
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		ColorWheelColor currentColor = null; //GET CURRENT WHEEL COLOR
-		if (currentColor == target)
-			return true;
-		return false;
+		String receivedColor = ColorSpinnerSerialListener.getInstance().getColor();
+		if (receivedColor != null) 
+			return ColorWheelColor.valueOf(receivedColor.charAt(0)) == target;
+		else
+			return false;
 	}
 }
