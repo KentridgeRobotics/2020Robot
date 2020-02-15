@@ -8,23 +8,30 @@
 package com.chargerrobotics.subsystems;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import com.fazecast.jSerialComm.SerialPort;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/** A subsystem to read from all USB serial devices and
+ * distribute data to a set of listeners.
+ */
 public class SerialSubsystem extends SubsystemBase {
   private final List<SerialPort> ports;
+  private final Map<String,Consumer<String>> listeners;
   private final Map<String,StringBuilder> stringBuilders;
-  private final Deque<String> queue;
   private static final int baudRate = 9600;
 
   private static SerialSubsystem instance;
+
+  /**
+   * Singleton, since this manages all ports on the robot
+   * @return
+   */
   public static SerialSubsystem getInstance() {
     if (instance == null) {
       instance = new SerialSubsystem();
@@ -35,11 +42,14 @@ public class SerialSubsystem extends SubsystemBase {
    * Creates a new SerialSubsystem.
    */
   private SerialSubsystem() {
-    this.queue = new LinkedList<String>();
     this.ports = new ArrayList<>();
-    this.stringBuilders = new HashMap<String,StringBuilder>();
+    this.stringBuilders = new HashMap<>();
+    this.listeners = new HashMap<>();
   }
 
+  /**
+   * Call this in teleopInit and autonomousInit
+   */
   public void init() {
     if (this.ports.isEmpty()) {
       SerialPort[] availablePorts = SerialPort.getCommPorts();
@@ -58,6 +68,9 @@ public class SerialSubsystem extends SubsystemBase {
     }
   }
 
+  /**
+   * Call this in disableInit. Probably also good to call when the competition is done
+   */
   public void close() {
     for (var port : ports) {
       port.closePort();
@@ -66,7 +79,26 @@ public class SerialSubsystem extends SubsystemBase {
     ports.clear();
   }
 
-  byte[] buf = new byte[256];
+  /**
+   * Register a consumer to listen for messages that start with a given prefix.
+   * This is how we distinguish different kinds of messages from each other.
+   * 
+   * @param messagePrefix
+   * @param listener
+   */
+  public void registerListener(String messagePrefix, Consumer<String> listener) {
+    this.listeners.put(messagePrefix, listener);
+  }
+
+  private final byte[] buf = new byte[256];
+
+  private void processMessage(String message) {
+    for (var prefix : listeners.keySet()) {
+      if (message.startsWith(prefix)) {
+        listeners.get(prefix).accept(message.substring(prefix.length()));
+      }
+    }
+  }
 
   private void pollPort(SerialPort serial) {
     int avail = serial.bytesAvailable();
@@ -82,7 +114,7 @@ public class SerialSubsystem extends SubsystemBase {
         char c = (char)buf[i];
         if (c == '\n') {
           String s = sb.toString();
-          queue.addFirst(s);
+          processMessage(s);
           sb = null;
           stringBuilders.remove(portName);
         } else {
@@ -90,17 +122,12 @@ public class SerialSubsystem extends SubsystemBase {
         }
       }
     }
-
   }
 
   @Override
   public void periodic() {
     for (var port : ports) {
       pollPort(port);
-    }
-    String line = queue.pollLast();
-    if (line != null) {
-      System.err.println("Queue: "+line);
     }
   }
 }
