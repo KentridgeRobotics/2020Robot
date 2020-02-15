@@ -23,7 +23,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     private int testSetpoint = 50;
     private int prevTestSetpoint;
 
-    private boolean isRunning = false;
+    private boolean isRunning;
 
     public static ShooterHoodSubsystem getInstance() {
         if (instance == null) {

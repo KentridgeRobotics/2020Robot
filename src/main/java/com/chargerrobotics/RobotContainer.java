@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import com.chargerrobotics.commands.shooter.HoodOffCommand;
+import com.chargerrobotics.commands.shooter.HoodOnCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.commands.LimelightCommand;
@@ -32,6 +34,7 @@ import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.SerialSubsystem;
+import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
 import com.chargerrobotics.utils.ColorSpinnerSerialListener;
 import com.chargerrobotics.utils.Config;
@@ -49,9 +52,10 @@ public class RobotContainer {
 	private static final boolean limelightEnabled = false;
 	private static final boolean driveEnabled = false;
 	private static final boolean shooterEnabled = false;
+	private static final boolean shooterHoodEnabled = true;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
-	private static final boolean serialEnabled = true;
+	private static final boolean serialEnabled = false;
 
 	// Limelight
 	private LimelightSubsystem limelightSubsystem;
@@ -68,8 +72,11 @@ public class RobotContainer {
 
 	// Shooter
 	private ShooterSubsystem shooterSubsystem;
+	private ShooterHoodSubsystem shooterHoodSubsystem;
 	private ShooterOnCommand shooterOnCommand;
 	private ShooterOffCommand shooterOffCommand;
+	private HoodOnCommand hoodOnCommand;
+	private HoodOffCommand hoodOffCommand;
 
 	// Color Spinner
 	private ColorSpinnerSubsystem colorSpinnerSubsystem;
@@ -119,6 +126,11 @@ public class RobotContainer {
 			shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
 			shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
 		}
+		if (shooterHoodEnabled) {
+			shooterHoodSubsystem = ShooterHoodSubsystem.getInstance();
+			hoodOnCommand = new HoodOnCommand(shooterHoodSubsystem);
+			hoodOffCommand = new HoodOffCommand(shooterHoodSubsystem);
+		}
 		if (colorSpinnerEnabled) {
 			colorSpinnerSubsystem = ColorSpinnerSubsystem.getInstance();
 			colorSpinnerCommand = new ColorSpinnerCommand(colorSpinnerSubsystem);
@@ -167,6 +179,10 @@ public class RobotContainer {
 		if (shooterEnabled) {
 			secondary.buttonA.whenPressed(shooterOnCommand);
 			secondary.buttonB.whenPressed(shooterOffCommand);
+		}
+		if (shooterHoodEnabled) {
+			secondary.buttonY.whenPressed(hoodOnCommand);
+			secondary.buttonBumperRight.whenPressed(hoodOffCommand);
 		}
 		if (colorSpinnerEnabled) {
 			secondary.buttonX.whenPressed(colorTargetCommand);
