@@ -170,7 +170,7 @@ public class RobotContainer {
 
 	public void setTeleop() {
 		if (driveEnabled) {
-			//manualDriveCommand.schedule();
+			manualDriveCommand.schedule();
 			if (limelightEnabled)
 				limelightSubsystem.setLEDStatus(false);
 		}
