@@ -14,7 +14,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ShooterSubsystem extends SubsystemBase {
     private static ShooterSubsystem instance;
     private CANSparkMax shooter1;
-    private CANSparkMax shooter2;
+	private CANSparkMax shooter2;
+	/*
+	* P = 0.00075
+	* I = 0.0000003
+	* D = 0.00008
+	* F = 0.0
+
+
+	Later attempt with fresh battery, got this far...
+	P = 0.00048
+	I = .00000001
+	D = 0
+	*/
     private CANPIDController shooterPIDController1;
     private CANPIDController shooterPIDController2;
     public double kIz, kMaxOutput, kMinOutput, maxRPM;
@@ -46,7 +58,7 @@ public class ShooterSubsystem extends SubsystemBase {
 		setPIDI(kI.getValue());
 		setPIDD(kD.getValue());
 		setPIDF(kF.getValue());
-		setSetPoint(kSetPoint.getValue());
+		setRunning(false);
 	}
 
 	private void setPIDP(double P) {
@@ -81,7 +93,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	public void setRunning(boolean isRunning) {
 		this.isRunning = isRunning;
-		setPIDTarget(isRunning ? kSetPoint.getValue() : 0);
+		if (isRunning) {
+			setPIDTarget(kSetPoint.getValue());
+		}
+		else {
+			shooter1.set(0.0);
+			shooter2.set(0.0);
+		}
 	}
 
 	public double getAverageVelocity() {
@@ -92,6 +110,10 @@ public class ShooterSubsystem extends SubsystemBase {
 	public void periodic() {
 		super.periodic();
 		SmartDashboard.putNumber("ShooterSpeed", getAverageVelocity());
+		SmartDashboard.putNumber("shooterSpeed1", shooter1.getEncoder().getVelocity());
+		SmartDashboard.putNumber("shooterSpeed2", shooter2.getEncoder().getVelocity());
+		SmartDashboard.putNumber("motor1temp", shooter1.getMotorTemperature());
+		SmartDashboard.putNumber("motor2temp", shooter2.getMotorTemperature());
 	}
 
 }
