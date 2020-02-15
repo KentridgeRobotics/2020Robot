@@ -57,7 +57,7 @@ public final class Constants {
 	public static final boolean hoodSensorPhase = true;
 	public static final boolean hoodMotorInverted = false;
 	public static final int hoodErrorThreshold = 0;
-	public static final int ticksPerRev = 500; //just a test number
+	public static final int ticksPerRev = 538;
 	public static final double hoodP = 0.1;
 	public static final double hoodI = 0.0;
 	public static final double hoodD = 0.0;
