@@ -11,7 +11,7 @@ public class ColorSpinnerSerialListener implements Consumer<String> {
     public static ColorSpinnerSerialListener getInstance() {
         if (instance == null) {
             instance = new ColorSpinnerSerialListener();
-            SerialSubsystem.getInstance().registerListener("COL", instance);
+            SerialSubsystem.getInstance().registerListener("COLOR", instance);
         }
         return instance;
     }
