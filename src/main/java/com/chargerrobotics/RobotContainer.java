@@ -33,6 +33,7 @@ import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.SerialSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
+import com.chargerrobotics.utils.ColorSpinnerSerialListener;
 import com.chargerrobotics.utils.Config;
 import com.chargerrobotics.utils.XboxController;
 
@@ -84,6 +85,7 @@ public class RobotContainer {
 
 	// Serial connection
 	private SerialSubsystem serialSubsystem;
+	private ColorSpinnerSerialListener colorSpinnerSerialListener;
 
 	// controllers
 	public final static XboxController primary = new XboxController(Constants.primary);
@@ -95,6 +97,7 @@ public class RobotContainer {
 	public RobotContainer() {
 		Config.setup();
 		serialSubsystem = serialSubsystem.getInstance();
+		colorSpinnerSerialListener = colorSpinnerSerialListener.getInstance();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
 			manualDriveCommand = new ManualDriveCommand(driveSubsystem);
