@@ -10,6 +10,7 @@ package com.chargerrobotics;
 import java.util.Arrays;
 
 import com.chargerrobotics.subsystems.LimelightSubsystem;
+import com.chargerrobotics.subsystems.SerialSubsystem;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -69,6 +70,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopInit() {
+		SerialSubsystem.getInstance().init();
 		robotContainer.setTeleop();
 	}
 
@@ -85,6 +87,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		robotContainer.setDisabled();
+		SerialSubsystem.getInstance().close();
+
 	}
 
 	/**
@@ -99,6 +103,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		SerialSubsystem.getInstance().init();
 		robotContainer.setAutonomous();
 	}
 

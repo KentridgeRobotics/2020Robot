@@ -31,6 +31,7 @@ import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
+import com.chargerrobotics.subsystems.SerialSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
 import com.chargerrobotics.utils.Config;
 import com.chargerrobotics.utils.XboxController;
@@ -44,11 +45,12 @@ import com.chargerrobotics.utils.XboxController;
  */
 public class RobotContainer {
 
-	private static final boolean limelightEnabled = true;
-	private static final boolean driveEnabled = true;
-	private static final boolean shooterEnabled = true;
-	private static final boolean colorSpinnerEnabled = true;
-	private static final boolean climberEnabled = true;
+	private static final boolean limelightEnabled = false;
+	private static final boolean driveEnabled = false;
+	private static final boolean shooterEnabled = false;
+	private static final boolean colorSpinnerEnabled = false;
+	private static final boolean climberEnabled = false;
+	private static final boolean serialEnabled = true;
 
 	// Limelight
 	private LimelightSubsystem limelightSubsystem;
@@ -80,6 +82,9 @@ public class RobotContainer {
 
 	private Compressor compressor = null;
 
+	// Serial connection
+	private SerialSubsystem serialSubsystem;
+
 	// controllers
 	public final static XboxController primary = new XboxController(Constants.primary);
 	public final static XboxController secondary = new XboxController(Constants.secondary);
@@ -89,6 +94,7 @@ public class RobotContainer {
 	 */
 	public RobotContainer() {
 		Config.setup();
+		serialSubsystem = serialSubsystem.getInstance();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
 			manualDriveCommand = new ManualDriveCommand(driveSubsystem);
