@@ -168,6 +168,9 @@ public class RobotContainer {
 			secondary.buttonA.whenPressed(shooterOnCommand);
 			secondary.buttonB.whenPressed(shooterOffCommand);
 		}
+		if (colorSpinnerEnabled) {
+			secondary.buttonX.whenPressed(colorTargetCommand);
+		}
 		// secondary.buttonX.whenPressed(chomperCommand);
 	}
 
