@@ -36,7 +36,13 @@ public final class Constants {
 	public static final int leftRearDrive = 14;
 	public static final int shooterID1 = 21;
 	public static final int shooterID2 = 22;
+	public static final int shooterHood = 23;
 	public static final int colorSpinner = 31;
+	public static final int colorLifter = 32;
+	public static final int feedStage1 = 41;
+	public static final int feedStage2 = 42;
+	public static final int chomperUpDown = 51;
+	public static final int chomperFeed = 52;
 
 	// Shooter Constants
 	public static final double shooterTargetRPM = 10000.0;
