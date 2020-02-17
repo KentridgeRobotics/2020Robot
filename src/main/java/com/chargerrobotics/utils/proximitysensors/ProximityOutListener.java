@@ -17,16 +17,11 @@ public class ProximityOutListener implements Consumer<String> {
     
     @Override
     public void accept(String message) {
-        try {
-            if(message == "stop") {
-                //tell the feeder motor to stop
-            }
-            else if(message == "decrement") {
-                BallCount.getInstance().decrementBallCount();
-            }
+        if(message == "stop") {
+            //tell the feeder motor to stop
         }
-        catch (NumberFormatException e) {
-            System.err.println("Bad message in ProximityOutListener" + message);
+        else if(message == "decrement") {
+            BallCount.getInstance().decrementBallCount();
         }
     }
 }

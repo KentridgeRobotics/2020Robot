@@ -17,13 +17,8 @@ public class ProximityInListener implements Consumer<String> {
 
     @Override
     public void accept(String message) {
-        try {
-            if(message == "increment") {
-                BallCount.getInstance().incrementBallCount();
-            }
-        }
-        catch(NumberFormatException e) {
-            System.err.println("Bad Message in ProximityInListener" + message);
+        if(message == "increment") {
+            BallCount.getInstance().incrementBallCount();
         }
     }
 }
