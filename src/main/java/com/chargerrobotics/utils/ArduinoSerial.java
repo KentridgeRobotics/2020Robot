@@ -26,8 +26,10 @@ public class ArduinoSerial {
 	
 	private final String name;
 
-	private static final Checksum cs = new Checksum();
-	private final ByteBuffer dataBuffer = ByteBuffer.allocate(256).order(ByteOrder.LITTLE_ENDIAN);
+	private static final Checksum recCs = new Checksum();
+	private static final Checksum sendCs = new Checksum();
+	private final ByteBuffer recBuffer = ByteBuffer.allocate(256).order(ByteOrder.LITTLE_ENDIAN);
+	private final ByteBuffer sendBuffer = ByteBuffer.allocate(256).order(ByteOrder.LITTLE_ENDIAN);
 	private int openCounter;
 	private ArduinoListener listener = null;
 
@@ -54,37 +56,35 @@ public class ArduinoSerial {
 		isOpen = false;
 		try {
 			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
 			out.close();
-		} catch (SerialPortTimeoutException e) {
-		} catch (SerialPortIOException e) {
-			isOpen = false;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void calculateChecksum() {
-		cs.reset();
-		for (byte b : dataBuffer.array()) {
-			cs.updateChecksum(b);
+	public void sendData(short header, byte[] data) {
+		sendData(header, data, false);
+	}
+
+	public ByteBuffer sendData(short header, byte[] data, boolean receive) {
+		if (!isOpen) {
+			open();
+			openCounter = 0;
 		}
-	}
-
-	public void sendData(byte header1, byte header2, byte[] data) {
-		sendData(header1, header2, data, false);
-	}
-
-	public ByteBuffer sendData(byte header1, byte header2, byte[] data, boolean receive) {
 		if (isOpen) {
-			dataBuffer.position(0);
-			dataBuffer.limit(data.length);
-			dataBuffer.put(data);
-			sendData(new byte[] {header1, header2}, data.length);
+			sendBuffer.position(0);
+			sendBuffer.limit(data.length);
+			sendBuffer.put(data);
+			sendData(new byte[] {(byte)(header & 0xff), (byte)((header >> 8) & 0xff)}, data.length);
 			if (receive) {
 				int len = receiveData();
 				if (len >= 0) {
-					dataBuffer.limit(len);
-					return dataBuffer;
+					recBuffer.limit(len);
+					return recBuffer;
 				}
 			}
 		}
@@ -103,9 +103,9 @@ public class ArduinoSerial {
 			sendData(poll, 0);
 			int len = receiveData();
 			if (len >= 0) {
-				dataBuffer.limit(len);
+				recBuffer.limit(len);
 				listener.setLastReceived();
-				listener.receiveData(this, dataBuffer);
+				listener.receiveData(this, recBuffer.asReadOnlyBuffer().order(ByteOrder.LITTLE_ENDIAN));
 				return true;
 			}
 		}
@@ -118,10 +118,10 @@ public class ArduinoSerial {
 			boolean hasSync = false;
 			boolean hasHeader = false;
 			int recCount = 0;
-			cs.reset();
+			recCs.reset();
 			int expectedChecksum = 0;
 			int expectedLength = 0;
-			byte[] receivedHeader = new byte[2];
+			short recHeader = 0;
 			ArduinoListener listener = null;
 			while (true) {
 				try {
@@ -134,14 +134,16 @@ public class ArduinoSerial {
 						if (hasSync) {
 							recCount++;
 							if (!hasHeader) {
-								if (recCount <= 2) {
-									receivedHeader[recCount - 1] = b;
-								} else if (recCount == 3) {
-									listener = ArduinoSerialReceiver.getListener(receivedHeader);
+								if (recCount <= 1) {
+									recHeader = (short)(b & 0xff);
+								} else if (recCount <= 2) {
+									recHeader |= (short)((b & 0xff) << 8);
+									listener = ArduinoSerialReceiver.getListener(recHeader);
 									if (listener == null)
 										return -1;
 									else
 										this.listener = listener;
+								} else if (recCount == 3) {
 									expectedChecksum = b & 0xff;
 								} else if (recCount == 4) {
 									expectedChecksum = expectedChecksum | ((b << 8) & 0xff);
@@ -151,19 +153,19 @@ public class ArduinoSerial {
 									expectedLength = expectedLength | ((b << 8) & 0xff);
 									recCount = 0;
 									hasHeader = true;
-									if (recCount >= expectedLength) {
-										dataBuffer.limit(0);
-										dataBuffer.position(0);
+									if (expectedLength == 0) {
+										recBuffer.limit(0);
+										recBuffer.position(0);
 										return 0;
 									}
 								}
 							} else {
-								dataBuffer.array()[recCount - 1] = b;
-								cs.updateChecksum(b);
+								recBuffer.array()[recCount - 1] = b;
+								recCs.updateChecksum(b);
 								if (recCount >= expectedLength) {
-									if (cs.getChecksum() == expectedChecksum) {
-										dataBuffer.limit(expectedLength);
-										dataBuffer.position(0);
+									if (recCs.getChecksum() == expectedChecksum) {
+										recBuffer.limit(expectedLength);
+										recBuffer.position(0);
 										return expectedLength;
 									}
 									return -1;
@@ -205,12 +207,15 @@ public class ArduinoSerial {
 
 	private void sendData(byte[] msgType, int length) {
 		try {
-			calculateChecksum();
+			sendCs.reset();
+			for (byte b : sendBuffer.array()) {
+				sendCs.updateChecksum(b);
+			}
 			out.write(sync);
 			out.write(msgType);
-			out.write(cs.getArray());
+			out.write(sendCs.getArray());
 			out.write(new byte[] { (byte) (length & 0xff), (byte) ((length >> 8) & 0xff) });
-			out.write(dataBuffer.array(), 0, length);
+			out.write(sendBuffer.array(), 0, length);
 		} catch (SerialPortTimeoutException e) {
 		} catch (SerialPortIOException e) {
 			isOpen = false;

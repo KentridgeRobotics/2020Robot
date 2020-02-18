@@ -41,7 +41,6 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		robotContainer = new RobotContainer();
 		SmartDashboard.putData(CommandScheduler.getInstance());
-		ArduinoSerialReceiver.init();
 	}
 
 	/**
@@ -63,7 +62,6 @@ public class Robot extends TimedRobot {
 		// robot's periodic
 		// block in order for anything in the Command-based framework to work.
 		CommandScheduler.getInstance().run();
-		ArduinoSerialReceiver.poll();
 	}
 
 	/**
@@ -73,6 +71,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		robotContainer.setTeleop();
+		ArduinoSerialReceiver.start();
 	}
 
 	/**
@@ -88,6 +87,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		robotContainer.setDisabled();
+		ArduinoSerialReceiver.close();
 	}
 
 	/**
@@ -104,6 +104,7 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		//SerialSubsystem.getInstance().init();
 		robotContainer.setAutonomous();
+		ArduinoSerialReceiver.start();
 	}
 
 	/**
@@ -119,6 +120,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testInit() {
 		CommandScheduler.getInstance().cancelAll();
+		ArduinoSerialReceiver.close();
 	}
 
 	/**
