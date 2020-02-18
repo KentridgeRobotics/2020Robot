@@ -9,12 +9,10 @@ package com.chargerrobotics;
 
 import java.util.Arrays;
 
-import com.chargerrobotics.subsystems.LimelightSubsystem;
-import com.chargerrobotics.subsystems.SerialSubsystem;
-
+import com.chargerrobotics.utils.ArduinoSerialReceiver;
+import com.chargerrobotics.utils.ColorSensorSerial;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -32,6 +30,8 @@ public class Robot extends TimedRobot {
 
 	@SuppressWarnings("unused")
 	private RobotContainer robotContainer;
+	
+	public ColorSensorSerial css = null;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		robotContainer = new RobotContainer();
 		SmartDashboard.putData(CommandScheduler.getInstance());
+		ArduinoSerialReceiver.init();
 	}
 
 	/**
@@ -62,6 +63,7 @@ public class Robot extends TimedRobot {
 		// robot's periodic
 		// block in order for anything in the Command-based framework to work.
 		CommandScheduler.getInstance().run();
+		ArduinoSerialReceiver.poll();
 	}
 
 	/**
@@ -70,7 +72,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopInit() {
-		SerialSubsystem.getInstance().init();
 		robotContainer.setTeleop();
 	}
 
@@ -87,8 +88,6 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		robotContainer.setDisabled();
-		SerialSubsystem.getInstance().close();
-
 	}
 
 	/**
@@ -103,7 +102,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		SerialSubsystem.getInstance().init();
+		//SerialSubsystem.getInstance().init();
 		robotContainer.setAutonomous();
 	}
 

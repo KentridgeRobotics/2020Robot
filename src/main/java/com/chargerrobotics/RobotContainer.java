@@ -33,6 +33,7 @@ import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.SerialSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
+import com.chargerrobotics.utils.ColorSensorSerial;
 import com.chargerrobotics.utils.ColorSpinnerSerialListener;
 import com.chargerrobotics.utils.Config;
 import com.chargerrobotics.utils.XboxController;
@@ -51,7 +52,6 @@ public class RobotContainer {
 	private static final boolean shooterEnabled = false;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
-	private static final boolean serialEnabled = true;
 
 	// Limelight
 	private LimelightSubsystem limelightSubsystem;
@@ -84,8 +84,7 @@ public class RobotContainer {
 	private Compressor compressor = null;
 
 	// Serial connection
-	private SerialSubsystem serialSubsystem;
-	private ColorSpinnerSerialListener colorSpinnerSerialListener;
+	public ColorSensorSerial colorSensor = new ColorSensorSerial();
 
 	// controllers
 	public final static XboxController primary = new XboxController(Constants.primary);
@@ -96,8 +95,6 @@ public class RobotContainer {
 	 */
 	public RobotContainer() {
 		Config.setup();
-		serialSubsystem = serialSubsystem.getInstance();
-		colorSpinnerSerialListener = colorSpinnerSerialListener.getInstance();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
 			manualDriveCommand = new ManualDriveCommand(driveSubsystem);
@@ -138,8 +135,6 @@ public class RobotContainer {
 	public void setupCamera() {
 		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
 		cam.setConnectVerbose(0);
-		CvSink cvSink = CameraServer.getInstance().getVideo();
-		CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
 	}
 
 	/**
