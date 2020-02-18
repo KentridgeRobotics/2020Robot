@@ -2,6 +2,7 @@ package com.chargerrobotics.commands.shooter;
 
 import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class HoodOffCommand extends CommandBase {
@@ -13,12 +14,12 @@ public class HoodOffCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        super.initialize();
         shooterHoodSubsystem.setRunning(false);
+        SmartDashboard.putString("Hey", "HoodCommand is off");
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 }

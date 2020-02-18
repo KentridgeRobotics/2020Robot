@@ -36,7 +36,7 @@ public final class Constants {
 	public static final int leftRearDrive = 14;
 	public static final int shooterID1 = 21;
 	public static final int shooterID2 = 22;
-	public static final int shooterHoodID = 23;
+	public static final int shooterHoodID = 32;
 	public static final int colorSpinner = 31;
 
 	// Shooter Constants
@@ -58,8 +58,8 @@ public final class Constants {
 	public static final boolean hoodMotorInverted = false;
 	public static final int hoodErrorThreshold = 0;
 	public static final int ticksPerRev = 538;
-	public static final double hoodP = 0.1;
-	public static final double hoodI = 0.0;
+	public static final double hoodP = 0.02;
+	public static final double hoodI = 0.0001;
 	public static final double hoodD = 0.0;
 	public static final double hoodF = 0.0;
 

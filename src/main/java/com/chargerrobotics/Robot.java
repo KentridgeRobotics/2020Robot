@@ -11,6 +11,7 @@ import java.util.Arrays;
 
 import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.SerialSubsystem;
+import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -72,6 +73,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		SerialSubsystem.getInstance().init();
 		robotContainer.setTeleop();
+		ShooterHoodSubsystem.getInstance().resetShooterEncoder();
 	}
 
 	/**
