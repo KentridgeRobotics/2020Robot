@@ -39,9 +39,10 @@ public class ShooterSubsystem extends SubsystemBase {
     private boolean isRunning;
 
 	public static ShooterSubsystem getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new ShooterSubsystem();
 			CommandScheduler.getInstance().registerSubsystem(instance);
+		}
 		return instance;
 	}
 
