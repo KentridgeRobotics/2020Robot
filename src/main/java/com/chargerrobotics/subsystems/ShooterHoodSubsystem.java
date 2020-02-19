@@ -31,14 +31,9 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     public ShooterHoodSubsystem() {
         shooterHood = new WPI_TalonSRX(Constants.shooterHoodID);
         shooterHood.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder,0,0);
-        //shooterHood.setSensorPhase(Constants.hoodSensorPhase);
-//        shooterHood.configAllowableClosedloopError(Constants.hoodGainSlot, Constants.hoodErrorThreshold);
 		setPIDP(kP.getValue());
 		setPIDI(kI.getValue());
 		setPIDD(kD.getValue());
-       // if(Constants.hoodSensorPhase) {absolutePosition *= -1;}
-        //if(Constants.hoodMotorInverted) {absolutePosition *= -1;}
-        //shooterHood.setSelectedSensorPosition(absolutePosition, Constants.hoodPIDLoopId, Constants.hoodTimeOutMs);
     }
 
     public void resetShooterEncoder() {
