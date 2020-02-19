@@ -29,7 +29,7 @@ public class ArduinoSerialReceiver {
 			pollTask = new PollTask();
 			synchronized(serialPorts) {
 				for (SerialPort availablePort : SerialPort.getCommPorts()) {
-					if (true || availablePort.toString().contains("USB-to-Serial")) {
+					if (availablePort.toString().contains("USB-to-Serial")) {
 						String name = availablePort.getSystemPortName();
 						serialPorts.add(new ArduinoSerial(name));
 					}
