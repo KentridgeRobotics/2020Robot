@@ -3,7 +3,6 @@ package com.chargerrobotics.utils;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,6 +12,8 @@ import com.fazecast.jSerialComm.SerialPort;
 
 public class ArduinoSerialReceiver {
 
+	private static final long POLL_INTERVAL = 20;
+	
 	private static final ConcurrentHashMap<Short, ArduinoListener> responseHeaders = new ConcurrentHashMap<Short, ArduinoListener>();
 	private static final List<ArduinoSerial> serialPorts = Collections.synchronizedList(new ArrayList<ArduinoSerial>());
 	
@@ -22,22 +23,26 @@ public class ArduinoSerialReceiver {
 	
 	public static void start() {
 		startThread = new Thread(() -> {
+			if (pollTask != null) {
+				pollTask.stop();
+			}
 			pollTask = new PollTask();
 			synchronized(serialPorts) {
 				for (SerialPort availablePort : SerialPort.getCommPorts()) {
-					if (availablePort.toString().contains("USB-to-Serial")) {
+					if (true || availablePort.toString().contains("USB-to-Serial")) {
 						String name = availablePort.getSystemPortName();
 						serialPorts.add(new ArduinoSerial(name));
 					}
 				}
 			}
-			pollTimer.scheduleAtFixedRate(pollTask, 0, 20);
+			pollTimer.scheduleAtFixedRate(pollTask, 0, POLL_INTERVAL);
 		});
 		startThread.start();
 	}
 	
 	public static void close() {
-		pollTask.stop();
+		if (pollTask != null)
+			pollTask.stop();
 	}
 
 	public static void registerListener(ArduinoListener listener, short header) {
@@ -55,17 +60,13 @@ public class ArduinoSerialReceiver {
 		@Override
 		public void run() {
 			synchronized(serialPorts) {
-				for (ArduinoSerial port : serialPorts) {
-					port.poll();
-				}
 				if (stop) {
-					Iterator<ArduinoSerial> iter = serialPorts.iterator();
-					while (iter.hasNext()) {
-						ArduinoSerial serial = iter.next();
-						serial.close();
-						serialPorts.remove(serial);
-					}
+					serialPorts.removeIf(serial -> {serial.close(); return true;});
 					this.cancel();
+				} else {
+					for (ArduinoSerial port : serialPorts) {
+						port.poll();
+					}
 				}
 			}
 		}
