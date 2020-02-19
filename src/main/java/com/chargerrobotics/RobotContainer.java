@@ -53,8 +53,8 @@ public class RobotContainer {
 	// Limelight
 	private LimelightSubsystem limelightSubsystem;
 	private LimelightCommand limelightCommand;
-	// Vision Test
-	public VisionTurn visionTurnTest;
+	// Align to the target
+	public VisionTurn alignToTarget;
 
 	// Drive
 	private DriveSubsystem driveSubsystem;
@@ -102,7 +102,7 @@ public class RobotContainer {
 			limelightSubsystem.setRunning(true);
 			if (driveEnabled) {
 				//Vision Testing
-				visionTurnTest = new VisionTurn(limelightSubsystem, driveSubsystem);
+				alignToTarget = new VisionTurn(limelightSubsystem, driveSubsystem);
 			}
 		}
 		if (shooterEnabled) {
@@ -147,7 +147,7 @@ public class RobotContainer {
 			primary.buttonBumperLeft.whileHeld(slowCommand);
 		}
 		if (limelightEnabled) {
-			primary.buttonY.whileHeld(limelightCommand);
+			primary.buttonY.whileHeld(alignToTarget);
 		}
 		if (climberEnabled) {
 			climberSubsystem.setStop();
@@ -179,7 +179,7 @@ public class RobotContainer {
 	public void setAutonomous() {
 		if (driveEnabled && limelightEnabled) {
 			limelightSubsystem.setLEDStatus(true);
-			visionTurnTest.schedule();
+			alignToTarget.schedule();
 		}
 	}
 

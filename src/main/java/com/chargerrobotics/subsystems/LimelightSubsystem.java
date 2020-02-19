@@ -47,11 +47,17 @@ public class LimelightSubsystem extends SubsystemBase {
 
 	public void setRunning(boolean isRunning) {
 		this.isRunning = isRunning;
-		if (v == 1.0) DriveSubsystem.getInstance().tankDrive(x, y);
+		this.setLEDStatus(true);
+		
+		//if (v == 1.0) DriveSubsystem.getInstance().tankDrive(x, y);
 	}
 
 	public double getX() {
-		return x;
+		if (v == 0) {
+			return 0.0;
+		} else {
+			return x;
+		}
 	}
 
 	public double getY() {

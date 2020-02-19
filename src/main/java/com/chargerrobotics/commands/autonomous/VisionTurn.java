@@ -23,34 +23,44 @@ public class VisionTurn extends PIDCommand {
   private static LimelightSubsystem limelight;
 
   private static PIDController pid;
-  public final NetworkMapping<Double> kP = new NetworkMapping<Double>("vision_p", 0.1, val -> {setPIDP(val);});
-  public final NetworkMapping<Double> kI = new NetworkMapping<Double>("vision_i", 0.0, val -> {setPIDI(val);});
-  public final NetworkMapping<Double> kD = new NetworkMapping<Double>("vision_d", 0.0, val -> {setPIDD(val);});
+  public final NetworkMapping<Double> kP = new NetworkMapping<Double>("vision_p", 0.1, val -> {
+    setPIDP(val);
+  });
+  public final NetworkMapping<Double> kI = new NetworkMapping<Double>("vision_i", 0.0, val -> {
+    setPIDI(val);
+  });
+  public final NetworkMapping<Double> kD = new NetworkMapping<Double>("vision_d", 0.0, val -> {
+    setPIDD(val);
+  });
 
   /**
    * Creates a new VisionTurn.
    */
   public VisionTurn(final LimelightSubsystem limelightSubsystem, final DriveSubsystem driveSubsystem) {
-    
+
     super(
         // The controller that the command will use
-        setPID(new PIDController(0.1, 0, 0)),
+        setPID(new PIDController(0.012, 0.0135, 0.00075)),
         // This should return the measurement
         () -> limelightSubsystem.getX(),
         // This should return the setpoint (can also be a constant)
         () -> 0,
-        // This uses the output
-        output -> {driveSubsystem.setSpeeds(output * 0.1, -output * 0.1); System.out.println("Turn Target: " + output);},
-        limelightSubsystem);
+        // This uses the output to move the robot
+        output -> {driveSubsystem.setSpeeds(output, -output);
+        System.out.println("Turn Target - Left: " + output + " Right: " + -output);}, limelightSubsystem);
+
+        // This doesn't move the robot
+        // output -> {
+        //   driveSubsystem.setSpeeds(0, 0);
+        //   System.out.println("Turn Target - Left: " + -output + " Right: " + output);}, limelightSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
     limelight = limelightSubsystem;
-		setPIDP(kP.getValue());
-		setPIDI(kI.getValue());
-		setPIDD(kD.getValue());
+    setPIDP(kP.getValue());
+    setPIDI(kI.getValue());
+    setPIDD(kD.getValue());
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
@@ -65,16 +75,31 @@ public class VisionTurn extends PIDCommand {
     return limelight.getX();
   }
 
-	private void setPIDP(double P) {
-		pid.setP(P);
-	}
+  private void setPIDP(double P) {
+    pid.setP(P);
+  }
 
-	private void setPIDI(double I) {
-		pid.setI(I);
-	}
+  private void setPIDI(double I) {
+    pid.setI(I);
+  }
 
-	private void setPIDD(double D) {
-		pid.setD(D);
-	}
+  private void setPIDD(double D) {
+    pid.setD(D);
+  }
+
+  @Override
+  public void initialize() {
+    // TODO Auto-generated method stub
+    super.initialize();
+    limelight.setLEDStatus(true);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    // TODO Auto-generated method stub
+    super.end(interrupted);
+    limelight.setLEDStatus(false);
+  }
+
 
 }
