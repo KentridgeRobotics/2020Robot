@@ -30,7 +30,7 @@ public class ChomperPIDCommand extends PIDCommand {
         () -> position,
         // This uses the output
         output -> {
-          chomperSubsystem.Setspeed(output);
+          chomperSubsystem.setUpDownSpeed(output);
           // Use the output here
         });
     // Use addRequirements() here to declare subsystem dependencies.

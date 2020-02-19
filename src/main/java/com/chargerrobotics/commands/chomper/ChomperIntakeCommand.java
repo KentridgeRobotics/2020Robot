@@ -7,24 +7,24 @@
 
 package com.chargerrobotics.commands.chomper;
 
-import com.chargerrobotics.subsystems.IntakeSubsystem;
+import com.chargerrobotics.subsystems.ChomperSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class IntakeCommand extends CommandBase {
+public class ChomperIntakeCommand extends CommandBase {
   /**
    * Creates a new IntakeCommand.
    */
-  private final IntakeSubsystem intakeSubsystem;
+  private final ChomperSubsystem chomperSubsystem;
 
-  public IntakeCommand(IntakeSubsystem intakeSubsystem) {
-    this.intakeSubsystem = intakeSubsystem;
+  public ChomperIntakeCommand(ChomperSubsystem chomperSubsystem) {
+    this.chomperSubsystem = chomperSubsystem;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeSubsystem.setSpeed(0.1);
+    chomperSubsystem.setFeedSpeed(0.1);
   }
 
   // Called every time the scheduler runs whiley the command is scheduled.
@@ -35,7 +35,7 @@ public class IntakeCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(final boolean interrupted) {
-    if (!interrupted) intakeSubsystem.setSpeed(0);
+    if (!interrupted) chomperSubsystem.setFeedSpeed(0.0);
   }
 
   // Returns true when the command should end.
