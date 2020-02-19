@@ -7,17 +7,21 @@
 
 package com.chargerrobotics.subsystems;
 
+import com.chargerrobotics.Constants;
 import com.ctre.phoenix.motorcontrol.can.*;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-
-
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ChomperSubsystem extends SubsystemBase {
   
   private static ChomperSubsystem instance;
-  private boolean isRunning;
-  private final WPI_TalonSRX chomperMotor;
+  private boolean isUpDownRunning;
+  private boolean isFeedRunning;
+  private WPI_TalonSRX chomperUpDown;
+  private CANSparkMax chomperFeed;
 
   /**
    * Creates a new Chomper.
@@ -27,23 +31,32 @@ public class ChomperSubsystem extends SubsystemBase {
   public static ChomperSubsystem getInstance() {
     if (instance == null)
       instance = new ChomperSubsystem();
+      CommandScheduler.getInstance().registerSubsystem(instance);
     return instance;
   }
 
   public ChomperSubsystem() {
-    chomperMotor = new WPI_TalonSRX(32);
+    chomperUpDown = new WPI_TalonSRX(Constants.chomperUpDown);
+    chomperFeed = new CANSparkMax(Constants.chomperFeed, MotorType.kBrushless);
   }
 
-  public void setRunning(final boolean isRunning) {
-    this.isRunning = isRunning;
-
-    //
-  }
-
-  public void Setspeed(final double speed) {
-  chomperMotor.set(speed);
+  public void setChomperUpDownRunning(boolean isRunning) {
+    isUpDownRunning = isRunning;
 
   }
+
+  public void setChomperFeedRunning(boolean isRunning) {
+    isFeedRunning = isRunning;
+  }
+
+  public void setUpDownSpeed(double speed) {
+    chomperUpDown.set(speed);
+  }
+
+  public void setFeedSpeed(double speed) {
+    chomperFeed.set(speed);
+  }
+
   @Override
   public void periodic() {
     
