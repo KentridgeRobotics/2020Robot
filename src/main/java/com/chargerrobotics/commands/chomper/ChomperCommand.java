@@ -25,7 +25,7 @@ public class ChomperCommand extends CommandBase {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		chomperSubsystem.setRunning(true);
+		chomperSubsystem.setChomperUpDownRunning(true);
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.
@@ -36,7 +36,7 @@ public class ChomperCommand extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		chomperSubsystem.setRunning(false);
+		chomperSubsystem.setChomperUpDownRunning(false);
 	}
 
 	// Returns true when the command should end.
