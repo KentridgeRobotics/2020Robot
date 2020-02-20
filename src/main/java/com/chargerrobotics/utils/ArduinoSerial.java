@@ -54,15 +54,19 @@ public class ArduinoSerial {
 
 	public void close() {
 		isOpen = false;
-		try {
-			in.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (in != null) {
+			try {
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		try {
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (out != null) {
+			try {
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -127,7 +131,7 @@ public class ArduinoSerial {
 					if (in.available() > 0) {
 						byte b = (byte) in.read();
 						if (!hasSync) {
-							if (b != 0x55)
+							if (b != sync[0])
 								hasSync = true;
 						}
 						if (hasSync) {
@@ -190,7 +194,7 @@ public class ArduinoSerial {
 		while (true) {
 			try {
 				int b = in.read();
-				if (b == 0x55) {
+				if (b == sync[0]) {
 					return true;
 				}
 			} catch (SerialPortTimeoutException e) {
@@ -207,8 +211,9 @@ public class ArduinoSerial {
 	private void sendData(byte[] msgType, int length) {
 		try {
 			sendCs.reset();
-			for (byte b : sendBuffer.array()) {
-				sendCs.updateChecksum(b);
+			byte[] sendArr = sendBuffer.array();
+			for (int i = 0; i < length; i++) {
+				sendCs.updateChecksum(sendArr[i]);
 			}
 			out.write(sync);
 			out.write(msgType);
@@ -225,6 +230,10 @@ public class ArduinoSerial {
 
 	public boolean isOpen() {
 		return isOpen;
+	}
+	
+	public String toString() {
+		return getName();
 	}
 
 	// Checksum holder class
