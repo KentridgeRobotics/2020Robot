@@ -78,7 +78,15 @@ public class ArduinoSerialReceiver {
 
 	public static abstract class ArduinoListener {
 		private long lastReceived = 0;
-		private long expiry = 50;
+		private final long expiry;
+		
+		public ArduinoListener() {
+			this(50);
+		}
+		
+		public ArduinoListener(long expiry) {
+			this.expiry = expiry;
+		}
 
 		public abstract void receiveData(ArduinoSerial serial, ByteBuffer data);
 
@@ -86,17 +94,12 @@ public class ArduinoSerialReceiver {
 			lastReceived = System.currentTimeMillis();
 		}
 
-		void setLastReceived(long expiry) {
-			lastReceived = System.currentTimeMillis();
-			this.expiry = expiry;
-		}
-
 		public long getLastMessageTime() {
 			return lastReceived;
 		}
 
 		public boolean isExpired() {
-			return System.currentTimeMillis() - lastReceived > expiry;
+			return expiry < 0 || System.currentTimeMillis() - lastReceived > expiry;
 		}
 
 		public long getExpiryTime() {

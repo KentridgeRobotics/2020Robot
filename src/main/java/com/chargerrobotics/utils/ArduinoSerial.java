@@ -103,7 +103,6 @@ public class ArduinoSerial {
 			sendData(poll, 0);
 			int len = receiveData();
 			if (len >= 0) {
-				recBuffer.limit(len);
 				listener.setLastReceived();
 				listener.receiveData(this, recBuffer.asReadOnlyBuffer().order(ByteOrder.LITTLE_ENDIAN));
 				return true;
