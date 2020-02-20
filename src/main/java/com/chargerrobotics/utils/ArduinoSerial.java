@@ -11,10 +11,18 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortIOException;
 import com.fazecast.jSerialComm.SerialPortTimeoutException;
 
+/**
+ * Serial sender/receiver to communicate with an Arduino
+ * Uses a 2 byte header to specify device type
+ * Sends packets of up to 256 bytes, little endian
+ * 
+ * Serial Settings: 115200 baud, 8 data bits, 1 stop bit, no parity
+ */
 public class ArduinoSerial {
 
 	private final SerialPort serial;
 	private boolean isOpen;
+	private boolean closed;
 	private InputStream in;
 	private OutputStream out;
 
@@ -33,6 +41,12 @@ public class ArduinoSerial {
 	private int openCounter;
 	private ArduinoListener listener = null;
 
+	/**
+	 * Construcst a new ArduinoSerial on the given system COM port name
+	 * 
+	 * @param port System COM port name
+	 * Ex: ttyUSB0
+	 */
 	protected ArduinoSerial(String port) {
 		this.name = port;
 		serial = SerialPort.getCommPort(port);
@@ -40,6 +54,11 @@ public class ArduinoSerial {
 		open();
 	}
 	
+	/**
+	 * Returns the COM port name in use
+	 * 
+	 * @return System COM port name
+	 */
 	public String getName() {
 		return name;
 	}
@@ -52,8 +71,12 @@ public class ArduinoSerial {
 		}
 	}
 
+	/**
+	 * Closes the serial port
+	 */
 	public void close() {
 		isOpen = false;
+		closed = true;
 		if (in != null) {
 			try {
 				in.close();
@@ -70,11 +93,34 @@ public class ArduinoSerial {
 		}
 	}
 
+	/**
+	 * Sends the given byte array of data to the device with the specified header
+	 * 
+	 * Does not wait for a response from the device
+	 * 
+	 * @param header Header to be sent
+	 * @param data Data to be sent
+	 * 
+	 * @return A read-only {@link java.nio.ByteBuffer} containing the received data
+	 */
 	public void sendData(short header, byte[] data) {
 		sendData(header, data, false);
 	}
 
+	/**
+	 * Sends the given byte array of data to the device with the specified header
+	 * 
+	 * <p>Blocks for a short period of time until the request times out if receiving data
+	 * 
+	 * @param header Header to be sent
+	 * @param data Data to be sent
+	 * @param receive Whether to wait for a response from the device
+	 * 
+	 * @return A read-only {@link java.nio.ByteBuffer} containing the received data, if available
+	 */
 	public ByteBuffer sendData(short header, byte[] data, boolean receive) {
+		if (closed)
+			return null;
 		if (!isOpen) {
 			open();
 			openCounter = 0;
@@ -85,9 +131,8 @@ public class ArduinoSerial {
 			sendBuffer.put(data);
 			sendData(new byte[] {(byte)(header & 0xff), (byte)((header >> 8) & 0xff)}, data.length);
 			if (receive) {
-				int len = receiveData();
-				if (len >= 0) {
-					recBuffer.limit(len);
+				Pair<ArduinoListener, Integer> rec = receiveData();
+				if (rec.getValue() >= 0) {
 					return recBuffer;
 				}
 			}
@@ -95,7 +140,18 @@ public class ArduinoSerial {
 		return null;
 	}
 
+	/**
+	 * Sends the polling message header to poll the connected device for data
+	 * 
+	 * If the port is not currently open, it will increment a counter up to 50 before attempting to open the port again and will return <code>false</code> for each ignored attempt to avoid unnecessary blocking
+	 * 
+	 * <p>Blocks for a short period of time until the request times out
+	 * 
+	 * @return <code>true</code> if the polling was successful
+	 */
 	public boolean poll() {
+		if (closed)
+			return false;
 		if (!isOpen) {
 			openCounter++;
 			if (openCounter >= 50) {
@@ -105,8 +161,8 @@ public class ArduinoSerial {
 		}
 		if (isOpen) {
 			sendData(poll, 0);
-			int len = receiveData();
-			if (len >= 0) {
+			Pair<ArduinoListener, Integer> rec = receiveData();
+			if (rec.getValue() >= 0) {
 				listener.setLastReceived();
 				listener.receiveData(this, recBuffer.asReadOnlyBuffer().order(ByteOrder.LITTLE_ENDIAN));
 				return true;
@@ -115,7 +171,22 @@ public class ArduinoSerial {
 		return false;
 	}
 
-	private int receiveData() {
+	/**
+	 * Internal method for receiving data into the receive {@link java.nio.ByteBuffer}
+	 * 
+	 * Message checksum and length are automatically validated to confirm that the packet was received successfully
+	 * 
+	 * <p>Blocks for a short period of time until the request times out
+	 * 
+	 * <p>Receives remaining sync bytes to ensure proper serial operation before reading the message
+	 * <p>Receives 2 byte header to identify a registered listener
+	 * <p>Receives message checksum
+	 * <p>Receives length of message to be received
+	 * <p>Receives message and stores in the receive {@link java.nio.ByteBuffer}
+	 * 
+	 * @return A {@link Pair} containing the listener to be called and the number of bytes received or null if the packet was invalid
+	 */
+	private Pair<ArduinoListener, Integer> receiveData() {
 		if (findSync()) {
 			long start = System.currentTimeMillis();
 			boolean hasSync = false;
@@ -143,23 +214,21 @@ public class ArduinoSerial {
 									recHeader |= (short)((b & 0xff) << 8);
 									listener = ArduinoSerialReceiver.getListener(recHeader);
 									if (listener == null)
-										return -1;
-									else
-										this.listener = listener;
+										return null;
 								} else if (recCount == 3) {
 									expectedChecksum = b & 0xff;
 								} else if (recCount == 4) {
-									expectedChecksum = expectedChecksum | ((b << 8) & 0xff);
+									expectedChecksum |= ((b << 8) & 0xff);
 								} else if (recCount == 5) {
 									expectedLength = b & 0xff;
 								} else if (recCount == 6) {
-									expectedLength = expectedLength | ((b << 8) & 0xff);
+									expectedLength |= ((b << 8) & 0xff);
 									recCount = 0;
 									hasHeader = true;
 									if (expectedLength == 0) {
 										recBuffer.limit(0);
 										recBuffer.position(0);
-										return 0;
+										return new Pair<ArduinoListener, Integer>(listener, 0);
 									}
 								}
 							} else {
@@ -169,9 +238,9 @@ public class ArduinoSerial {
 									if (recCs.getChecksum() == expectedChecksum) {
 										recBuffer.limit(expectedLength);
 										recBuffer.position(0);
-										return expectedLength;
+										return new Pair<ArduinoListener, Integer>(listener, expectedLength);
 									}
-									return -1;
+									return null;
 								}
 							}
 						}
@@ -179,16 +248,24 @@ public class ArduinoSerial {
 				} catch (SerialPortTimeoutException e) {
 				} catch (SerialPortIOException e) {
 					isOpen = false;
+					return null;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				if (TIMEOUT > 0 && System.currentTimeMillis() - start >= TIMEOUT)
-					return -1;
+					return null;
 			}
 		}
-		return -1;
+		return null;
 	}
 
+	/**
+	 * Internal method for finding the initial sync bytes to ensure proper serial operation before reading
+	 * 
+	 * <p>Blocks for a short period of time until the request times out
+	 * 
+	 * @return <code>true</code> if a sync byte was found
+	 */
 	private boolean findSync() {
 		long start = System.currentTimeMillis();
 		while (true) {
@@ -208,6 +285,18 @@ public class ArduinoSerial {
 		}
 	}
 
+	/**
+	 * Internal method for sending the current contents of the send {@link java.nio.ByteBuffer}
+	 * 
+	 * <p>Sends sync bytes to ensure proper serial operation before reading the message
+	 * <p>Sends 2 byte header to indicate message contents
+	 * <p>Sends message checksum
+	 * <p>Sends length of message to be sent
+	 * <p>Sends message stored in the send {@link java.nio.ByteBuffer}
+	 * 
+	 * @param msgType 2 byte header
+	 * @param length Number of bytes from buffer to send
+	 */
 	private void sendData(byte[] msgType, int length) {
 		try {
 			sendCs.reset();
@@ -228,15 +317,68 @@ public class ArduinoSerial {
 		}
 	}
 
+	/**
+	 * Returns whether or not the serial port is open
+	 * 
+	 * @return Serial port status
+	 */
 	public boolean isOpen() {
-		return isOpen;
+		return closed ? false : isOpen;
 	}
 	
+	/**
+	 * Returns the COM port name in use
+	 * 
+	 * Equivalent to {@link #getName()}
+	 * 
+	 * @return System COM port name
+	 */
 	public String toString() {
 		return getName();
 	}
+	
+	/**
+	 * Pair holder class
+	 *
+	 * @param <K> Key
+	 * @param <V> Value
+	 */
+	public static class Pair<K, V> {
+		private final K key;
+		private final V value;
+		/**
+		 * Constructs a new pair with the given key and value
+		 * 
+		 * @param key Key
+		 * @param value Value
+		 */
+		public Pair(K key, V value) {
+			this.key = key;
+			this.value = value;
+		}
+		
+		/**
+		 * Returns the stored key
+		 * 
+		 * @return Key
+		 */
+		public K getKey() {
+			return this.key;
+		}
+		
+		/**
+		 * Returns the stored value
+		 * 
+		 * @return Value
+		 */
+		public V getValue() {
+			return this.value;
+		}
+	}
 
-	// Checksum holder class
+	/**
+	 * Checksum holder class
+	 */
 	public static class Checksum {
 
 		int cs = 0;
