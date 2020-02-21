@@ -162,7 +162,8 @@ public class ArduinoSerial {
 		if (isOpen) {
 			sendData(poll, 0);
 			Pair<ArduinoListener, Integer> rec = receiveData();
-			if (rec.getValue() >= 0) {
+			if (rec != null && rec.getValue() >= 0) {
+				listener = rec.getKey();
 				listener.setLastReceived();
 				listener.receiveData(this, recBuffer.asReadOnlyBuffer().order(ByteOrder.LITTLE_ENDIAN));
 				return true;
