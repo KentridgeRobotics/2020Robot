@@ -10,6 +10,8 @@ package com.chargerrobotics.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.chargerrobotics.Constants;
+import com.chargerrobotics.utils.NetworkMapping;
+import com.chargerrobotics.utils.REVSmartServo;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class ColorSpinnerSubsystem extends SubsystemBase {
@@ -18,7 +20,9 @@ public class ColorSpinnerSubsystem extends SubsystemBase {
 	 */
 	private static ColorSpinnerSubsystem instance;
 	private WPI_TalonSRX spinnerMotor;
+	private REVSmartServo lifter;
 	private boolean isRunning;
+    public final NetworkMapping<Double> servoPos = new NetworkMapping<Double>("color_spinner_servo_position", 0.0, val -> {setAngle(val);});
 
 	public static ColorSpinnerSubsystem getInstance() {
 		if (instance == null)
@@ -28,6 +32,12 @@ public class ColorSpinnerSubsystem extends SubsystemBase {
 
 	public ColorSpinnerSubsystem() {
 		spinnerMotor = new WPI_TalonSRX(Constants.colorSpinner);
+		lifter = new REVSmartServo(Constants.colorSpinnerLifter);
+		setAngle(servoPos.getValue());
+	}
+	
+	public void setAngle(double deg) {
+		lifter.setAngle(deg);
 	}
 
 	public void setRunning(boolean isRunning) {

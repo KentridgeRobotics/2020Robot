@@ -39,11 +39,13 @@ public final class Constants {
 	public static final int colorSpinner = 31;
 	public static final int feedStage1 = 41;
 	public static final int feedStage2 = 42;
-	public static final int chomperUpDown = 43;
+  public static final int chomperUpDown = 43;
 	public static final int chomperFeed = 44;
 	public static final int climbPush1 = 51;
 	public static final int climbPush2 = 52;
 	public static final int climbPull = 53;
+	//PWM IDs
+	public static final int colorSpinnerLifter = 0;
 
 	// Shooter Constants
 	public static final double shooterTargetRPM = 10000.0;

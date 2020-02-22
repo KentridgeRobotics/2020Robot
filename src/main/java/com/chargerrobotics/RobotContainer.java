@@ -7,8 +7,6 @@
 
 package com.chargerrobotics;
 
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -17,6 +15,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
+import com.chargerrobotics.sensors.ColorSensorSerial;
+import com.chargerrobotics.sensors.GyroscopeSerial;
+import com.chargerrobotics.sensors.ScaleSerial;
 import com.chargerrobotics.commands.LimelightCommand;
 import com.chargerrobotics.commands.autonomous.VisionTurn;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
@@ -31,10 +32,7 @@ import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
-import com.chargerrobotics.subsystems.SerialSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
-import com.chargerrobotics.utils.ColorSensorSerial;
-import com.chargerrobotics.utils.ColorSpinnerSerialListener;
 import com.chargerrobotics.utils.Config;
 import com.chargerrobotics.utils.XboxController;
 
@@ -83,6 +81,8 @@ public class RobotContainer {
 
 	// Serial connection
 	public ColorSensorSerial colorSensor = new ColorSensorSerial();
+	public ScaleSerial scaleSensor = new ScaleSerial();
+	public GyroscopeSerial gyroscopeSensor = new GyroscopeSerial();
 
 	// controllers
 	public final static XboxController primary = new XboxController(Constants.primary);
@@ -117,7 +117,7 @@ public class RobotContainer {
 		if (colorSpinnerEnabled) {
 			colorSpinnerSubsystem = ColorSpinnerSubsystem.getInstance();
 			colorSpinnerCommand = new ColorSpinnerCommand(colorSpinnerSubsystem);
-			colorTargetCommand = new ColorTargetCommand(colorSpinnerSubsystem);
+			colorTargetCommand = new ColorTargetCommand(colorSpinnerSubsystem, colorSensor);
 		}
 		if (climberEnabled) {
 			climberSubsystem = ClimberSubsystem.getInstance();

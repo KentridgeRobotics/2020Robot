@@ -9,8 +9,9 @@ package com.chargerrobotics;
 
 import java.util.Arrays;
 
+import com.chargerrobotics.sensors.ColorSensorSerial;
 import com.chargerrobotics.utils.ArduinoSerialReceiver;
-import com.chargerrobotics.utils.ColorSensorSerial;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -130,7 +131,7 @@ public class Robot extends TimedRobot {
 	public void testPeriodic() {
 	}
 
-	public static ColorWheelColor getColorWheelColor() {
+	public static ColorWheelColor getTargetColorWheelColor() {
 		String data = DriverStation.getInstance().getGameSpecificMessage();
 		return data.length() > 0 ? ColorWheelColor.valueOf(data.charAt(0)) : null;
 	}

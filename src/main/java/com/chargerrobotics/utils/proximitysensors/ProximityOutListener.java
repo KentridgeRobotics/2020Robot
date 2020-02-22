@@ -2,15 +2,13 @@ package com.chargerrobotics.utils.proximitysensors;
 
 import java.util.function.Consumer;
 
-import com.chargerrobotics.subsystems.SerialSubsystem;
-
 public class ProximityOutListener implements Consumer<String> {
     private static ProximityOutListener instance = null;
 
     public static ProximityOutListener getInstance() {
         if(instance == null) {
             instance = new ProximityOutListener();
-            SerialSubsystem.getInstance().registerListener("PRXYO", instance);
+            //SerialSubsystem.getInstance().registerListener("PRXYO", instance); TEMPORARILY COMMENTED OUT - Needs to be migrated later
         }
         return instance;
     }

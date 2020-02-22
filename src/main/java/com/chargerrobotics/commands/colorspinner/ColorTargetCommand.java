@@ -9,26 +9,28 @@ package com.chargerrobotics.commands.colorspinner;
 
 import com.chargerrobotics.Robot;
 import com.chargerrobotics.Robot.ColorWheelColor;
+import com.chargerrobotics.sensors.ColorSensorSerial;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
-import com.chargerrobotics.utils.ColorSpinnerSerialListener;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ColorTargetCommand extends CommandBase {
 	
 	private final ColorSpinnerSubsystem colorSpinnerSubsystem;
+	private final ColorSensorSerial colorSensor;
 	private ColorWheelColor target;
 	/**
 	 * Creates a new ColorSpinnerCommand.
 	 */
-	public ColorTargetCommand(ColorSpinnerSubsystem colorSpinnerSubsystem) {
+	public ColorTargetCommand(ColorSpinnerSubsystem colorSpinnerSubsystem, ColorSensorSerial colorSensor) {
 		this.colorSpinnerSubsystem = colorSpinnerSubsystem;
+		this.colorSensor = colorSensor;
 	}
 
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		target = Robot.getColorWheelColor();
+		target = Robot.getTargetColorWheelColor();
 		if (target != null) colorSpinnerSubsystem.setRunning(true);
 		else this.cancel();
 	}
@@ -41,18 +43,12 @@ public class ColorTargetCommand extends CommandBase {
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(final boolean interrupted) {
-		if (!interrupted) colorSpinnerSubsystem.setRunning(false);
+		colorSpinnerSubsystem.setRunning(false);
 	}
 
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		String receivedColor = ColorSpinnerSerialListener.getInstance().getColor();
-		if (receivedColor != null) {
-			System.out.println(receivedColor);
-			return ColorWheelColor.valueOf(receivedColor.charAt(0)) == target;
-		} else {
-			return false;
-		}
+		return colorSensor.getColor() == target;
 	}
 }
