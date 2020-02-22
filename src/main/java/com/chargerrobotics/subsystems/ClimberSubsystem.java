@@ -7,7 +7,12 @@
 
 package com.chargerrobotics.subsystems;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import com.chargerrobotics.Constants;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimberSubsystem extends SubsystemBase {
@@ -16,30 +21,45 @@ public class ClimberSubsystem extends SubsystemBase {
 	 */
 
 	private static ClimberSubsystem instance;
-	private DoubleSolenoid hookSolenoid;
+	private WPI_TalonFX climbPush1;
+	private WPI_TalonFX climbPush2;
+	private WPI_TalonSRX climbPull;
 
 	public static ClimberSubsystem getInstance() {
-		if (instance == null)
+		if(instance == null) {
 			instance = new ClimberSubsystem();
+			CommandScheduler.getInstance().registerSubsystem(instance);
+		}
 		return instance;
 	}
 
 	public ClimberSubsystem() {
-		hookSolenoid = new DoubleSolenoid(2, 0, 1);
+		climbPush1 = new WPI_TalonFX(Constants.climbPush1);
+		climbPush2 = new WPI_TalonFX(Constants.climbPush2);
+		climbPull = new WPI_TalonSRX(Constants.climbPull);
+		climbPush1.setNeutralMode(NeutralMode.Brake);
+		climbPush2.setNeutralMode(NeutralMode.Brake);
+		climbPull.setNeutralMode(NeutralMode.Brake);
 	}
 
 	public void setUp() {
-		hookSolenoid.set(DoubleSolenoid.Value.kForward);
+		climbPush1.set(0.4);
+		climbPush2.set(-0.4);
+		climbPull.set(0.6);
 	}
 
 	public void setDown() {
-		hookSolenoid.set(DoubleSolenoid.Value.kReverse);
+		climbPush1.set(-0.4);
+		climbPush2.set(0.4);
+		climbPull.set(0);
 	}
 
 	public void setStop() {
-		hookSolenoid.set(DoubleSolenoid.Value.kOff);
+		climbPush1.set(0);
+		climbPush2.set(0);
+		climbPull.set(0);
 	}
-
+	
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
