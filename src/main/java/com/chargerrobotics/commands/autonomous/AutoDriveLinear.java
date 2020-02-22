@@ -8,6 +8,7 @@
 package com.chargerrobotics.commands.autonomous;
 
 import com.chargerrobotics.subsystems.DriveSubsystem;
+import com.chargerrobotics.utils.GyroHeading;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
@@ -23,7 +24,8 @@ public class AutoDriveLinear extends CommandBase {
   private double initialRightDistance;
   private double currentLeftDistance;
   private double currentRightDistance;
-  private double initialGyroAngle;
+  private double currentHeading;
+  private double initialHeading;
   private double desiredDistance;
   private final DriveSubsystem drive;
   private DifferentialDriveOdometry odometry;
@@ -47,17 +49,25 @@ public class AutoDriveLinear extends CommandBase {
     initialRightDistance = drive.getOdoRight();
     currentLeftDistance = initialLeftDistance;
     currentRightDistance = initialRightDistance;
+    initialHeading = GyroHeading.getHeading();
+    currentHeading = initialHeading;
     desiredDistance = SmartDashboard.getNumber(KEY, 0.0);
+    drive.setAutonomousRunning(true);
+    drive.setThrottle(0, 0); // Clear out any current throttle on the drive....
     rotationPid = new PIDController(
       SmartDashboard.getNumber("linRotP", 0.0),
       SmartDashboard.getNumber("linRotI", 0.0),
       SmartDashboard.getNumber("linRotD", 0.0)
     );
+    rotationPid.setSetpoint(0.0);
+    rotationPid.setTolerance(0.5, 0.05);
     translationPid = new PIDController(
       SmartDashboard.getNumber("linTransP", 0.0),
       SmartDashboard.getNumber("linTransI", 0.0),
       SmartDashboard.getNumber("linTransD", 0.0)
     );
+    translationPid.setSetpoint(desiredDistance);
+    translationPid.setTolerance(1.0, 0.1);
     odometry = new DifferentialDriveOdometry(getGyroHeading(), new Pose2d(desiredDistance, 0.0, new Rotation2d(0.0)));
   }
 
@@ -70,9 +80,7 @@ public class AutoDriveLinear extends CommandBase {
   }
 
   private Rotation2d getGyroHeading() {
-    double newHeading = 
-    return null;
-
+    return Rotation2d.fromDegrees(currentHeading - initialHeading);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -80,23 +88,25 @@ public class AutoDriveLinear extends CommandBase {
   public void execute() {
     currentLeftDistance = drive.getOdoLeft();
     currentRightDistance = drive.getOdoRight();
-
+    currentHeading = GyroHeading.getHeading();
     Pose2d pose = odometry.update(getGyroHeading(), getDistanceLeft(), getDistanceRight());
     Rotation2d rotation = pose.getRotation();
     Translation2d translation = pose.getTranslation();
-    double rotationOutput = rotationPid.calculate(rotation.getDegrees(), 0.0);
+    double rotationOutput = rotationPid.calculate(rotation.getDegrees());
     double translationOutput = translationPid.calculate(translation.getNorm());
+    drive.arcadeDrive(translationOutput, rotationOutput);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    drive.setAutonomousRunning(false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return rotationPid.atSetpoint() && translationPid.atSetpoint();
   }
 }
