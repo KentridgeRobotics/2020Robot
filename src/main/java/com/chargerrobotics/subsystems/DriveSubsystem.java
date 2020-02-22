@@ -78,6 +78,14 @@ public class DriveSubsystem extends SubsystemBase {
 		}
 	}
 
+	public double getOdoLeft() {
+		return leftFront.getEncoder().getPosition();
+	}
+
+	public double getOdoRight() {
+		return rightFront.getEncoder().getPosition();
+	}
+
 	public void setSpeeds(double left, double right) {
 		leftDriveGroup.set(left);
 		rightDriveGroup.set(right);
