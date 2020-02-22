@@ -43,6 +43,9 @@ public final class Constants {
 	public static final int feedStage2 = 42;
 	public static final int chomperUpDown = 51;
 	public static final int chomperFeed = 52;
+	
+	//PWM IDs
+	public static final int colorSpinnerLifter = 0;
 
 	// Shooter Constants
 	public static final double shooterTargetRPM = 10000.0;
