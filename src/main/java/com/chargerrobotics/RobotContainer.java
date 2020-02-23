@@ -20,6 +20,7 @@ import com.chargerrobotics.sensors.ColorSensorSerial;
 import com.chargerrobotics.sensors.GyroscopeSerial;
 import com.chargerrobotics.sensors.ScaleSerial;
 import com.chargerrobotics.commands.LimelightCommand;
+import com.chargerrobotics.commands.autonomous.AutoDriveLinear;
 import com.chargerrobotics.commands.autonomous.VisionTurn;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
@@ -65,6 +66,7 @@ public class RobotContainer {
 	private BrakeCommand brakeCommand;
 	private BoostCommand boostCommand;
 	private SlowCommand slowCommand;
+	private AutoDriveLinear autoDriveLinear;
 
 	// Shooter
 	private ShooterSubsystem shooterSubsystem;
@@ -105,6 +107,7 @@ public class RobotContainer {
 			brakeCommand = new BrakeCommand(driveSubsystem);
 			boostCommand = new BoostCommand(driveSubsystem);
 			slowCommand = new SlowCommand(driveSubsystem);
+			autoDriveLinear = new AutoDriveLinear(driveSubsystem);
 		}
 		if (limelightEnabled) {
 			limelightSubsystem = LimelightSubsystem.getInstance();
@@ -151,6 +154,7 @@ public class RobotContainer {
 			primary.buttonB.whileHeld(brakeCommand);
 			primary.buttonBumperRight.whileHeld(boostCommand);
 			primary.buttonBumperLeft.whileHeld(slowCommand);
+			primary.buttonPovLeft.whenPressed(autoDriveLinear);
 		}
 		if (limelightEnabled) {
 			primary.buttonY.whileHeld(alignToTarget);

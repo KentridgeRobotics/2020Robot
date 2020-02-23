@@ -30,6 +30,8 @@ public class DriveSubsystem extends SubsystemBase {
 	private boolean boost;
 	private boolean slow;
 
+	private boolean autonomousRunning;
+
 	public static DriveSubsystem getInstance() {
 		if (instance == null)
 			instance = new DriveSubsystem();
@@ -58,6 +60,10 @@ public class DriveSubsystem extends SubsystemBase {
 		differentialDrive.setDeadband(0.0);
 	}
 
+	public void setAutonomousRunning(boolean autonomousRunning) {
+		this.autonomousRunning = autonomousRunning;
+	}
+
 	public void setThrottle(double left, double right) {
 		leftThrottle = left;
 		rightThrottle = right;
@@ -76,6 +82,14 @@ public class DriveSubsystem extends SubsystemBase {
 			rightRear.setIdleMode(IdleMode.kCoast);
 			rightFront.setIdleMode(IdleMode.kCoast);
 		}
+	}
+
+	public double getOdoLeft() {
+		return leftFront.getEncoder().getPosition();
+	}
+
+	public double getOdoRight() {
+		return rightFront.getEncoder().getPosition();
 	}
 
 	public void setSpeeds(double left, double right) {
@@ -117,7 +131,9 @@ public class DriveSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		super.periodic();
-		tankDrive(leftThrottle, rightThrottle);
+		if (!autonomousRunning) {
+			tankDrive(leftThrottle, rightThrottle);
+		}
 	}
 
 	public void initDefaultCommand() {
