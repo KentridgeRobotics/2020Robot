@@ -63,6 +63,9 @@ public class ArduinoSerial {
 		return name;
 	}
 
+	/**
+	 * Internal method to open the port
+	 */
 	private void open() {
 		isOpen = serial.openPort();
 		if (isOpen) {
@@ -198,66 +201,76 @@ public class ArduinoSerial {
 	 * <p>Receives length of message to be received
 	 * <p>Receives message and stores in the receive {@link java.nio.ByteBuffer}
 	 * 
+	 * @param poll Whether to expect a response to a poll
+	 * 
 	 * @return A {@link Pair} containing the listener to be called and the number of bytes received or null if the packet was invalid
 	 */
 	private synchronized Pair<ArduinoListener, Integer> receiveData(boolean poll) {
 		if (findSync()) {
+			byte state = 0;
 			long start = System.currentTimeMillis();
-			boolean hasSync = false;
-			boolean hasHeader = false;
-			int recCount = 0;
+			int bytesRead = 0;
 			recCs.reset();
 			int expectedChecksum = 0;
 			int expectedLength = 0;
-			short recHeader = 0;
+			short currentHeader = 0;
 			ArduinoListener listener = null;
 			while (true) {
 				try {
 					if (in.available() > 0) {
 						byte b = (byte) in.read();
-						if (!hasSync) {
-							if (b != sync[0])
-								hasSync = true;
-						}
-						if (hasSync) {
-							recCount++;
-							if (!hasHeader) {
-								if (recCount <= 1) {
-									recHeader = (short)(b & 0xff);
-								} else if (recCount <= 2) {
-									recHeader |= (short)((b & 0xff) << 8);
-									if (poll) {
-										listener = ArduinoSerialReceiver.getListener(recHeader);
-										if (listener == null)
-											return null;
-									}
-								} else if (recCount == 3) {
-									expectedChecksum = b & 0xff;
-								} else if (recCount == 4) {
-									expectedChecksum |= ((b << 8) & 0xff);
-								} else if (recCount == 5) {
-									expectedLength = b & 0xff;
-								} else if (recCount == 6) {
-									expectedLength |= ((b << 8) & 0xff);
-									recCount = 0;
-									hasHeader = true;
-									if (expectedLength == 0) {
-										recBuffer.limit(0);
-										recBuffer.position(0);
-										return new Pair<ArduinoListener, Integer>(listener, 0);
-									}
-								}
-							} else {
-								recBuffer.array()[recCount - 1] = b;
-								recCs.updateChecksum(b);
-								if (recCount >= expectedLength) {
-									if (recCs.getChecksum() == expectedChecksum) {
-										recBuffer.limit(expectedLength);
-										recBuffer.position(0);
-										return new Pair<ArduinoListener, Integer>(listener, expectedLength);
-									}
+						switch (state) {
+						case 0:
+							if (b == sync[0]) {
+								state++;
+								break;
+							}
+						case 1:
+							currentHeader = (short)(b & 0xff);
+							state++;
+							break;
+						case 2:
+							currentHeader |= (short)((b & 0xff) << 8);
+							state++;
+							if (poll) {
+								listener = ArduinoSerialReceiver.getListener(currentHeader);
+								if (listener == null)
 									return null;
+							}
+							break;
+						case 3:
+							expectedChecksum = b & 0xff;
+							state++;
+							break;
+						case 4:
+							expectedChecksum |= ((b << 8) & 0xff);
+							state++;
+							break;
+						case 5:
+							expectedLength = b & 0xff;
+							state++;
+							break;
+						case 6:
+							expectedLength |= ((b << 8) & 0xff);
+							state++;
+							bytesRead = 0;
+							if (expectedLength == 0) {
+								recBuffer.limit(0);
+								recBuffer.position(0);
+								return new Pair<ArduinoListener, Integer>(listener, 0);
+							}
+							break;
+						case 7:
+							recBuffer.array()[bytesRead] = b;
+							bytesRead++;
+							recCs.updateChecksum(b);
+							if (bytesRead >= expectedLength) {
+								if (recCs.getChecksum() == expectedChecksum) {
+									recBuffer.limit(expectedLength);
+									recBuffer.position(0);
+									return new Pair<ArduinoListener, Integer>(listener, expectedLength);
 								}
+								return null;
 							}
 						}
 					}

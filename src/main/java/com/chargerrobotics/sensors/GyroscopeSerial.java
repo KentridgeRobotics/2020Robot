@@ -7,14 +7,14 @@ import com.chargerrobotics.utils.ArduinoSerialReceiver;
 import com.chargerrobotics.utils.ArduinoSerialReceiver.ArduinoListener;
 
 public class GyroscopeSerial extends ArduinoListener {
+
+	private volatile float x = 0;
+	private volatile float y = 0;
+	private volatile float z = 0;
 	
 	public GyroscopeSerial() {
 		ArduinoSerialReceiver.registerListener(this, (short)0xA02D);
 	}
-
-	private float x = 0;
-	private float y = 0;
-	private float z = 0;
 
 	public void receiveData(ArduinoSerial serial, ByteBuffer buffer) {
 		if (buffer.remaining() >= 12) {
@@ -24,16 +24,42 @@ public class GyroscopeSerial extends ArduinoListener {
 		}
 	}
 	
-	public float getX() {
-		return isExpired() ? null : x;
+	/**
+	 * Gets the robot heading in degrees or {@code -1} if data is expired
+	 * 
+	 * Equivalent to {@link #getYaw()}
+	 * 
+	 * @return Robot heading
+	 */
+	public float getHeading() {
+		return getYaw();
 	}
 	
-	public float getY() {
-		return isExpired() ? null : y;
+	/**
+	 * Gets the robot yaw in degrees or {@code -1} if data is expired
+	 * 
+	 * @return Robot yaw
+	 */
+	public float getYaw() {
+		return isExpired() ? -1 : x;
 	}
 	
-	public float getZ() {
-		return isExpired() ? null : z;
+	/**
+	 * Gets the robot pitch in degrees or {@code -1} if data is expired
+	 * 
+	 * @return Robot pitch
+	 */
+	public float getPitch() {
+		return isExpired() ? -1 : y;
+	}
+	
+	/**
+	 * Gets the robot roll in degrees or {@code -1} if data is expired
+	 * 
+	 * @return Robot roll
+	 */
+	public float getRoll() {
+		return isExpired() ? -1 : z;
 	}
 
 }

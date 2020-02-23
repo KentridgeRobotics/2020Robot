@@ -25,7 +25,9 @@ public class ArduinoSerialReceiver {
 	private static volatile PollTask pollTask = null;
 
 	/**
-	 * Looks for all available USB to serial COM ports and sends initialization commands before closing
+	 * Looks for all available USB to serial COM ports and runs the provided initialization commands before closing them
+	 * 
+	 * Useful for resetting Arduinos
 	 * 
 	 * @param initCommands Commands to run at initialization
 	 */
@@ -37,9 +39,7 @@ public class ArduinoSerialReceiver {
 					serialPorts.add(new ArduinoSerial(name));
 				}
 			}
-		}
-		initCommands.run();
-		synchronized(serialPorts) {
+			initCommands.run();
 			serialPorts.removeIf(serial -> {serial.close(); return true;});
 		}
 	}
@@ -141,7 +141,7 @@ public class ArduinoSerialReceiver {
 	 * Listener class for received messages
 	 */
 	public static abstract class ArduinoListener {
-		private long lastReceived = 0;
+		private volatile long lastReceived = 0;
 		private final long expiry;
 		private String id = "";
 		
