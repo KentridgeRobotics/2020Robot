@@ -9,7 +9,6 @@ package com.chargerrobotics;
 
 import java.util.Arrays;
 
-import com.chargerrobotics.sensors.ColorSensorSerial;
 import com.chargerrobotics.utils.ArduinoSerialReceiver;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -29,10 +28,7 @@ public class Robot extends TimedRobot {
 
 	public static final int TEAM = 3786;
 
-	@SuppressWarnings("unused")
 	private RobotContainer robotContainer;
-	
-	public ColorSensorSerial css = null;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -103,7 +99,6 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		//SerialSubsystem.getInstance().init();
 		robotContainer.setAutonomous();
 		ArduinoSerialReceiver.start();
 	}

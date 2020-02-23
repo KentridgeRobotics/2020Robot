@@ -127,13 +127,16 @@ public class ArduinoSerial {
 		}
 		if (isOpen) {
 			sendBuffer.position(0);
-			sendBuffer.limit(data.length);
-			sendBuffer.put(data);
-			sendData(new byte[] {(byte)(header & 0xff), (byte)((header >> 8) & 0xff)}, data.length);
+			if (data != null) {
+				sendBuffer.limit(data.length);
+				sendBuffer.put(data);
+			} else
+				sendBuffer.limit(0);
+			sendData(new byte[] {(byte)(header & 0xff), (byte)((header >> 8) & 0xff)}, sendBuffer.limit());
 			if (receive) {
-				Pair<ArduinoListener, Integer> rec = receiveData();
+				Pair<ArduinoListener, Integer> rec = receiveData(false);
 				if (rec.getValue() >= 0) {
-					return recBuffer;
+					return recBuffer.asReadOnlyBuffer().order(ByteOrder.LITTLE_ENDIAN);
 				}
 			}
 		}
@@ -161,15 +164,25 @@ public class ArduinoSerial {
 		}
 		if (isOpen) {
 			sendData(poll, 0);
-			Pair<ArduinoListener, Integer> rec = receiveData();
+			Pair<ArduinoListener, Integer> rec = receiveData(true);
 			if (rec != null && rec.getValue() >= 0) {
 				listener = rec.getKey();
 				listener.setLastReceived();
+				listener.savePortID(getName());
 				listener.receiveData(this, recBuffer.asReadOnlyBuffer().order(ByteOrder.LITTLE_ENDIAN));
 				return true;
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Gets the {@link ArduinoListener} that has been found for this serial port, or <code>null</code> if unavailable
+	 * 
+	 * @return {@link ArduinoListener} for this port
+	 */
+	public ArduinoListener getListener() {
+		return listener;
 	}
 
 	/**
@@ -187,7 +200,7 @@ public class ArduinoSerial {
 	 * 
 	 * @return A {@link Pair} containing the listener to be called and the number of bytes received or null if the packet was invalid
 	 */
-	private Pair<ArduinoListener, Integer> receiveData() {
+	private synchronized Pair<ArduinoListener, Integer> receiveData(boolean poll) {
 		if (findSync()) {
 			long start = System.currentTimeMillis();
 			boolean hasSync = false;
@@ -213,9 +226,11 @@ public class ArduinoSerial {
 									recHeader = (short)(b & 0xff);
 								} else if (recCount <= 2) {
 									recHeader |= (short)((b & 0xff) << 8);
-									listener = ArduinoSerialReceiver.getListener(recHeader);
-									if (listener == null)
-										return null;
+									if (poll) {
+										listener = ArduinoSerialReceiver.getListener(recHeader);
+										if (listener == null)
+											return null;
+									}
 								} else if (recCount == 3) {
 									expectedChecksum = b & 0xff;
 								} else if (recCount == 4) {
@@ -267,7 +282,7 @@ public class ArduinoSerial {
 	 * 
 	 * @return <code>true</code> if a sync byte was found
 	 */
-	private boolean findSync() {
+	private synchronized boolean findSync() {
 		long start = System.currentTimeMillis();
 		while (true) {
 			try {
@@ -298,7 +313,7 @@ public class ArduinoSerial {
 	 * @param msgType 2 byte header
 	 * @param length Number of bytes from buffer to send
 	 */
-	private void sendData(byte[] msgType, int length) {
+	private synchronized void sendData(byte[] msgType, int length) {
 		try {
 			sendCs.reset();
 			byte[] sendArr = sendBuffer.array();

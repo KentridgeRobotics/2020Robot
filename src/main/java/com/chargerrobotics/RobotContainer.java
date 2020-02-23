@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
+import com.chargerrobotics.sensors.BallSensorSerial;
 import com.chargerrobotics.sensors.ColorSensorSerial;
 import com.chargerrobotics.sensors.GyroscopeSerial;
 import com.chargerrobotics.sensors.ScaleSerial;
@@ -33,6 +34,7 @@ import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
+import com.chargerrobotics.utils.ArduinoSerialReceiver;
 import com.chargerrobotics.utils.Config;
 import com.chargerrobotics.utils.XboxController;
 
@@ -85,6 +87,7 @@ public class RobotContainer {
 	public ColorSensorSerial colorSensor = new ColorSensorSerial();
 	public ScaleSerial scaleSensor = new ScaleSerial();
 	public GyroscopeSerial gyroscopeSensor = new GyroscopeSerial();
+	public BallSensorSerial ballSensor = new BallSensorSerial();
 
 	// controllers
 	public final static XboxController primary = new XboxController(Constants.primary);
@@ -94,6 +97,9 @@ public class RobotContainer {
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
+		ArduinoSerialReceiver.initialization(() -> {
+			ballSensor.resetCount();
+		});
 		Config.setup();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
