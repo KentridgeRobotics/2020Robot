@@ -9,7 +9,6 @@ package com.chargerrobotics;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -86,7 +85,7 @@ public class RobotContainer {
 	// Serial connection
 	public ColorSensorSerial colorSensor = new ColorSensorSerial();
 	public ScaleSerial scaleSensor = new ScaleSerial();
-	public GyroscopeSerial gyroscopeSensor = new GyroscopeSerial();
+	public GyroscopeSerial gyroscope = new GyroscopeSerial();
 	public BallSensorSerial ballSensor = new BallSensorSerial();
 
 	// controllers
@@ -107,7 +106,7 @@ public class RobotContainer {
 			brakeCommand = new BrakeCommand(driveSubsystem);
 			boostCommand = new BoostCommand(driveSubsystem);
 			slowCommand = new SlowCommand(driveSubsystem);
-			autoDriveLinear = new AutoDriveLinear(driveSubsystem);
+			autoDriveLinear = new AutoDriveLinear(driveSubsystem, gyroscope);
 		}
 		if (limelightEnabled) {
 			limelightSubsystem = LimelightSubsystem.getInstance();
