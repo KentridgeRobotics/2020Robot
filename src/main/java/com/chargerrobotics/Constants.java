@@ -29,7 +29,6 @@ public final class Constants {
 	// 2x: Shooter
 	// 3x: Color Spinner
 	public static final int powerDistributionPanel = 1;
-	public static final int pneumaticControlModule = 2;
 	public static final int rightFrontDrive = 11;
 	public static final int rightRearDrive = 12;
 	public static final int leftFrontDrive = 13;
@@ -38,12 +37,13 @@ public final class Constants {
 	public static final int shooterID2 = 22;
 	public static final int shooterHood = 23;
 	public static final int colorSpinner = 31;
-	public static final int colorLifter = 32;
 	public static final int feedStage1 = 41;
 	public static final int feedStage2 = 42;
-	public static final int chomperUpDown = 51;
-	public static final int chomperFeed = 52;
-	
+  public static final int chomperUpDown = 43;
+	public static final int chomperFeed = 44;
+	public static final int climbPush1 = 51;
+	public static final int climbPush2 = 52;
+	public static final int climbPull = 53;
 	//PWM IDs
 	public static final int colorSpinnerLifter = 0;
 

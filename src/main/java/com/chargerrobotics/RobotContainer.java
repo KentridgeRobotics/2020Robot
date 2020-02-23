@@ -81,8 +81,6 @@ public class RobotContainer {
 	private ClimberUpCommand climberUpCommand;
 	private ClimberDownCommand climberDownCommand;
 
-	private Compressor compressor = null;
-
 	// Serial connection
 	public ColorSensorSerial colorSensor = new ColorSensorSerial();
 	public ScaleSerial scaleSensor = new ScaleSerial();
@@ -128,8 +126,6 @@ public class RobotContainer {
 			colorTargetCommand = new ColorTargetCommand(colorSpinnerSubsystem, colorSensor);
 		}
 		if (climberEnabled) {
-			compressor = new Compressor(Constants.pneumaticControlModule);
-			compressor.setClosedLoopControl(true);
 			climberSubsystem = ClimberSubsystem.getInstance();
 			climberUpCommand = new ClimberUpCommand(climberSubsystem);
 			climberDownCommand = new ClimberDownCommand(climberSubsystem);
