@@ -9,7 +9,6 @@ package com.chargerrobotics;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -17,10 +16,12 @@ import com.chargerrobotics.commands.shooter.HoodOffCommand;
 import com.chargerrobotics.commands.shooter.HoodOnCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
+import com.chargerrobotics.sensors.BallSensorSerial;
 import com.chargerrobotics.sensors.ColorSensorSerial;
 import com.chargerrobotics.sensors.GyroscopeSerial;
 import com.chargerrobotics.sensors.ScaleSerial;
 import com.chargerrobotics.commands.LimelightCommand;
+import com.chargerrobotics.commands.autonomous.AutoDriveLinear;
 import com.chargerrobotics.commands.autonomous.VisionTurn;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
@@ -36,6 +37,7 @@ import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
+import com.chargerrobotics.utils.ArduinoSerialReceiver;
 import com.chargerrobotics.utils.Config;
 import com.chargerrobotics.utils.XboxController;
 
@@ -67,6 +69,7 @@ public class RobotContainer {
 	private BrakeCommand brakeCommand;
 	private BoostCommand boostCommand;
 	private SlowCommand slowCommand;
+	private AutoDriveLinear autoDriveLinear;
 
 	// Shooter
 	private ShooterSubsystem shooterSubsystem;
@@ -89,7 +92,8 @@ public class RobotContainer {
 	// Serial connection
 	public ColorSensorSerial colorSensor = new ColorSensorSerial();
 	public ScaleSerial scaleSensor = new ScaleSerial();
-	public GyroscopeSerial gyroscopeSensor = new GyroscopeSerial();
+	public GyroscopeSerial gyroscope = new GyroscopeSerial();
+	public BallSensorSerial ballSensor = new BallSensorSerial();
 
 	// controllers
 	public final static XboxController primary = new XboxController(Constants.primary);
@@ -99,6 +103,9 @@ public class RobotContainer {
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
+		ArduinoSerialReceiver.initialization(() -> {
+			ballSensor.resetCount();
+		});
 		Config.setup();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
@@ -106,6 +113,7 @@ public class RobotContainer {
 			brakeCommand = new BrakeCommand(driveSubsystem);
 			boostCommand = new BoostCommand(driveSubsystem);
 			slowCommand = new SlowCommand(driveSubsystem);
+			autoDriveLinear = new AutoDriveLinear(driveSubsystem, gyroscope);
 		}
 		if (limelightEnabled) {
 			limelightSubsystem = LimelightSubsystem.getInstance();
@@ -157,6 +165,7 @@ public class RobotContainer {
 			primary.buttonB.whileHeld(brakeCommand);
 			primary.buttonBumperRight.whileHeld(boostCommand);
 			primary.buttonBumperLeft.whileHeld(slowCommand);
+			primary.buttonPovLeft.whenPressed(autoDriveLinear);
 		}
 		if (limelightEnabled) {
 			primary.buttonY.whileHeld(alignToTarget);

@@ -74,4 +74,5 @@ public final class Constants {
 	// File Names
 	public static final String dataStoragePath = "/home/lvuser";
 	public static final String configFileName = "config.yml";
+	public static final String comPortsFileName = "com.yml";
 }
