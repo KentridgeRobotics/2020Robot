@@ -21,6 +21,7 @@ import com.chargerrobotics.sensors.ScaleSerial;
 import com.chargerrobotics.commands.LimelightCommand;
 import com.chargerrobotics.commands.autonomous.AutoDriveLinear;
 import com.chargerrobotics.commands.autonomous.VisionTurn;
+import com.chargerrobotics.commands.chomper.ChomperIntakeCommand;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -29,6 +30,7 @@ import com.chargerrobotics.commands.drive.BoostCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
 import com.chargerrobotics.commands.drive.SlowCommand;
+import com.chargerrobotics.subsystems.ChomperSubsystem;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
@@ -49,6 +51,7 @@ public class RobotContainer {
 
 	private static final boolean limelightEnabled = false;
 	private static final boolean driveEnabled = false;
+	private static final boolean chomperEnabled = true;
 	private static final boolean shooterEnabled = false;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
@@ -71,6 +74,10 @@ public class RobotContainer {
 	private ShooterSubsystem shooterSubsystem;
 	private ShooterOnCommand shooterOnCommand;
 	private ShooterOffCommand shooterOffCommand;
+
+	// Chomper
+	private ChomperSubsystem chomperSubsystem;
+	private ChomperIntakeCommand chomperIntakeCommand;
 
 	// Color Spinner
 	private ColorSpinnerSubsystem colorSpinnerSubsystem;
@@ -122,6 +129,11 @@ public class RobotContainer {
 			shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
 			shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
 		}
+		if(chomperEnabled) {
+			chomperSubsystem = ChomperSubsystem.getInstance();
+			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem);
+
+		}
 		if (colorSpinnerEnabled) {
 			colorSpinnerSubsystem = ColorSpinnerSubsystem.getInstance();
 			colorSpinnerCommand = new ColorSpinnerCommand(colorSpinnerSubsystem);
@@ -167,6 +179,9 @@ public class RobotContainer {
 		if (shooterEnabled) {
 			secondary.buttonA.whenPressed(shooterOnCommand);
 			secondary.buttonB.whenPressed(shooterOffCommand);
+		}
+		if (chomperEnabled) {
+			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);
 		}
 		if (colorSpinnerEnabled) {
 			secondary.buttonX.whenPressed(colorTargetCommand);
