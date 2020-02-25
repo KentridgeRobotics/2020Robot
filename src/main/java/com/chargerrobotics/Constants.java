@@ -37,9 +37,10 @@ public final class Constants {
 	public static final int shooterID2 = 22;
 	public static final int shooterHoodID = 32;
 	public static final int colorSpinner = 31;
+	//public static final int colorLifter = 32;
 	public static final int feedStage1 = 41;
 	public static final int feedStage2 = 42;
-  public static final int chomperUpDown = 43;
+  	public static final int chomperUpDown = 43;
 	public static final int chomperFeed = 44;
 	public static final int climbPush1 = 51;
 	public static final int climbPush2 = 52;
@@ -48,7 +49,7 @@ public final class Constants {
 	public static final int colorSpinnerLifter = 0;
 
 	// Shooter Constants
-	public static final double shooterTargetRPM = 10000.0;
+	public static final double shooterTargetRPM = 3000.0;
 	public static final double shooterP = 0.001;
 	public static final double shooterI = 0.0000004;
 	public static final double shooterD = 0.2;
@@ -64,9 +65,9 @@ public final class Constants {
 	public static final int hoodGainSlot = 0;
 	public static final int hoodTimeOutMs = 30;
 	public static final int ticksPerRev = 0;
-	public static final double hoodP = 5.0;
-	public static final double hoodI = 0.0001;
-	public static final double hoodD = 0.05;
+	public static final double hoodP = 0.5;
+	public static final double hoodI = 0.006;
+	public static final double hoodD = 0.0;
 	public static final double hoodF = 0.0;
 
 

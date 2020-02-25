@@ -3,8 +3,10 @@ package com.chargerrobotics.subsystems;
 import com.chargerrobotics.Constants;
 import com.chargerrobotics.utils.NetworkMapping;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,9 +33,14 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     public ShooterHoodSubsystem() {
         shooterHood = new WPI_TalonSRX(Constants.shooterHoodID);
         shooterHood.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder, Constants.hoodPIDLoopId, Constants.hoodTimeOutMs);
+        shooterHood.setNeutralMode(NeutralMode.Brake);
+        shooterHood.configPeakCurrentLimit(40);
+        shooterHood.configContinuousCurrentLimit(30);
+        //shooterHood.configReverseLimitSwitchSource(LimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen);
 		setPIDP(kP.getValue());
 		setPIDI(kI.getValue());
-		setPIDD(kD.getValue());
+        setPIDD(kD.getValue());
+        
     }
 
     public void resetShooterEncoder() {
@@ -72,7 +79,11 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         super.periodic();
+        /*if(shooterHood.isRevLimitSwitchClosed() == 1) {
+            shooterHood.setSelectedSensorPosition(0);
+        }*/
         SmartDashboard.putNumber("hoodCurrPos", shooterHood.getSensorCollection().getQuadraturePosition());
+        SmartDashboard.putNumber("hood Current", shooterHood.getSupplyCurrent());
     }
 
 }
