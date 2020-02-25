@@ -30,7 +30,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
     public ShooterHoodSubsystem() {
         shooterHood = new WPI_TalonSRX(Constants.shooterHoodID);
-        shooterHood.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder,0,0);
+        shooterHood.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder, Constants.hoodPIDLoopId, Constants.hoodTimeOutMs);
 		setPIDP(kP.getValue());
 		setPIDI(kI.getValue());
 		setPIDD(kD.getValue());
