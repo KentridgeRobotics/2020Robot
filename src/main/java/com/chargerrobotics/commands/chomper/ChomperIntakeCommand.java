@@ -9,6 +9,7 @@ package com.chargerrobotics.commands.chomper;
 
 import com.chargerrobotics.subsystems.ChomperSubsystem;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ChomperIntakeCommand extends CommandBase {
@@ -24,7 +25,8 @@ public class ChomperIntakeCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    chomperSubsystem.setFeedSpeed(0.1);
+    chomperSubsystem.setChomperFeedRunning(true);
+    SmartDashboard.putString("Chomper Intake", "Running");
   }
 
   // Called every time the scheduler runs whiley the command is scheduled.
@@ -34,8 +36,9 @@ public class ChomperIntakeCommand extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(final boolean interrupted) {
-    if (!interrupted) chomperSubsystem.setFeedSpeed(0.0);
+  public void end(boolean interrupted) {
+    chomperSubsystem.setChomperFeedRunning(false);
+    SmartDashboard.putString("Chomper Intake", "Stopped");
   }
 
   // Returns true when the command should end.
