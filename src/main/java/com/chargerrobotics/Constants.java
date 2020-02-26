@@ -39,7 +39,7 @@ public final class Constants {
 	public static final int colorSpinner = 31;
 	public static final int feedStage1 = 41;
 	public static final int feedStage2 = 42;
-  public static final int chomperUpDown = 43;
+  	public static final int chomperUpDown = 43;
 	public static final int chomperFeed = 44;
 	public static final int climbPush1 = 51;
 	public static final int climbPush2 = 52;
@@ -48,7 +48,7 @@ public final class Constants {
 	public static final int colorSpinnerLifter = 0;
 
 	// Shooter Constants
-	public static final double shooterTargetRPM = 10000.0;
+	public static final double shooterTargetRPM = 3000.0;
 	public static final double shooterP = 0.001;
 	public static final double shooterI = 0.0000004;
 	public static final double shooterD = 0.2;
@@ -58,6 +58,12 @@ public final class Constants {
 	public static final double shooterVelocityGain = 0.0;
 	public static final double shooterMinOutput = -1.0;
 	public static final double shooterMaxOutput = 1.0;
+
+	//Chomper Constants
+	public static final double chomperP = 0.1;
+	public static final double chomperI = 0.0;
+	public static final double chomperD = 0.0;
+	public static final int chomperDownPosition = 100;
 
 	// File Names
 	public static final String dataStoragePath = "/home/lvuser";

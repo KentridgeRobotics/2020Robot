@@ -8,6 +8,7 @@
 package com.chargerrobotics.subsystems;
 
 import com.chargerrobotics.Constants;
+import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -19,9 +20,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ChomperSubsystem extends SubsystemBase {
   
   private static ChomperSubsystem instance;
-  private boolean isUpDownRunning;
   private boolean isFeedRunning;
-  //private WPI_TalonSRX chomperUpDown;
+  private WPI_TalonSRX chomperUpDown;
   private CANSparkMax chomperFeed;
 
   /**
@@ -37,13 +37,9 @@ public class ChomperSubsystem extends SubsystemBase {
   }
 
   public ChomperSubsystem() {
-    //chomperUpDown = new WPI_TalonSRX(Constants.chomperUpDown);
+    chomperUpDown = new WPI_TalonSRX(Constants.chomperUpDown);
+    chomperUpDown.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder, 0, 0);
     chomperFeed = new CANSparkMax(Constants.chomperFeed, MotorType.kBrushless);
-  }
-
-  public void setChomperUpDownRunning(boolean isRunning) {
-    isUpDownRunning = isRunning;
-
   }
 
   public void setChomperFeedRunning(boolean isRunning) {
@@ -57,15 +53,22 @@ public class ChomperSubsystem extends SubsystemBase {
   }
 
   public void setUpDownSpeed(double speed) {
-    //chomperUpDown.set(speed);
+    chomperUpDown.set(speed);
   }
 
   public void setFeedSpeed(double speed) {
     chomperFeed.set(speed);
   }
 
+  public int getUpDownPosition() {
+    return chomperUpDown.getSelectedSensorPosition();
+  }
+
   @Override
   public void periodic() {
+    if(chomperUpDown.isRevLimitSwitchClosed() == 1) {
+      chomperUpDown.setSelectedSensorPosition(0);
+    }
     SmartDashboard.putString("Chomper", "In periodic");
   }
 }
