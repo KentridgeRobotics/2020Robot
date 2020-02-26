@@ -22,19 +22,12 @@ public class ChomperPIDCommand extends PIDCommand {
    */
   public ChomperPIDCommand(final double position, DutyCycleEncoder positionEcoder,ChomperSubsystem chomperSubsystem) {
     super(
-        // The controller that the command will use
         new PIDController(0.1, 0, 0),
-        // This should return the measurement
         () -> positionEcoder.getPositionOffset(),
-        // This should return the setpoint (can also be a constant)
         () -> position,
-        // This uses the output
         output -> {
-          chomperSubsystem.Setspeed(output);
-          // Use the output here
+          chomperSubsystem.setSpeed(output);
         });
-    // Use addRequirements() here to declare subsystem dependencies.
-    // Configure additional PID options by calling `getController` here.
   }
 
   // Returns true when the command should end.

@@ -27,7 +27,7 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMotor = new CANSparkMax(33, MotorType.kBrushless);
   }
 
-  public void setSpeed(double speed) {
+  public void setSpeed(final double speed) {
     intakeMotor.set(speed);
   }
 

@@ -40,9 +40,8 @@ public class ChomperSubsystem extends SubsystemBase {
     //
   }
 
-  public void Setspeed(final double speed) {
-  chomperMotor.set(speed);
-
+  public void setSpeed(final double speed) {
+    if (isRunning) chomperMotor.set(speed);
   }
   @Override
   public void periodic() {
