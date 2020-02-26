@@ -7,18 +7,21 @@
 
 package com.chargerrobotics;
 
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
+import com.chargerrobotics.sensors.BallSensorSerial;
+import com.chargerrobotics.sensors.ColorSensorSerial;
+import com.chargerrobotics.sensors.GyroscopeSerial;
+import com.chargerrobotics.sensors.ScaleSerial;
 import com.chargerrobotics.commands.LimelightCommand;
+import com.chargerrobotics.commands.autonomous.AutoDriveLinear;
 import com.chargerrobotics.commands.autonomous.VisionTurn;
+import com.chargerrobotics.commands.chomper.ChomperIntakeCommand;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -27,13 +30,13 @@ import com.chargerrobotics.commands.drive.BoostCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
 import com.chargerrobotics.commands.drive.SlowCommand;
+import com.chargerrobotics.subsystems.ChomperSubsystem;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
-import com.chargerrobotics.subsystems.SerialSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
-import com.chargerrobotics.utils.ColorSpinnerSerialListener;
+import com.chargerrobotics.utils.ArduinoSerialReceiver;
 import com.chargerrobotics.utils.Config;
 import com.chargerrobotics.utils.XboxController;
 
@@ -48,16 +51,16 @@ public class RobotContainer {
 
 	private static final boolean limelightEnabled = false;
 	private static final boolean driveEnabled = false;
+	private static final boolean chomperEnabled = true;
 	private static final boolean shooterEnabled = false;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
-	private static final boolean serialEnabled = true;
 
 	// Limelight
 	private LimelightSubsystem limelightSubsystem;
 	private LimelightCommand limelightCommand;
-	// Vision Test
-	public VisionTurn visionTurnTest;
+	// Align to the target
+	public VisionTurn alignToTarget;
 
 	// Drive
 	private DriveSubsystem driveSubsystem;
@@ -65,11 +68,16 @@ public class RobotContainer {
 	private BrakeCommand brakeCommand;
 	private BoostCommand boostCommand;
 	private SlowCommand slowCommand;
+	private AutoDriveLinear autoDriveLinear;
 
 	// Shooter
 	private ShooterSubsystem shooterSubsystem;
 	private ShooterOnCommand shooterOnCommand;
 	private ShooterOffCommand shooterOffCommand;
+
+	// Chomper
+	private ChomperSubsystem chomperSubsystem;
+	private ChomperIntakeCommand chomperIntakeCommand;
 
 	// Color Spinner
 	private ColorSpinnerSubsystem colorSpinnerSubsystem;
@@ -81,11 +89,11 @@ public class RobotContainer {
 	private ClimberUpCommand climberUpCommand;
 	private ClimberDownCommand climberDownCommand;
 
-	private Compressor compressor = null;
-
 	// Serial connection
-	private SerialSubsystem serialSubsystem;
-	private ColorSpinnerSerialListener colorSpinnerSerialListener;
+	public ColorSensorSerial colorSensor = new ColorSensorSerial();
+	public ScaleSerial scaleSensor = new ScaleSerial();
+	public GyroscopeSerial gyroscope = new GyroscopeSerial();
+	public BallSensorSerial ballSensor = new BallSensorSerial();
 
 	// controllers
 	public final static XboxController primary = new XboxController(Constants.primary);
@@ -95,15 +103,17 @@ public class RobotContainer {
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
+		ArduinoSerialReceiver.initialization(() -> {
+			ballSensor.resetCount();
+		});
 		Config.setup();
-		serialSubsystem = serialSubsystem.getInstance();
-		colorSpinnerSerialListener = colorSpinnerSerialListener.getInstance();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
 			manualDriveCommand = new ManualDriveCommand(driveSubsystem);
 			brakeCommand = new BrakeCommand(driveSubsystem);
 			boostCommand = new BoostCommand(driveSubsystem);
 			slowCommand = new SlowCommand(driveSubsystem);
+			autoDriveLinear = new AutoDriveLinear(driveSubsystem, gyroscope);
 		}
 		if (limelightEnabled) {
 			limelightSubsystem = LimelightSubsystem.getInstance();
@@ -111,7 +121,7 @@ public class RobotContainer {
 			limelightSubsystem.setRunning(true);
 			if (driveEnabled) {
 				//Vision Testing
-				visionTurnTest = new VisionTurn(limelightSubsystem, driveSubsystem);
+				alignToTarget = new VisionTurn(limelightSubsystem, driveSubsystem);
 			}
 		}
 		if (shooterEnabled) {
@@ -119,14 +129,17 @@ public class RobotContainer {
 			shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
 			shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
 		}
+		if(chomperEnabled) {
+			chomperSubsystem = ChomperSubsystem.getInstance();
+			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem);
+
+		}
 		if (colorSpinnerEnabled) {
 			colorSpinnerSubsystem = ColorSpinnerSubsystem.getInstance();
 			colorSpinnerCommand = new ColorSpinnerCommand(colorSpinnerSubsystem);
-			colorTargetCommand = new ColorTargetCommand(colorSpinnerSubsystem);
+			colorTargetCommand = new ColorTargetCommand(colorSpinnerSubsystem, colorSensor);
 		}
 		if (climberEnabled) {
-			compressor = new Compressor(Constants.pneumaticControlModule);
-			compressor.setClosedLoopControl(true);
 			climberSubsystem = ClimberSubsystem.getInstance();
 			climberUpCommand = new ClimberUpCommand(climberSubsystem);
 			climberDownCommand = new ClimberDownCommand(climberSubsystem);
@@ -138,8 +151,6 @@ public class RobotContainer {
 	public void setupCamera() {
 		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
 		cam.setConnectVerbose(0);
-		CvSink cvSink = CameraServer.getInstance().getVideo();
-		CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
 	}
 
 	/**
@@ -154,9 +165,10 @@ public class RobotContainer {
 			primary.buttonB.whileHeld(brakeCommand);
 			primary.buttonBumperRight.whileHeld(boostCommand);
 			primary.buttonBumperLeft.whileHeld(slowCommand);
+			primary.buttonPovLeft.whenPressed(autoDriveLinear);
 		}
 		if (limelightEnabled) {
-			primary.buttonY.whileHeld(limelightCommand);
+			primary.buttonY.whileHeld(alignToTarget);
 		}
 		if (climberEnabled) {
 			climberSubsystem.setStop();
@@ -167,6 +179,9 @@ public class RobotContainer {
 		if (shooterEnabled) {
 			secondary.buttonA.whenPressed(shooterOnCommand);
 			secondary.buttonB.whenPressed(shooterOffCommand);
+		}
+		if (chomperEnabled) {
+			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);
 		}
 		if (colorSpinnerEnabled) {
 			secondary.buttonX.whenPressed(colorTargetCommand);
@@ -182,7 +197,7 @@ public class RobotContainer {
 
 	public void setTeleop() {
 		if (driveEnabled) {
-			//manualDriveCommand.schedule();
+			manualDriveCommand.schedule();
 			if (limelightEnabled)
 				limelightSubsystem.setLEDStatus(false);
 		}
@@ -191,7 +206,7 @@ public class RobotContainer {
 	public void setAutonomous() {
 		if (driveEnabled && limelightEnabled) {
 			limelightSubsystem.setLEDStatus(true);
-			visionTurnTest.schedule();
+			alignToTarget.schedule();
 		}
 	}
 

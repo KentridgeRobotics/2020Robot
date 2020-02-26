@@ -29,20 +29,30 @@ public final class Constants {
 	// 2x: Shooter
 	// 3x: Color Spinner
 	public static final int powerDistributionPanel = 1;
-	public static final int pneumaticControlModule = 2;
 	public static final int rightFrontDrive = 11;
 	public static final int rightRearDrive = 12;
 	public static final int leftFrontDrive = 13;
 	public static final int leftRearDrive = 14;
 	public static final int shooterID1 = 21;
 	public static final int shooterID2 = 22;
+	public static final int shooterHood = 23;
 	public static final int colorSpinner = 31;
+	public static final int feedStage1 = 41;
+	public static final int feedStage2 = 42;
+  public static final int chomperUpDown = 43;
+	public static final int chomperFeed = 44;
+	public static final int climbPush1 = 51;
+	public static final int climbPush2 = 52;
+	public static final int climbPull = 53;
+	//PWM IDs
+	public static final int colorSpinnerLifter = 0;
 
 	// Shooter Constants
 	public static final double shooterTargetRPM = 10000.0;
-	public static final double shooterP = 0.0002;
-	public static final double shooterI = 0.0;
-	public static final double shooterD = 0.0;
+	public static final double shooterP = 0.001;
+	public static final double shooterI = 0.0000004;
+	public static final double shooterD = 0.2;
+	public static final int shooterCurrentLimit = 40;
 	public static final double shooterFeedForward = 0.0;
 	public static final double shooterStaticGain = 0.0;
 	public static final double shooterVelocityGain = 0.0;
@@ -52,4 +62,5 @@ public final class Constants {
 	// File Names
 	public static final String dataStoragePath = "/home/lvuser";
 	public static final String configFileName = "config.yml";
+	public static final String comPortsFileName = "com.yml";
 }

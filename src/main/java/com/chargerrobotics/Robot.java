@@ -9,12 +9,10 @@ package com.chargerrobotics;
 
 import java.util.Arrays;
 
-import com.chargerrobotics.subsystems.LimelightSubsystem;
-import com.chargerrobotics.subsystems.SerialSubsystem;
+import com.chargerrobotics.utils.ArduinoSerialReceiver;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -30,7 +28,6 @@ public class Robot extends TimedRobot {
 
 	public static final int TEAM = 3786;
 
-	@SuppressWarnings("unused")
 	private RobotContainer robotContainer;
 
 	/**
@@ -70,8 +67,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopInit() {
-		SerialSubsystem.getInstance().init();
 		robotContainer.setTeleop();
+		ArduinoSerialReceiver.start();
 	}
 
 	/**
@@ -87,8 +84,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		robotContainer.setDisabled();
-		SerialSubsystem.getInstance().close();
-
+		ArduinoSerialReceiver.close();
 	}
 
 	/**
@@ -103,8 +99,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		SerialSubsystem.getInstance().init();
 		robotContainer.setAutonomous();
+		ArduinoSerialReceiver.start();
 	}
 
 	/**
@@ -120,6 +116,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testInit() {
 		CommandScheduler.getInstance().cancelAll();
+		ArduinoSerialReceiver.close();
 	}
 
 	/**
@@ -129,7 +126,7 @@ public class Robot extends TimedRobot {
 	public void testPeriodic() {
 	}
 
-	public static ColorWheelColor getColorWheelColor() {
+	public static ColorWheelColor getTargetColorWheelColor() {
 		String data = DriverStation.getInstance().getGameSpecificMessage();
 		return data.length() > 0 ? ColorWheelColor.valueOf(data.charAt(0)) : null;
 	}

@@ -46,6 +46,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	public ShooterSubsystem() {
 		shooter1 = new CANSparkMax(Constants.shooterID1, MotorType.kBrushless);
 		shooter2 = new CANSparkMax(Constants.shooterID2, MotorType.kBrushless);
+		shooter1.setSmartCurrentLimit(Constants.shooterCurrentLimit);
+		shooter2.setSmartCurrentLimit(Constants.shooterCurrentLimit);
 		shooterPIDController1 = shooter1.getPIDController();
 		shooterPIDController2 = shooter2.getPIDController();
 		shooter1.setInverted(true);

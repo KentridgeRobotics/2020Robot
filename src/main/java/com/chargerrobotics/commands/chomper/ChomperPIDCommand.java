@@ -26,7 +26,8 @@ public class ChomperPIDCommand extends PIDCommand {
         () -> positionEcoder.getPositionOffset(),
         () -> position,
         output -> {
-          chomperSubsystem.setSpeed(output);
+          chomperSubsystem.setUpDownSpeed(output);
+          // Use the output here
         });
   }
 
