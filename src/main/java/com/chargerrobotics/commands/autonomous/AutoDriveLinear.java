@@ -7,11 +7,10 @@
 
 package com.chargerrobotics.commands.autonomous;
 
+import com.chargerrobotics.sensors.GyroscopeSerial;
 import com.chargerrobotics.subsystems.DriveSubsystem;
-import com.chargerrobotics.utils.GyroHeading;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -28,6 +27,7 @@ public class AutoDriveLinear extends CommandBase {
   private double initialHeading;
   private double desiredDistance;
   private final DriveSubsystem drive;
+  private final GyroscopeSerial gyro;
   private DifferentialDriveOdometry odometry;
   private static final String KEY = "LinearAutoDistance";
   private PIDController rotationPid;
@@ -35,8 +35,9 @@ public class AutoDriveLinear extends CommandBase {
   /**
    * Creates a new AutoDriveLinear.
    */
-  public AutoDriveLinear(DriveSubsystem drive) {
+  public AutoDriveLinear(DriveSubsystem drive, GyroscopeSerial gyro) {
     this.drive = drive;
+    this.gyro = gyro;
     addRequirements(drive);
     SmartDashboard.putNumber(KEY, 0.0);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -49,7 +50,7 @@ public class AutoDriveLinear extends CommandBase {
     initialRightDistance = drive.getOdoRight();
     currentLeftDistance = initialLeftDistance;
     currentRightDistance = initialRightDistance;
-    initialHeading = GyroHeading.getHeading();
+    initialHeading = gyro.getHeading();
     currentHeading = initialHeading;
     desiredDistance = SmartDashboard.getNumber(KEY, 0.0);
     drive.setAutonomousRunning(true);
@@ -88,7 +89,7 @@ public class AutoDriveLinear extends CommandBase {
   public void execute() {
     currentLeftDistance = drive.getOdoLeft();
     currentRightDistance = drive.getOdoRight();
-    currentHeading = GyroHeading.getHeading();
+    currentHeading = gyro.getHeading();
     Pose2d pose = odometry.update(getGyroHeading(), getDistanceLeft(), getDistanceRight());
     Rotation2d rotation = pose.getRotation();
     Translation2d translation = pose.getTranslation();

@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -47,10 +48,16 @@ public class ChomperSubsystem extends SubsystemBase {
 
   public void setChomperFeedRunning(boolean isRunning) {
     isFeedRunning = isRunning;
+    if(isFeedRunning) {
+      setFeedSpeed(1);
+    }
+    else {
+      setFeedSpeed(0.0);
+    }
   }
 
   public void setUpDownSpeed(double speed) {
-    chomperUpDown.set(speed);
+    //chomperUpDown.set(speed);
   }
 
   public void setFeedSpeed(double speed) {
@@ -59,6 +66,6 @@ public class ChomperSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+    SmartDashboard.putString("Chomper", "In periodic");
   }
 }

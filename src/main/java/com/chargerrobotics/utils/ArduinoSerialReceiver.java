@@ -15,7 +15,7 @@ import com.fazecast.jSerialComm.SerialPort;
  */
 public class ArduinoSerialReceiver {
 
-	private static final long POLL_INTERVAL = 20;
+	private static final long POLL_INTERVAL = 40;
 	
 	private static final ConcurrentHashMap<Short, ArduinoListener> responseHeaders = new ConcurrentHashMap<Short, ArduinoListener>();
 	private static final List<ArduinoSerial> serialPorts = Collections.synchronizedList(new ArrayList<ArduinoSerial>());
@@ -23,6 +23,26 @@ public class ArduinoSerialReceiver {
 	private static Thread startThread = null;
 	private static Timer pollTimer = new Timer();
 	private static volatile PollTask pollTask = null;
+
+	/**
+	 * Looks for all available USB to serial COM ports and runs the provided initialization commands before closing them
+	 * 
+	 * Useful for resetting Arduinos
+	 * 
+	 * @param initCommands Commands to run at initialization
+	 */
+	public static void initialization(Runnable initCommands) {
+		synchronized(serialPorts) {
+			for (SerialPort availablePort : SerialPort.getCommPorts()) {
+				if (availablePort.toString().contains("USB-to-Serial")) {
+					String name = availablePort.getSystemPortName();
+					serialPorts.add(new ArduinoSerial(name));
+				}
+			}
+			initCommands.run();
+			serialPorts.removeIf(serial -> {serial.close(); return true;});
+		}
+	}
 	
 	/**
 	 * Looks for all available USB to serial COM ports and begins polling them for data
@@ -44,6 +64,22 @@ public class ArduinoSerialReceiver {
 			pollTimer.scheduleAtFixedRate(pollTask, 0, POLL_INTERVAL);
 		});
 		startThread.start();
+	}
+	
+	/**
+	 * Gets the {@link ArduinoSerial} port with the given name
+	 * 
+	 * @param name Port name
+	 */
+	private static ArduinoSerial getSerialPort(String name) {
+		synchronized(serialPorts) {
+			for (ArduinoSerial serial : serialPorts) {
+				if (serial.getName().equals(name)) {
+					return serial;
+				}
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -105,8 +141,9 @@ public class ArduinoSerialReceiver {
 	 * Listener class for received messages
 	 */
 	public static abstract class ArduinoListener {
-		private long lastReceived = 0;
+		private volatile long lastReceived = 0;
 		private final long expiry;
+		private String id = "";
 		
 		/**
 		 * Constructs a listener with the default message expiry time of <code>50ms</code>
@@ -135,6 +172,30 @@ public class ArduinoSerialReceiver {
 		 */
 		void setLastReceived() {
 			lastReceived = System.currentTimeMillis();
+		}
+
+		/**
+		 * Internal method for saving the port ID to config
+		 * 
+		 * @param id Port id
+		 */
+		void savePortID(String id) {
+			this.id = id;
+			COMPortsStorage.savePort(this.getClass().getSimpleName(), id);
+		}
+
+		/**
+		 * Gets the {@link ArduinoSerial} object tied to this listener if available
+		 * 
+		 * @return {@link ArduinoSerial} last associated with this listener, or <code>null</code> if unavailable
+		 */
+		public ArduinoSerial getSerialPort() {
+			if (id == null || id.length() == 0)
+				id = COMPortsStorage.getPort(this.getClass().getSimpleName());
+			if (id != null && id.length() > 0) {
+				return ArduinoSerialReceiver.getSerialPort(id);
+			}
+			return null;
 		}
 
 		/**

@@ -9,18 +9,19 @@ package com.chargerrobotics;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
+import com.chargerrobotics.sensors.BallSensorSerial;
 import com.chargerrobotics.sensors.ColorSensorSerial;
 import com.chargerrobotics.sensors.GyroscopeSerial;
 import com.chargerrobotics.sensors.ScaleSerial;
 import com.chargerrobotics.commands.LimelightCommand;
 import com.chargerrobotics.commands.autonomous.AutoDriveLinear;
 import com.chargerrobotics.commands.autonomous.VisionTurn;
+import com.chargerrobotics.commands.chomper.ChomperIntakeCommand;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -29,11 +30,13 @@ import com.chargerrobotics.commands.drive.BoostCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
 import com.chargerrobotics.commands.drive.SlowCommand;
+import com.chargerrobotics.subsystems.ChomperSubsystem;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
+import com.chargerrobotics.utils.ArduinoSerialReceiver;
 import com.chargerrobotics.utils.Config;
 import com.chargerrobotics.utils.XboxController;
 
@@ -48,6 +51,7 @@ public class RobotContainer {
 
 	private static final boolean limelightEnabled = false;
 	private static final boolean driveEnabled = false;
+	private static final boolean chomperEnabled = true;
 	private static final boolean shooterEnabled = false;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
@@ -71,6 +75,10 @@ public class RobotContainer {
 	private ShooterOnCommand shooterOnCommand;
 	private ShooterOffCommand shooterOffCommand;
 
+	// Chomper
+	private ChomperSubsystem chomperSubsystem;
+	private ChomperIntakeCommand chomperIntakeCommand;
+
 	// Color Spinner
 	private ColorSpinnerSubsystem colorSpinnerSubsystem;
 	private ColorSpinnerCommand colorSpinnerCommand;
@@ -84,7 +92,8 @@ public class RobotContainer {
 	// Serial connection
 	public ColorSensorSerial colorSensor = new ColorSensorSerial();
 	public ScaleSerial scaleSensor = new ScaleSerial();
-	public GyroscopeSerial gyroscopeSensor = new GyroscopeSerial();
+	public GyroscopeSerial gyroscope = new GyroscopeSerial();
+	public BallSensorSerial ballSensor = new BallSensorSerial();
 
 	// controllers
 	public final static XboxController primary = new XboxController(Constants.primary);
@@ -94,6 +103,9 @@ public class RobotContainer {
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
+		ArduinoSerialReceiver.initialization(() -> {
+			ballSensor.resetCount();
+		});
 		Config.setup();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
@@ -101,7 +113,7 @@ public class RobotContainer {
 			brakeCommand = new BrakeCommand(driveSubsystem);
 			boostCommand = new BoostCommand(driveSubsystem);
 			slowCommand = new SlowCommand(driveSubsystem);
-			autoDriveLinear = new AutoDriveLinear(driveSubsystem);
+			autoDriveLinear = new AutoDriveLinear(driveSubsystem, gyroscope);
 		}
 		if (limelightEnabled) {
 			limelightSubsystem = LimelightSubsystem.getInstance();
@@ -116,6 +128,11 @@ public class RobotContainer {
 			shooterSubsystem = ShooterSubsystem.getInstance();
 			shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
 			shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
+		}
+		if(chomperEnabled) {
+			chomperSubsystem = ChomperSubsystem.getInstance();
+			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem);
+
 		}
 		if (colorSpinnerEnabled) {
 			colorSpinnerSubsystem = ColorSpinnerSubsystem.getInstance();
@@ -162,6 +179,9 @@ public class RobotContainer {
 		if (shooterEnabled) {
 			secondary.buttonA.whenPressed(shooterOnCommand);
 			secondary.buttonB.whenPressed(shooterOffCommand);
+		}
+		if (chomperEnabled) {
+			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);
 		}
 		if (colorSpinnerEnabled) {
 			secondary.buttonX.whenPressed(colorTargetCommand);
