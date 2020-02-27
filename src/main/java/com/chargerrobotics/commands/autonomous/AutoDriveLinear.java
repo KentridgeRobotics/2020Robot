@@ -32,7 +32,6 @@ public class AutoDriveLinear extends CommandBase {
   private static final String KEY = "LinearAutoDistance";
   private PIDController rotationPid;
   private PIDController translationPid;
-  private boolean isDone;
 
   /**
    * Creates a new AutoDriveLinear.
@@ -43,11 +42,13 @@ public class AutoDriveLinear extends CommandBase {
     addRequirements(drive);
     SmartDashboard.putNumber(KEY, 0.0);
     SmartDashboard.putNumber("linRotP", 0.0);
-    SmartDashboard.putNumber("linRotI", 0.0);
+    SmartDashboard.putNumber("linRotI", 0.0); 
     SmartDashboard.putNumber("linRotD", 0.0);
+    SmartDashboard.putNumber("linRotTolerance", 1.0);
     SmartDashboard.putNumber("linTransP", 0.0);
     SmartDashboard.putNumber("linTransI", 0.0);
     SmartDashboard.putNumber("linTransD", 0.0);
+    SmartDashboard.putNumber("linTransTolerance", 1.0);
     this.rotationPid = new PIDController(0.0, 0.0, 0.0);
     this.translationPid = new PIDController(0.0, 0.0, 0.0);
     
@@ -57,8 +58,7 @@ public class AutoDriveLinear extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    isDone = false;
-    System.err.println("AutoDrive starting");
+    System.out.println("AutoDrive starting");
     initialLeftDistance = drive.getOdoLeft();
     initialRightDistance = drive.getOdoRight();
     currentLeftDistance = initialLeftDistance;
@@ -71,13 +71,13 @@ public class AutoDriveLinear extends CommandBase {
     rotationPid.setP(SmartDashboard.getNumber("linRotP", 0.0));
     rotationPid.setI(SmartDashboard.getNumber("linRotI", 0.0));
     rotationPid.setD(SmartDashboard.getNumber("linRotD", 0.0));
+    rotationPid.setTolerance(SmartDashboard.getNumber("linRotTol", 1.0));
     rotationPid.setSetpoint(0.0);
-    rotationPid.setTolerance(0.1);
     translationPid.setP(SmartDashboard.getNumber("linTransP", 0.0));
     translationPid.setI(SmartDashboard.getNumber("linTransI", 0.0));
     translationPid.setD(SmartDashboard.getNumber("linTransD", 0.0));
     translationPid.setSetpoint(desiredDistance);
-    translationPid.setTolerance(1.0);
+    translationPid.setTolerance(SmartDashboard.getNumber("linTransTolerance", 1.0));
     odometry = new DifferentialDriveOdometry(getGyroHeading(), new Pose2d(0.0, 0.0, new Rotation2d(0.0)));
   }
 
@@ -112,7 +112,7 @@ public class AutoDriveLinear extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drive.setAutonomousRunning(false);
-    System.err.println("Autodrive done");
+    System.out.println("Autodrive done");
   }
 
   // Returns true when the command should end.
