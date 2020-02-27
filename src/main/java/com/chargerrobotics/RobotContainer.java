@@ -38,6 +38,7 @@ import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
 import com.chargerrobotics.utils.ArduinoSerialReceiver;
 import com.chargerrobotics.utils.Config;
+import com.chargerrobotics.utils.GyroHeading;
 import com.chargerrobotics.utils.XboxController;
 
 /**
@@ -107,6 +108,7 @@ public class RobotContainer {
 			ballSensor.resetCount();
 		});
 		Config.setup();
+		GyroHeading.getInstance();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
 			manualDriveCommand = new ManualDriveCommand(driveSubsystem);

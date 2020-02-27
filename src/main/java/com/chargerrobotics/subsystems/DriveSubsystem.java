@@ -62,6 +62,12 @@ public class DriveSubsystem extends SubsystemBase {
 
 	public void setAutonomousRunning(boolean autonomousRunning) {
 		this.autonomousRunning = autonomousRunning;
+		double rampRate = autonomousRunning ? 2.0 : 0.1;
+		leftFront.setOpenLoopRampRate(rampRate);
+		rightFront.setOpenLoopRampRate(rampRate);
+		leftRear.setOpenLoopRampRate(rampRate);
+		rightRear.setOpenLoopRampRate(rampRate);
+		leftThrottle = rightThrottle = 0;
 	}
 
 	public void setThrottle(double left, double right) {
