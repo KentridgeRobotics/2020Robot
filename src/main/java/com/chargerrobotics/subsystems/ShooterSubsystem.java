@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -38,8 +39,10 @@ public class ShooterSubsystem extends SubsystemBase {
     private boolean isRunning;
 
 	public static ShooterSubsystem getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new ShooterSubsystem();
+			CommandScheduler.getInstance().registerSubsystem(instance);
+		}
 		return instance;
 	}
 

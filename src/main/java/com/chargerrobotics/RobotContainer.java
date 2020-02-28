@@ -12,6 +12,8 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import com.chargerrobotics.commands.shooter.HoodOffCommand;
+import com.chargerrobotics.commands.shooter.HoodOnCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.sensors.BallSensorSerial;
@@ -35,6 +37,7 @@ import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
+import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
 import com.chargerrobotics.utils.ArduinoSerialReceiver;
 import com.chargerrobotics.utils.Config;
@@ -53,6 +56,7 @@ public class RobotContainer {
 	private static final boolean driveEnabled = false;
 	private static final boolean chomperEnabled = true;
 	private static final boolean shooterEnabled = false;
+	private static final boolean shooterHoodEnabled = true;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
 
@@ -72,8 +76,11 @@ public class RobotContainer {
 
 	// Shooter
 	private ShooterSubsystem shooterSubsystem;
+	private ShooterHoodSubsystem shooterHoodSubsystem;
 	private ShooterOnCommand shooterOnCommand;
 	private ShooterOffCommand shooterOffCommand;
+	private HoodOnCommand hoodOnCommand;
+	private HoodOffCommand hoodOffCommand;
 
 	// Chomper
 	private ChomperSubsystem chomperSubsystem;
@@ -129,10 +136,14 @@ public class RobotContainer {
 			shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
 			shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
 		}
+		if (shooterHoodEnabled) {
+			shooterHoodSubsystem = ShooterHoodSubsystem.getInstance();
+			hoodOnCommand = new HoodOnCommand(shooterHoodSubsystem);
+			hoodOffCommand = new HoodOffCommand(shooterHoodSubsystem);
+		}
 		if(chomperEnabled) {
 			chomperSubsystem = ChomperSubsystem.getInstance();
 			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem);
-
 		}
 		if (colorSpinnerEnabled) {
 			colorSpinnerSubsystem = ColorSpinnerSubsystem.getInstance();
@@ -145,7 +156,7 @@ public class RobotContainer {
 			climberDownCommand = new ClimberDownCommand(climberSubsystem);
 		}
 		setupBindings();
-		setupCamera();
+		setupCamera(); 
 	}
 
 	public void setupCamera() {
@@ -179,6 +190,10 @@ public class RobotContainer {
 		if (shooterEnabled) {
 			secondary.buttonA.whenPressed(shooterOnCommand);
 			secondary.buttonB.whenPressed(shooterOffCommand);
+		}
+		if (shooterHoodEnabled) {
+			secondary.buttonY.whenPressed(hoodOnCommand);
+			secondary.buttonBumperRight.whenPressed(hoodOffCommand);
 		}
 		if (chomperEnabled) {
 			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);
