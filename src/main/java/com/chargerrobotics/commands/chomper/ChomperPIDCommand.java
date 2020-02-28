@@ -17,15 +17,16 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class ChomperPIDCommand extends PIDCommand {
+  final static DutyCycleEncoder positionEncoder = new DutyCycleEncoder(0);
   /**
    * Creates a new ChomperPIDCommand.
    */
-  public ChomperPIDCommand(final double position, DutyCycleEncoder positionEcoder,ChomperSubsystem chomperSubsystem) {
+  public ChomperPIDCommand(final double position,ChomperSubsystem chomperSubsystem) {
     super(
         // The controller that the command will use
         new PIDController(0.1, 0, 0),
         // This should return the measurement
-        () -> positionEcoder.getPositionOffset(),
+        () -> positionEncoder.getPositionOffset(),
         // This should return the setpoint (can also be a constant)
         () -> position,
         // This uses the output
