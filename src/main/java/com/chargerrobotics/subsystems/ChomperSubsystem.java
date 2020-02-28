@@ -21,7 +21,7 @@ public class ChomperSubsystem extends SubsystemBase {
   private static ChomperSubsystem instance;
   private boolean isUpDownRunning;
   private boolean isFeedRunning;
-  //private WPI_TalonSRX chomperUpDown;
+  private WPI_TalonSRX chomperUpDown;
   private CANSparkMax chomperFeed;
 
   /**
@@ -37,7 +37,7 @@ public class ChomperSubsystem extends SubsystemBase {
   }
 
   public ChomperSubsystem() {
-    //chomperUpDown = new WPI_TalonSRX(Constants.chomperUpDown);
+    chomperUpDown = new WPI_TalonSRX(Constants.chomperLift);
     chomperFeed = new CANSparkMax(Constants.chomperFeed, MotorType.kBrushless);
   }
 

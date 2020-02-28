@@ -31,17 +31,17 @@ public final class Constants {
 	public static final int powerDistributionPanel = 1;
 	public static final int rightFrontDrive = 11;
 	public static final int rightRearDrive = 12;
-	public static final int leftFrontDrive = 13;
-	public static final int leftRearDrive = 14;
-	public static final int shooterID1 = 21;
-	public static final int shooterID2 = 22;
+	public static final int leftRearDrive = 13;
+	public static final int leftFrontDrive = 14;
+	public static final int shooterLeft = 21;
+	public static final int shooterRight = 22;
 	public static final int shooterHood = 23;
 	public static final int colorSpinner = 31;
-	public static final int feedStage1 = 41;
-	public static final int feedStage2 = 42;
-  public static final int chomperUpDown = 43;
-	public static final int chomperFeed = 44;
-	public static final int climbPush1 = 51;
+	public static final int chomperFeed = 41;
+	public static final int chomperLift = 42;
+  	public static final int feedStage = 43;
+	public static final int kicker = 44;
+	public static final int climbExtender = 51;
 	public static final int climbPush2 = 52;
 	public static final int climbPull = 53;
 	//PWM IDs
