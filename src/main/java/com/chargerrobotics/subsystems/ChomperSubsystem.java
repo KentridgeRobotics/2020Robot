@@ -39,9 +39,7 @@ public class ChomperSubsystem extends SubsystemBase {
   }
 
   public ChomperSubsystem() {
-    chomperUpDown = new WPI_TalonSRX(Constants.chomperUpDown);
-    chomperUpDown.configReverseLimitSwitchSource(LimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen);
-    chomperUpDown.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder, 0, 0);
+    chomperUpDown = new WPI_TalonSRX(Constants.chomperLift);
     chomperFeed = new CANSparkMax(Constants.chomperFeed, MotorType.kBrushless);
   }
 
