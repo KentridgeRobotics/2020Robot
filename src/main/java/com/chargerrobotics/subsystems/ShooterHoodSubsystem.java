@@ -36,7 +36,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         shooterHood.setNeutralMode(NeutralMode.Brake);
         shooterHood.configPeakCurrentLimit(40);
         shooterHood.configContinuousCurrentLimit(30);
-        //shooterHood.configReverseLimitSwitchSource(LimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen);
+        
 		setPIDP(kP.getValue());
 		setPIDI(kI.getValue());
         setPIDD(kD.getValue());
@@ -79,9 +79,6 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         super.periodic();
-        /*if(shooterHood.isRevLimitSwitchClosed() == 1) {
-            shooterHood.setSelectedSensorPosition(0);
-        }*/
         SmartDashboard.putNumber("hoodCurrPos", shooterHood.getSensorCollection().getQuadraturePosition());
         SmartDashboard.putNumber("hood Current", shooterHood.getSupplyCurrent());
     }
