@@ -46,6 +46,10 @@ public class ChomperSubsystem extends SubsystemBase {
 
   }
 
+  public double chomperUpDownPosition() {
+    return chomperUpDown.getSensorCollection().getPulseWidthPosition();
+  }
+
   public void setChomperFeedRunning(boolean isRunning) {
     isFeedRunning = isRunning;
     if(isFeedRunning) {
@@ -57,7 +61,7 @@ public class ChomperSubsystem extends SubsystemBase {
   }
 
   public void setUpDownSpeed(double speed) {
-    //chomperUpDown.set(speed);
+    chomperUpDown.set(speed);
   }
 
   public void setFeedSpeed(double speed) {

@@ -23,6 +23,7 @@ import com.chargerrobotics.commands.autonomous.AutoDriveLinear;
 import com.chargerrobotics.commands.autonomous.VisionTurn;
 import com.chargerrobotics.commands.chomper.ChomperIntakeCommand;
 import com.chargerrobotics.commands.chomper.ChomperPIDCommand;
+import com.chargerrobotics.commands.chomper.chomperUpDownCommand;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -53,7 +54,7 @@ public class RobotContainer {
 	private static final boolean limelightEnabled = false;
 	private static final boolean driveEnabled = false;
 	private static final boolean chomperEnabled = true;
-	private static final boolean shooterEnabled = false;
+	private static final boolean shooterEnabled = true;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
 
@@ -81,6 +82,8 @@ public class RobotContainer {
 	private ChomperIntakeCommand chomperIntakeCommand;
 	private ChomperPIDCommand chomperUpCommand; 
 	private ChomperPIDCommand chomperDownCommand; 
+	private chomperUpDownCommand manualchomperUpCommand;
+	private chomperUpDownCommand manualchomperDownCommand;
 
 	// Color Spinner
 	private ColorSpinnerSubsystem colorSpinnerSubsystem;
@@ -135,8 +138,10 @@ public class RobotContainer {
 		if(chomperEnabled) {
 			chomperSubsystem = ChomperSubsystem.getInstance();
 			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem);
-			chomperUpCommand = new ChomperPIDCommand(50, chomperSubsystem);
+			chomperUpCommand = new ChomperPIDCommand(5000, chomperSubsystem);
 			chomperDownCommand = new ChomperPIDCommand(0, chomperSubsystem);
+			manualchomperUpCommand = new chomperUpDownCommand(true);
+			manualchomperDownCommand = new chomperUpDownCommand(false);
 
 		}
 		if (colorSpinnerEnabled) {
@@ -187,6 +192,10 @@ public class RobotContainer {
 		}
 		if (chomperEnabled) {
 			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);
+			secondary.buttonY.whenPressed(chomperUpCommand);
+			secondary.buttonX.whenPressed(chomperDownCommand);
+			secondary.buttonA.whileHeld(manualchomperDownCommand);
+			secondary.buttonB.whileHeld(manualchomperUpCommand);
 		}
 		if (colorSpinnerEnabled) {
 			secondary.buttonX.whenPressed(colorTargetCommand);
