@@ -49,7 +49,7 @@ repositories {
 // Also defines JUnit 4.
 dependencies {
     implementation 'com.github.Carleslc:Simple-YAML:1.4.1'
-    implementation 'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
+    implementation 'com.fazecast:jSerialComm:2.5.3'
     implementation 'org.slf4j:slf4j-api:1.7.30'
     runtime 'ch.qos.logback:logback-classic:1.2.3'
     implementation wpi.deps.wpilib()

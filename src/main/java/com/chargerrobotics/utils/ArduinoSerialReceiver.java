@@ -39,8 +39,7 @@ public class ArduinoSerialReceiver {
 			}
 			for (SerialPort availablePort : availablePorts) {
 				if (availablePort.toString().contains("USB-to-Serial")) {
-					String name = availablePort.getSystemPortName();
-					serialPorts.add(new ArduinoSerial(name));
+					serialPorts.add(new ArduinoSerial(availablePort));
 				}
 			}
 			initCommands.run();
@@ -60,8 +59,7 @@ public class ArduinoSerialReceiver {
 			synchronized(serialPorts) {
 				for (SerialPort availablePort : SerialPort.getCommPorts()) {
 					if (availablePort.toString().contains("USB-to-Serial")) {
-						String name = availablePort.getSystemPortName();
-						serialPorts.add(new ArduinoSerial(name));
+						serialPorts.add(new ArduinoSerial(availablePort));
 					}
 				}
 			}

@@ -53,6 +53,19 @@ public class ArduinoSerial {
 		serial.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
 		open();
 	}
+
+	/**
+	 * Construcst a new ArduinoSerial on the given COM port
+	 * 
+	 * @param port System COM port name
+	 * Ex: ttyUSB0
+	 */
+	protected ArduinoSerial(SerialPort serial) {
+		this.serial = serial;
+		this.name = serial.getSystemPortName();
+		serial.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+		open();
+	}
 	
 	/**
 	 * Returns the COM port name in use
@@ -94,6 +107,7 @@ public class ArduinoSerial {
 				e.printStackTrace();
 			}
 		}
+		serial.closePort();
 	}
 
 	/**
