@@ -44,8 +44,17 @@ public final class Constants {
 	public static final int climbExtender = 51;
 	public static final int climbPush2 = 52;
 	public static final int climbPull = 53;
+
 	//PWM IDs
 	public static final int colorSpinnerLifter = 0;
+
+	//Digital In/Out Ports
+	public static final int chomperLimitSwitch = 0;
+	public static final int hoodLimitSwitch = 1;
+
+	//Chomper Constants
+	public static final int chomperDistToDown = 0; //test with manual control
+	public static final int chomperDistToUp = 0; //test with manual control
 
 	// Shooter Constants
 	public static final double shooterTargetRPM = 3000.0;
