@@ -96,5 +96,6 @@ public class ChomperSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putString("Chomper", "In periodic");
+    SmartDashboard.putBoolean("Is Chomper switch trig?", chomperLimitSwitch.get());
   }
 }

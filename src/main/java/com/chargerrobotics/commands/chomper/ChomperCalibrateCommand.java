@@ -17,7 +17,7 @@ public class ChomperCalibrateCommand extends CommandBase {
     @Override
     public void initialize() {
         isDone = false;
-        chomperSubsystem.setUpDownSpeed(0.1);
+        chomperSubsystem.setUpDownSpeed(-0.1);
     }
 
     @Override
@@ -39,9 +39,4 @@ public class ChomperCalibrateCommand extends CommandBase {
         chomperSubsystem.setChomperTargetDown(encoderRef - Constants.chomperDistToDown);
         chomperSubsystem.setChomperTargetUp(chomperSubsystem.getChomperTargetDown() + Constants.chomperDistToUp);
     }
-
 }
-// start motor going in direction we think it should go
-//keep checking value of hall effect sensor
-//when it returns true, record the number and stop the motor.
-//print value of the chomper updown encoder on the dashboard
