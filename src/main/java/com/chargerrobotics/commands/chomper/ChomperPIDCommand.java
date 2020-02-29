@@ -9,6 +9,9 @@ package com.chargerrobotics.commands.chomper;
 
 import com.chargerrobotics.subsystems.ChomperSubsystem;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
@@ -17,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class ChomperPIDCommand extends PIDCommand {
-
+  private static final Logger logger = LoggerFactory.getLogger(ChomperPIDCommand.class);
   /**
    * Creates a new ChomperPIDCommand.
    */
@@ -32,7 +35,7 @@ public class ChomperPIDCommand extends PIDCommand {
         // This uses the output
         output -> {
           chomperSubsystem.setUpDownSpeed(output);
-          System.out.println("output ="+output);
+          logger.info("output ="+output);
           // Use the output here
         });
     // Use addRequirements() here to declare subsystem dependencies.
@@ -47,7 +50,7 @@ public class ChomperPIDCommand extends PIDCommand {
   @Override
   public boolean isFinished() {
     if (!ChomperSubsystem.getInstance().isCalibrated()) {
-      System.err.println("NEED TO CALIBRATE CHOMPER FIRST!!!!");
+      logger.error("NEED TO CALIBRATE CHOMPER FIRST!!!!");
       return true;
     }
     return false;
@@ -57,7 +60,7 @@ public class ChomperPIDCommand extends PIDCommand {
   public void end(boolean interrupted) {
     // TODO Auto-generated method stub
     super.end(interrupted);
-    System.out.println("Stopping Chomper PID Command");
+    logger.info("Stopping Chomper PID Command");
   }
 
   @Override
@@ -67,7 +70,7 @@ public class ChomperPIDCommand extends PIDCommand {
     this.getController().setP(SmartDashboard.getNumber("ChomperP", 0));
     this.getController().setI(SmartDashboard.getNumber("ChomperI", 0));
     this.getController().setD(SmartDashboard.getNumber("ChomperD", 0));
-    System.out.println("Started Chomper PID Command");
+    logger.info("Started Chomper PID Command");
   }
 
 }

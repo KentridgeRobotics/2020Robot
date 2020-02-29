@@ -6,8 +6,11 @@ import com.chargerrobotics.utils.ArduinoSerial;
 import com.chargerrobotics.utils.ArduinoSerialReceiver;
 import com.chargerrobotics.utils.ArduinoSerialReceiver.ArduinoListener;
 
-public class BallSensorSerial extends ArduinoListener {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class BallSensorSerial extends ArduinoListener {
+	private static final Logger logger = LoggerFactory.getLogger(BallSensorSerial.class);
 	private volatile byte ballCount = 0;
 	
 	public BallSensorSerial() {
@@ -17,7 +20,7 @@ public class BallSensorSerial extends ArduinoListener {
 	public void receiveData(ArduinoSerial serial, ByteBuffer buffer) {
 		if (buffer.hasRemaining())
 			ballCount = buffer.get();
-		System.out.println(getBallCount());
+		logger.info("Ball count: "+getBallCount());
 	}
 	
 	/**
