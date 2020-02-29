@@ -85,17 +85,12 @@ public class ChomperSubsystem extends SubsystemBase {
     }
   }
 
-<<<<<<< HEAD
-  public void setSpeed(final double speed) {
-    if (isRunning) chomperMotor.set(speed);
-=======
   public void setUpDownSpeed(double speed) {
     chomperUpDown.set(speed);
   }
 
   public void setFeedSpeed(double speed) {
     chomperFeed.set(speed);
->>>>>>> 3ce5c4dce7a48cbe5b8e79f38a11513de8361ed0
   }
 
   @Override
