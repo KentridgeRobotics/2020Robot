@@ -10,6 +10,9 @@ package com.chargerrobotics.commands.autonomous;
 import com.chargerrobotics.sensors.GyroscopeSerial;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -19,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutoDriveLinear extends CommandBase {
+  private static final Logger logger = LoggerFactory.getLogger(AutoDriveLinear.class);
   private double initialLeftDistance;
   private double initialRightDistance;
   private double currentLeftDistance;
@@ -58,7 +62,7 @@ public class AutoDriveLinear extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("AutoDrive starting");
+    logger.info("AutoDrive starting");
     initialLeftDistance = drive.getOdoLeft();
     initialRightDistance = drive.getOdoRight();
     currentLeftDistance = initialLeftDistance;
@@ -112,7 +116,7 @@ public class AutoDriveLinear extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drive.setAutonomousRunning(false);
-    System.out.println("Autodrive done");
+    logger.info("Autodrive done");
   }
 
   // Returns true when the command should end.

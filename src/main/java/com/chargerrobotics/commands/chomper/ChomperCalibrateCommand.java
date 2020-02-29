@@ -3,12 +3,16 @@ package com.chargerrobotics.commands.chomper;
 import com.chargerrobotics.Constants;
 import com.chargerrobotics.subsystems.ChomperSubsystem;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ChomperCalibrateCommand extends CommandBase {
     private final ChomperSubsystem chomperSubsystem;
     private double encoderRef;
     private boolean isDone;
+    private static final Logger logger = LoggerFactory.getLogger(ChomperCalibrateCommand.class);
 
     public ChomperCalibrateCommand(ChomperSubsystem chomperSubsystem) {
         this.chomperSubsystem = chomperSubsystem;
@@ -18,7 +22,7 @@ public class ChomperCalibrateCommand extends CommandBase {
     public void initialize() {
         isDone = false;
         chomperSubsystem.setUpDownSpeed(-0.3);
-        System.out.println("Calibrating chomper");
+        logger.info("Calibrating chomper");
     }
 
     @Override
@@ -40,6 +44,6 @@ public class ChomperCalibrateCommand extends CommandBase {
         double targetDown = encoderRef - Constants.chomperDistToDown;
         double targetUp = targetDown + Constants.chomperDistBottomToUp;
         chomperSubsystem.setChomperTargetUpDown(targetUp, targetDown);
-        System.out.println("Chomper is calibrated!");
+        logger.info("Chomper is calibrated!");
     }
 }
