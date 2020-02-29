@@ -39,6 +39,7 @@ import com.chargerrobotics.subsystems.ChomperSubsystem;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
+import com.chargerrobotics.subsystems.KickerSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
@@ -79,6 +80,7 @@ public class RobotContainer {
 
 	// Shooter
 	private ShooterSubsystem shooterSubsystem;
+	private KickerSubsystem kickerSubsystem;
 	private ShooterHoodSubsystem shooterHoodSubsystem;
 	private ShooterOnCommand shooterOnCommand;
 	private ShooterOffCommand shooterOffCommand;
@@ -143,6 +145,7 @@ public class RobotContainer {
 			shooterSubsystem = ShooterSubsystem.getInstance();
 			shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
 			shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
+			kickerSubsystem = KickerSubsystem.getInstance();
 		}
 		if (shooterHoodEnabled) {
 			shooterHoodSubsystem = ShooterHoodSubsystem.getInstance();

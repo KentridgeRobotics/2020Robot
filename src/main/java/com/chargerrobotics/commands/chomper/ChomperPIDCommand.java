@@ -28,14 +28,11 @@ public class ChomperPIDCommand extends PIDCommand {
         () -> (double) chomperSubsystem.chomperUpDownPosition(),
         // This should return the setpoint (can also be a constant)
         () -> position,
-        // This uses the output
         output -> {
           chomperSubsystem.setUpDownSpeed(output);
           System.out.println("output ="+output);
           // Use the output here
         });
-    // Use addRequirements() here to declare subsystem dependencies.
-    // Configure additional PID options by calling `getController` here.
   }
 
   // Returns true when the command should end.
