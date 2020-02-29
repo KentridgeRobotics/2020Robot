@@ -18,6 +18,7 @@ public class ChomperCalibrateCommand extends CommandBase {
     public void initialize() {
         isDone = false;
         chomperSubsystem.setUpDownSpeed(-0.3);
+        System.out.println("Calibrating chomper");
     }
 
     @Override
@@ -39,5 +40,6 @@ public class ChomperCalibrateCommand extends CommandBase {
         double targetDown = encoderRef - Constants.chomperDistToDown;
         double targetUp = targetDown + Constants.chomperDistBottomToUp;
         chomperSubsystem.setChomperTargetUpDown(targetUp, targetDown);
+        System.out.println("Chomper is calibrated!");
     }
 }
