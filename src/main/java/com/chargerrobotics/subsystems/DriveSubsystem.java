@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -35,6 +36,7 @@ public class DriveSubsystem extends SubsystemBase {
 	public static DriveSubsystem getInstance() {
 		if (instance == null)
 			instance = new DriveSubsystem();
+			CommandScheduler.getInstance().registerSubsystem(instance);
 		return instance;
 	}
 
