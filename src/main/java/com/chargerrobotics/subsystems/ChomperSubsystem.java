@@ -21,6 +21,8 @@ public class ChomperSubsystem extends SubsystemBase {
   
   private static ChomperSubsystem instance;
   private DigitalInput chomperLimitSwitch = new DigitalInput(Constants.chomperLimitSwitch);
+  private boolean isUpDownRunning;
+  private boolean isCalibrated;
   private boolean isFeedRunning;
   private WPI_TalonSRX chomperUpDown;
   private CANSparkMax chomperFeed;
@@ -40,7 +42,7 @@ public class ChomperSubsystem extends SubsystemBase {
     return instance;
   }
 
-  public ChomperSubsystem() {
+  private ChomperSubsystem() {
     chomperUpDown = new WPI_TalonSRX(Constants.chomperLift);
     chomperFeed = new CANSparkMax(Constants.chomperFeed, MotorType.kBrushless);
   }
@@ -53,16 +55,14 @@ public class ChomperSubsystem extends SubsystemBase {
     return !chomperLimitSwitch.get();
   }
 
-  public void setChomperTargetUp(double val) {
-    targetUpPos = val;
+  public void setChomperTargetUpDown(double upTarget, double downTarget) {
+    targetUpPos = upTarget;
+    targetDownPos = downTarget;
+    isCalibrated = true;
   }
 
   public double getChomperTargetUp() {
     return targetUpPos;
-  }
-
-  public void setChomperTargetDown(double val) {
-    targetDownPos = val;
   }
 
   public double getChomperTargetDown() {
@@ -87,9 +87,15 @@ public class ChomperSubsystem extends SubsystemBase {
     chomperFeed.set(speed);
   }
 
+  public boolean isCalibrated() {
+    return isCalibrated;
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putString("Chomper", "In periodic");
     SmartDashboard.putBoolean("Is Chomper switch trig?", chomperLimitSwitch.get());
+    SmartDashboard.putNumber("Chomp Target Up Position", getChomperTargetUp());
+    SmartDashboard.putNumber("Chomp Target Down Position", getChomperTargetDown());
   }
 }
