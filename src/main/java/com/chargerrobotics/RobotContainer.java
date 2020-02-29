@@ -120,9 +120,9 @@ public class RobotContainer {
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
-//		ArduinoSerialReceiver.initialization(() -> {
-//			ballSensor.resetCount();
-//		});
+		ArduinoSerialReceiver.initialization(() -> {
+			ballSensor.resetCount();
+		});
 		Config.setup();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
