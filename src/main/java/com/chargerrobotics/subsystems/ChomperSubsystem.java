@@ -8,8 +8,6 @@
 package com.chargerrobotics.subsystems;
 
 import com.chargerrobotics.Constants;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -45,7 +43,6 @@ public class ChomperSubsystem extends SubsystemBase {
 
   public ChomperSubsystem() {
     chomperUpDown = new WPI_TalonSRX(Constants.chomperLift);
-    chomperUpDown.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
     chomperFeed = new CANSparkMax(Constants.chomperFeed, MotorType.kBrushless);
   }
 
