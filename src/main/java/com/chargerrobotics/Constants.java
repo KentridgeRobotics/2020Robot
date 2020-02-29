@@ -53,8 +53,8 @@ public final class Constants {
 	public static final int hoodLimitSwitch = 1;
 
 	//Chomper Constants
-	public static final int chomperDistToDown = 0; //test with manual control
-	public static final int chomperDistToUp = 0; //test with manual control
+	public static final int chomperDistToDown = 479;
+	public static final int chomperDistBottomToUp = 1882;
 
 	// Shooter Constants
 	public static final double shooterTargetRPM = 3000.0;
