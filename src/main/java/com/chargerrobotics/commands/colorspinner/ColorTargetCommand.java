@@ -15,10 +15,11 @@ import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ColorTargetCommand extends CommandBase {
-	
+
 	private final ColorSpinnerSubsystem colorSpinnerSubsystem;
 	private final ColorSensorSerial colorSensor;
 	private ColorWheelColor target;
+
 	/**
 	 * Creates a new ColorSpinnerCommand.
 	 */
@@ -37,7 +38,7 @@ public class ColorTargetCommand extends CommandBase {
 
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
-	public void execute() {
+	public void execute() {	
 	}
 
 	// Called once the command ends or is interrupted.

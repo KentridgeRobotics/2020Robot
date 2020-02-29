@@ -47,7 +47,7 @@ public class VisionTurn extends PIDCommand {
         () -> 0,
         // This uses the output to move the robot
         output -> {driveSubsystem.setSpeeds(output, -output);
-        System.out.println("Turn Target - Left: " + output + " Right: " + -output);}, limelightSubsystem);
+        System.out.println("Turn Target - Left: " + output + " Right: " + -output + " Distance: " + limelightSubsystem.distance() + " inches");}, limelightSubsystem);
 
         // This doesn't move the robot
         // output -> {

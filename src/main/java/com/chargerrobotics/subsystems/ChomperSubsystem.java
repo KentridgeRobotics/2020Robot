@@ -47,17 +47,12 @@ public class ChomperSubsystem extends SubsystemBase {
     chomperFeed = new CANSparkMax(Constants.chomperFeed, MotorType.kBrushless);
   }
 
-  public void setChomperUpDownRunning(boolean isRunning) {
-    isUpDownRunning = isRunning;
-
-  }
-
   public double chomperUpDownPosition() {
     return (double)chomperUpDown.getSensorCollection().getQuadraturePosition();
   }
 
   public boolean isLimitSwitchTriggered() {
-    return chomperLimitSwitch.get();
+    return !chomperLimitSwitch.get();
   }
 
   public void setChomperTargetUpDown(double upTarget, double downTarget) {
