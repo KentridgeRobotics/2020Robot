@@ -154,7 +154,6 @@ public class RobotContainer {
 			chomperDownCommand = new ChomperPIDCommand(0, chomperSubsystem);
 			manualchomperUpCommand = new chomperUpDownCommand(true);
 			manualchomperDownCommand = new chomperUpDownCommand(false);
-
 		}
 		if (colorSpinnerEnabled) {
 			colorSpinnerSubsystem = ColorSpinnerSubsystem.getInstance();
