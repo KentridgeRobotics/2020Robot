@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.chargerrobotics.commands.shooter.HoodOffCommand;
 import com.chargerrobotics.commands.shooter.HoodOnCommand;
+import com.chargerrobotics.commands.shooter.KickerCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.sensors.BallSensorSerial;
@@ -86,6 +87,7 @@ public class RobotContainer {
 	private ShooterOffCommand shooterOffCommand;
 	private HoodOnCommand hoodOnCommand;
 	private HoodOffCommand hoodOffCommand;
+	private KickerCommand kickerCommand;
 
 	// Chomper
 	private ChomperSubsystem chomperSubsystem;
@@ -146,6 +148,7 @@ public class RobotContainer {
 			shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
 			shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
 			kickerSubsystem = KickerSubsystem.getInstance();
+			kickerCommand = new KickerCommand(kickerSubsystem);
 		}
 		if (shooterHoodEnabled) {
 			shooterHoodSubsystem = ShooterHoodSubsystem.getInstance();
