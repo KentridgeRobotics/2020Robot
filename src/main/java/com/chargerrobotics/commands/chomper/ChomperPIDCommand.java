@@ -9,7 +9,6 @@ package com.chargerrobotics.commands.chomper;
 
 import com.chargerrobotics.subsystems.ChomperSubsystem;
 
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
@@ -17,16 +16,21 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class ChomperPIDCommand extends PIDCommand {
+
   /**
    * Creates a new ChomperPIDCommand.
    */
-  public ChomperPIDCommand(final double position, DutyCycleEncoder positionEcoder,ChomperSubsystem chomperSubsystem) {
+  public ChomperPIDCommand(final double position, final ChomperSubsystem chomperSubsystem) {
     super(
-        new PIDController(0.1, 0, 0),
-        () -> positionEcoder.getPositionOffset(),
+        // The controller that the command will use
+        new PIDController(0.0000005, 0, 0),
+        // This should return the measurement
+        () -> (double) chomperSubsystem.chomperUpDownPosition(),
+        // This should return the setpoint (can also be a constant)
         () -> position,
         output -> {
           chomperSubsystem.setUpDownSpeed(output);
+          System.out.println("output ="+output);
           // Use the output here
         });
   }
@@ -35,5 +39,25 @@ public class ChomperPIDCommand extends PIDCommand {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    // TODO Auto-generated method stub
+    super.end(interrupted);
+    System.out.println("Stopping Chomper PID Command");
+  }
+
+  @Override
+  public void initialize() {
+    // TODO Auto-generated method stub
+    super.initialize();
+    System.out.println("Started Chomper PID Command");
+  }
+
+  @Override
+  public void setName(String moduleType, int moduleNumber, int channel) {
+    // TODO Auto-generated method stub
+    super.setName(moduleType, moduleNumber, channel);
   }
 }
