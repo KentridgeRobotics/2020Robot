@@ -58,8 +58,8 @@ public class RobotContainer {
 	private static final boolean limelightEnabled = false;
 	private static final boolean driveEnabled = false;
 	private static final boolean chomperEnabled = true;
-	private static final boolean shooterEnabled = true;
-	private static final boolean shooterHoodEnabled = true;
+	private static final boolean shooterEnabled = false;
+	private static final boolean shooterHoodEnabled = false;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
 

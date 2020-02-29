@@ -52,7 +52,7 @@ public class ChomperSubsystem extends SubsystemBase {
   }
 
   public double chomperUpDownPosition() {
-    return chomperUpDown.getSensorCollection().getPulseWidthPosition();
+    return (double)chomperUpDown.getSensorCollection().getQuadraturePosition();
   }
 
   public boolean isLimitSwitchTriggered() {
