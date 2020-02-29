@@ -22,8 +22,6 @@ import com.chargerrobotics.commands.LimelightCommand;
 import com.chargerrobotics.commands.autonomous.AutoDriveLinear;
 import com.chargerrobotics.commands.autonomous.VisionTurn;
 import com.chargerrobotics.commands.chomper.ChomperIntakeCommand;
-import com.chargerrobotics.commands.chomper.ChomperPIDDownCommand;
-import com.chargerrobotics.commands.chomper.ChomperPIDUpCommand;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -80,9 +78,6 @@ public class RobotContainer {
 	// Chomper
 	private ChomperSubsystem chomperSubsystem;
 	private ChomperIntakeCommand chomperIntakeCommand;
-	private ChomperPIDUpCommand chomperPIDUpCommand;
-	private ChomperPIDDownCommand chomperPIDDownCommand;
-	
 
 	// Color Spinner
 	private ColorSpinnerSubsystem colorSpinnerSubsystem;
@@ -137,8 +132,6 @@ public class RobotContainer {
 		if(chomperEnabled) {
 			chomperSubsystem = ChomperSubsystem.getInstance();
 			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem);
-			chomperPIDUpCommand = new ChomperPIDUpCommand(chomperSubsystem);
-			chomperPIDDownCommand = new ChomperPIDDownCommand(chomperSubsystem);
 
 		}
 		if (colorSpinnerEnabled) {
@@ -189,8 +182,6 @@ public class RobotContainer {
 		}
 		if (chomperEnabled) {
 			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);
-			secondary.buttonPovDown.whenPressed(chomperPIDDownCommand);
-			secondary.buttonPovUp.whenPressed(chomperPIDUpCommand);
 		}
 		if (colorSpinnerEnabled) {
 			secondary.buttonX.whenPressed(colorTargetCommand);
