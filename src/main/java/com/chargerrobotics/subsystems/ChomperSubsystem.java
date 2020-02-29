@@ -21,7 +21,6 @@ public class ChomperSubsystem extends SubsystemBase {
   
   private static ChomperSubsystem instance;
   private DigitalInput chomperLimitSwitch = new DigitalInput(Constants.chomperLimitSwitch);
-  private boolean isUpDownRunning;
   private boolean isFeedRunning;
   private WPI_TalonSRX chomperUpDown;
   private CANSparkMax chomperFeed;
@@ -46,17 +45,12 @@ public class ChomperSubsystem extends SubsystemBase {
     chomperFeed = new CANSparkMax(Constants.chomperFeed, MotorType.kBrushless);
   }
 
-  public void setChomperUpDownRunning(boolean isRunning) {
-    isUpDownRunning = isRunning;
-
-  }
-
   public double chomperUpDownPosition() {
     return (double)chomperUpDown.getSensorCollection().getQuadraturePosition();
   }
 
   public boolean isLimitSwitchTriggered() {
-    return chomperLimitSwitch.get();
+    return !chomperLimitSwitch.get();
   }
 
   public void setChomperTargetUp(double val) {
