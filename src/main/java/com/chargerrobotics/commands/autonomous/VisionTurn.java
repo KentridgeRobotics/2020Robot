@@ -13,6 +13,9 @@ import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.utils.NetworkMapping;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
@@ -21,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class VisionTurn extends PIDCommand {
   private static LimelightSubsystem limelight;
+  private static final Logger logger = LoggerFactory.getLogger(VisionTurn.class);
 
   private static PIDController pid;
   public final NetworkMapping<Double> kP = new NetworkMapping<Double>("vision_p", 0.1, val -> {
@@ -47,12 +51,8 @@ public class VisionTurn extends PIDCommand {
         () -> 0,
         // This uses the output to move the robot
         output -> {driveSubsystem.setSpeeds(output, -output);
-        System.out.println("Turn Target - Left: " + output + " Right: " + -output);}, limelightSubsystem);
+       logger.info("Turn Target - Left: " + output + " Right: " + -output + " Distance: " + limelightSubsystem.distance() + " inches");}, limelightSubsystem);
 
-        // This doesn't move the robot
-        // output -> {
-        //   driveSubsystem.setSpeeds(0, 0);
-        //   System.out.println("Turn Target - Left: " + -output + " Right: " + output);}, limelightSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
     limelight = limelightSubsystem;

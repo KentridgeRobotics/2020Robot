@@ -44,8 +44,17 @@ public final class Constants {
 	public static final int climbExtender = 51;
 	public static final int climbPush2 = 52;
 	public static final int climbPull = 53;
+
 	//PWM IDs
 	public static final int colorSpinnerLifter = 0;
+
+	//Digital In/Out Ports
+	public static final int chomperLimitSwitch = 0;
+	public static final int hoodLimitSwitch = 1;
+
+	//Chomper Constants
+	public static final int chomperDistToDown = 479;
+	public static final int chomperDistBottomToUp = 1882;
 
 	// Shooter Constants
 	public static final double shooterTargetRPM = 3000.0;
@@ -73,5 +82,16 @@ public final class Constants {
 	// File Names
 	public static final String dataStoragePath = "/home/lvuser";
 	public static final String configFileName = "config.yml";
+
+	// Limelight distance calculation constants
+	// Blitzen config:
+	public static final double targetHeight = 94.0; // inches
+	public static final double cameraHeight = 24.0; // inches
+	public static final double cameraAngle = 30.0; // degrees
+
+	// 2020 bot config:
+	// public static final double targetHeight = 0.0; // inches
+	// public static final double cameraHeight = 0.0; // inches
+	// public static final double cameraAngle = 0.0; // degrees
 	public static final String comPortsFileName = "com.yml";
 }

@@ -5,44 +5,39 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.chargerrobotics.commands.chomper;
+package com.chargerrobotics.commands.shooter;
 
-import com.chargerrobotics.subsystems.ChomperSubsystem;
+import com.chargerrobotics.subsystems.KickerSubsystem;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class chomperUpDownCommand extends CommandBase {
-  private boolean isUp;
+public class KickerCommand extends CommandBase {
   /**
-   * Creates a new chomperUpDownCommand.
+   * Creates a new KickerCommand.
    */
-  public chomperUpDownCommand(boolean isUp) {
-    this.isUp = isUp;
-    // Use addRequirements() here to declare subsystem dependencies.
+  private final KickerSubsystem kickerSubsystem;
+
+  public KickerCommand(KickerSubsystem kickerSubsystem) {
+    this.kickerSubsystem = kickerSubsystem;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    SmartDashboard.putNumber("KickerMotor", 0.1);
+    kickerSubsystem.setRunning(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  if (isUp) {
-    ChomperSubsystem.getInstance().setUpDownSpeed(0.5);
-  }
-  else {
-    ChomperSubsystem.getInstance().setUpDownSpeed(-0.5);
-  }
-  SmartDashboard.putNumber("Chomper Lifter Pos", ChomperSubsystem.getInstance().chomperUpDownPosition());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    ChomperSubsystem.getInstance().setUpDownSpeed(0.0);
+    kickerSubsystem.setRunning(false);
   }
 
   // Returns true when the command should end.

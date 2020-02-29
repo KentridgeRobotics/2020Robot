@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.chargerrobotics.commands.shooter.HoodOffCommand;
 import com.chargerrobotics.commands.shooter.HoodOnCommand;
+import com.chargerrobotics.commands.shooter.KickerCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.sensors.BallSensorSerial;
@@ -23,6 +24,7 @@ import com.chargerrobotics.sensors.ScaleSerial;
 import com.chargerrobotics.commands.LimelightCommand;
 import com.chargerrobotics.commands.autonomous.AutoDriveLinear;
 import com.chargerrobotics.commands.autonomous.VisionTurn;
+import com.chargerrobotics.commands.chomper.ChomperCalibrateCommand;
 import com.chargerrobotics.commands.chomper.ChomperIntakeCommand;
 import com.chargerrobotics.commands.chomper.ChomperPIDCommand;
 import com.chargerrobotics.commands.chomper.chomperUpDownCommand;
@@ -38,6 +40,7 @@ import com.chargerrobotics.subsystems.ChomperSubsystem;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
+import com.chargerrobotics.subsystems.KickerSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
@@ -78,14 +81,17 @@ public class RobotContainer {
 
 	// Shooter
 	private ShooterSubsystem shooterSubsystem;
+	private KickerSubsystem kickerSubsystem;
 	private ShooterHoodSubsystem shooterHoodSubsystem;
 	private ShooterOnCommand shooterOnCommand;
 	private ShooterOffCommand shooterOffCommand;
 	private HoodOnCommand hoodOnCommand;
 	private HoodOffCommand hoodOffCommand;
+	private KickerCommand kickerCommand;
 
 	// Chomper
 	private ChomperSubsystem chomperSubsystem;
+	private ChomperCalibrateCommand chomperCalibrateCommand;
 	private ChomperIntakeCommand chomperIntakeCommand;
 	private ChomperPIDCommand chomperUpCommand; 
 	private ChomperPIDCommand chomperDownCommand; 
@@ -141,6 +147,8 @@ public class RobotContainer {
 			shooterSubsystem = ShooterSubsystem.getInstance();
 			shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
 			shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
+			kickerSubsystem = KickerSubsystem.getInstance();
+			kickerCommand = new KickerCommand(kickerSubsystem);
 		}
 		if (shooterHoodEnabled) {
 			shooterHoodSubsystem = ShooterHoodSubsystem.getInstance();
@@ -149,9 +157,10 @@ public class RobotContainer {
 		}
 		if(chomperEnabled) {
 			chomperSubsystem = ChomperSubsystem.getInstance();
+			chomperCalibrateCommand = new ChomperCalibrateCommand(chomperSubsystem);
 			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem);
-			chomperUpCommand = new ChomperPIDCommand(5000, chomperSubsystem);
-			chomperDownCommand = new ChomperPIDCommand(0, chomperSubsystem);
+			chomperUpCommand = new ChomperPIDCommand(true, chomperSubsystem);
+			chomperDownCommand = new ChomperPIDCommand(false, chomperSubsystem);
 			manualchomperUpCommand = new chomperUpDownCommand(true);
 			manualchomperDownCommand = new chomperUpDownCommand(false);
 		}
@@ -207,6 +216,7 @@ public class RobotContainer {
 		}
 		if (chomperEnabled) {
 			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);
+			secondary.buttonBumperRight.whenPressed(chomperCalibrateCommand);
 			secondary.buttonY.whenPressed(chomperUpCommand);
 			secondary.buttonX.whenPressed(chomperDownCommand);
 			secondary.buttonA.whileHeld(manualchomperDownCommand);
