@@ -156,8 +156,8 @@ public class RobotContainer {
 			chomperSubsystem = ChomperSubsystem.getInstance();
 			chomperCalibrateCommand = new ChomperCalibrateCommand(chomperSubsystem);
 			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem);
-			chomperUpCommand = new ChomperPIDCommand(chomperSubsystem.getChomperTargetUp(), chomperSubsystem);
-			chomperDownCommand = new ChomperPIDCommand(chomperSubsystem.getChomperTargetDown(), chomperSubsystem);
+			chomperUpCommand = new ChomperPIDCommand(true, chomperSubsystem);
+			chomperDownCommand = new ChomperPIDCommand(false, chomperSubsystem);
 			manualchomperUpCommand = new chomperUpDownCommand(true);
 			manualchomperDownCommand = new chomperUpDownCommand(false);
 		}
