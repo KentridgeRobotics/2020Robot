@@ -10,6 +10,7 @@ package com.chargerrobotics.commands.chomper;
 import com.chargerrobotics.subsystems.ChomperSubsystem;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -20,14 +21,14 @@ public class ChomperPIDCommand extends PIDCommand {
   /**
    * Creates a new ChomperPIDCommand.
    */
-  public ChomperPIDCommand(final double position, final ChomperSubsystem chomperSubsystem) {
+  public ChomperPIDCommand(final boolean goingUp, final ChomperSubsystem chomperSubsystem) {
     super(
         // The controller that the command will use
         new PIDController(0.0000005, 0, 0),
         // This should return the measurement
         () -> (double) chomperSubsystem.chomperUpDownPosition(),
         // This should return the setpoint (can also be a constant)
-        () -> position,
+        () -> goingUp ? chomperSubsystem.getChomperTargetUp() : chomperSubsystem.getChomperTargetDown(),
         // This uses the output
         output -> {
           chomperSubsystem.setUpDownSpeed(output);
@@ -36,11 +37,19 @@ public class ChomperPIDCommand extends PIDCommand {
         });
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
+    SmartDashboard.putNumber("ChomperP", 0.0000005);
+    SmartDashboard.putNumber("ChomperI", 0.0);
+    SmartDashboard.putNumber("ChomperD", 0.0);
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (!ChomperSubsystem.getInstance().isCalibrated()) {
+      System.err.println("NEED TO CALIBRATE CHOMPER FIRST!!!!");
+      return true;
+    }
     return false;
   }
 
@@ -55,12 +64,10 @@ public class ChomperPIDCommand extends PIDCommand {
   public void initialize() {
     // TODO Auto-generated method stub
     super.initialize();
+    this.getController().setP(SmartDashboard.getNumber("ChomperP", 0));
+    this.getController().setI(SmartDashboard.getNumber("ChomperI", 0));
+    this.getController().setD(SmartDashboard.getNumber("ChomperD", 0));
     System.out.println("Started Chomper PID Command");
   }
 
-  @Override
-  public void setName(String moduleType, int moduleNumber, int channel) {
-    // TODO Auto-generated method stub
-    super.setName(moduleType, moduleNumber, channel);
-  }
 }
