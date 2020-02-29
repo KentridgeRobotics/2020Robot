@@ -26,7 +26,7 @@ public class KickerSubsystem extends SubsystemBase {
   public static KickerSubsystem getInstance() {
     if (instance == null) {
       instance = new KickerSubsystem();
-      //SmartDashboard.putNumber("KickerMotor", 0.1);
+      SmartDashboard.putNumber("KickerMotor", 0.1);
       CommandScheduler.getInstance().registerSubsystem(instance);
     }
     return instance;
