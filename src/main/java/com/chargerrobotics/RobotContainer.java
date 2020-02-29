@@ -56,9 +56,9 @@ public class RobotContainer {
 
 	private static final boolean limelightEnabled = false;
 	private static final boolean driveEnabled = false;
-	private static final boolean chomperEnabled = true;
-	private static final boolean shooterEnabled = true;
-	private static final boolean shooterHoodEnabled = true;
+	private static final boolean chomperEnabled = false;
+	private static final boolean shooterEnabled = false;
+	private static final boolean shooterHoodEnabled = false;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
 
@@ -116,9 +116,9 @@ public class RobotContainer {
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
-//		ArduinoSerialReceiver.initialization(() -> {
-//			ballSensor.resetCount();
-//		});
+		ArduinoSerialReceiver.initialization(() -> {
+			ballSensor.resetCount();
+		});
 		Config.setup();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();

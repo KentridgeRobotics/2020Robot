@@ -18,6 +18,7 @@ public class ColorSensorSerial extends ArduinoListener {
 	public void receiveData(ArduinoSerial serial, ByteBuffer buffer) {
 		if (buffer.hasRemaining())
 			color = ColorWheelColor.valueOf((char) buffer.get());
+		System.out.println(isExpired() ? "Expired" : getColor());
 	}
 	
 	/**
