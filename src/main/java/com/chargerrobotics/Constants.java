@@ -48,7 +48,7 @@ public final class Constants {
 	public static final int colorSpinnerLifter = 0;
 
 	// Shooter Constants
-	public static final double shooterTargetRPM = 10000.0;
+	public static final double shooterTargetRPM = 3000.0;
 	public static final double shooterP = 0.001;
 	public static final double shooterI = 0.0000004;
 	public static final double shooterD = 0.2;
@@ -58,6 +58,17 @@ public final class Constants {
 	public static final double shooterVelocityGain = 0.0;
 	public static final double shooterMinOutput = -1.0;
 	public static final double shooterMaxOutput = 1.0;
+
+	// Shooter Hood Constants
+	public static final int hoodPIDLoopId = 0;
+	public static final int hoodGainSlot = 0;
+	public static final int hoodTimeOutMs = 30;
+	public static final int ticksPerRev = 0;
+	public static final double hoodP = 0.5;
+	public static final double hoodI = 0.006;
+	public static final double hoodD = 0.0;
+	public static final double hoodF = 0.0;
+
 
 	// File Names
 	public static final String dataStoragePath = "/home/lvuser";

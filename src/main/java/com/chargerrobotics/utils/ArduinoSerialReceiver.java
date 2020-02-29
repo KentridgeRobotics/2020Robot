@@ -33,7 +33,11 @@ public class ArduinoSerialReceiver {
 	 */
 	public static void initialization(Runnable initCommands) {
 		synchronized(serialPorts) {
-			for (SerialPort availablePort : SerialPort.getCommPorts()) {
+			SerialPort[] availablePorts = SerialPort.getCommPorts();
+			if (availablePorts == null) {
+				return;
+			}
+			for (SerialPort availablePort : availablePorts) {
 				if (availablePort.toString().contains("USB-to-Serial")) {
 					String name = availablePort.getSystemPortName();
 					serialPorts.add(new ArduinoSerial(name));

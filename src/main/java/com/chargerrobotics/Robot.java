@@ -9,6 +9,9 @@ package com.chargerrobotics;
 
 import java.util.Arrays;
 
+import com.chargerrobotics.subsystems.LimelightSubsystem;
+import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
+import com.chargerrobotics.sensors.ColorSensorSerial;
 import com.chargerrobotics.utils.ArduinoSerialReceiver;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -68,7 +71,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		robotContainer.setTeleop();
-		ArduinoSerialReceiver.start();
+//		ArduinoSerialReceiver.start();
 	}
 
 	/**
@@ -84,7 +87,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		robotContainer.setDisabled();
-		ArduinoSerialReceiver.close();
+//		ArduinoSerialReceiver.close();
 	}
 
 	/**
@@ -100,7 +103,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		robotContainer.setAutonomous();
-		ArduinoSerialReceiver.start();
+//		ArduinoSerialReceiver.start();
 	}
 
 	/**
@@ -116,7 +119,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testInit() {
 		CommandScheduler.getInstance().cancelAll();
-		ArduinoSerialReceiver.close();
+//		ArduinoSerialReceiver.close();
 	}
 
 	/**
