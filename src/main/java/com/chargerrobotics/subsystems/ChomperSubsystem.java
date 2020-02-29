@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,10 +20,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ChomperSubsystem extends SubsystemBase {
   
   private static ChomperSubsystem instance;
+  private DigitalInput chomperLimitSwitch = new DigitalInput(Constants.chomperLimitSwitch);
   private boolean isUpDownRunning;
   private boolean isFeedRunning;
   private WPI_TalonSRX chomperUpDown;
   private CANSparkMax chomperFeed;
+
+  private double targetDownPos;
+  private double targetUpPos;
 
   /**
    * Creates a new Chomper.
@@ -50,6 +55,26 @@ public class ChomperSubsystem extends SubsystemBase {
     return chomperUpDown.getSensorCollection().getPulseWidthPosition();
   }
 
+  public boolean isLimitSwitchTriggered() {
+    return chomperLimitSwitch.get();
+  }
+
+  public void setChomperTargetUp(double val) {
+    targetUpPos = val;
+  }
+
+  public double getChomperTargetUp() {
+    return targetUpPos;
+  }
+
+  public void setChomperTargetDown(double val) {
+    targetDownPos = val;
+  }
+
+  public double getChomperTargetDown() {
+    return targetDownPos;
+  }
+
   public void setChomperFeedRunning(boolean isRunning) {
     isFeedRunning = isRunning;
     if(isFeedRunning) {
@@ -71,5 +96,6 @@ public class ChomperSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putString("Chomper", "In periodic");
+    SmartDashboard.putBoolean("Is Chomper switch trig?", chomperLimitSwitch.get());
   }
 }

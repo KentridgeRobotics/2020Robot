@@ -9,6 +9,7 @@ package com.chargerrobotics.commands.chomper;
 
 import com.chargerrobotics.subsystems.ChomperSubsystem;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class chomperUpDownCommand extends CommandBase {
@@ -35,6 +36,7 @@ public class chomperUpDownCommand extends CommandBase {
   else {
     ChomperSubsystem.getInstance().setUpDownSpeed(-0.2);
   }
+  SmartDashboard.putNumber("Chomper Lifter Pos", ChomperSubsystem.getInstance().chomperUpDownPosition());
   }
 
   // Called once the command ends or is interrupted.
