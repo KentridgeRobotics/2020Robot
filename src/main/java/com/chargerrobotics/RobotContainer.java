@@ -31,6 +31,8 @@ import com.chargerrobotics.commands.chomper.chomperUpDownCommand;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
+import com.chargerrobotics.commands.colorspinner.ColorSpinnerDeploy;
+import com.chargerrobotics.commands.colorspinner.ColorSpinnerRetract;
 import com.chargerrobotics.commands.colorspinner.ColorTargetCommand;
 import com.chargerrobotics.commands.drive.BoostCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
@@ -63,7 +65,7 @@ public class RobotContainer {
 	private static final boolean chomperEnabled = true;
 	private static final boolean shooterEnabled = false;
 	private static final boolean shooterHoodEnabled = false;
-	private static final boolean colorSpinnerEnabled = false;
+	private static final boolean colorSpinnerEnabled = true;
 	private static final boolean climberEnabled = false;
 
 	// Limelight
@@ -104,6 +106,8 @@ public class RobotContainer {
 	private ColorSpinnerSubsystem colorSpinnerSubsystem;
 	private ColorSpinnerCommand colorSpinnerCommand;
 	private ColorTargetCommand colorTargetCommand;
+	private ColorSpinnerDeploy colorSpinnerDeploy;
+	private ColorSpinnerRetract colorSpinnerRetract;
 
 	// Climber Spinner
 	private ClimberSubsystem climberSubsystem;
@@ -171,6 +175,8 @@ public class RobotContainer {
 			colorSpinnerSubsystem = ColorSpinnerSubsystem.getInstance();
 			colorSpinnerCommand = new ColorSpinnerCommand(colorSpinnerSubsystem);
 			colorTargetCommand = new ColorTargetCommand(colorSpinnerSubsystem, colorSensor);
+			colorSpinnerDeploy = new ColorSpinnerDeploy();
+			colorSpinnerRetract = new ColorSpinnerRetract();
 		}
 		if (climberEnabled) {
 			climberSubsystem = ClimberSubsystem.getInstance();
@@ -226,7 +232,9 @@ public class RobotContainer {
 			secondary.buttonB.whileHeld(manualchomperUpCommand);
 		}
 		if (colorSpinnerEnabled) {
-			secondary.buttonX.whenPressed(colorTargetCommand);
+			secondary.buttonPovLeft.whenPressed(colorTargetCommand);
+			secondary.buttonPovUp.whenPressed(colorSpinnerDeploy);
+			secondary.buttonPovDown.whenPressed(colorSpinnerRetract);
 		}
 		// secondary.buttonX.whenPressed(chomperCommand);
 	}

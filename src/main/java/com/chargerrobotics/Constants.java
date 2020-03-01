@@ -46,7 +46,7 @@ public final class Constants {
 	public static final int climbPull = 53;
 
 	//PWM IDs
-	public static final int colorSpinnerLifter = 0;
+	public static final int colorSpinnerLifter = 9;
 
 	//Digital In/Out Ports
 	public static final int chomperLimitSwitch = 0;
