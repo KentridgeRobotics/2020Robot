@@ -47,6 +47,7 @@ public final class Constants {
 
 	//PWM IDs
 	public static final int colorSpinnerLifter = 0;
+	public static final int leds = 1;
 
 	//Digital In/Out Ports
 	public static final int chomperLimitSwitch = 0;
