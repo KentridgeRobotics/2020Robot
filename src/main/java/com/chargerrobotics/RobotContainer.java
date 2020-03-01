@@ -12,6 +12,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import com.chargerrobotics.commands.shooter.HoodManualCommand;
 import com.chargerrobotics.commands.shooter.HoodOffCommand;
 import com.chargerrobotics.commands.shooter.HoodOnCommand;
 import com.chargerrobotics.commands.shooter.KickerCommand;
@@ -62,7 +63,7 @@ public class RobotContainer {
 	private static final boolean driveEnabled = true;
 	private static final boolean chomperEnabled = false;
 	private static final boolean shooterEnabled = true;
-	private static final boolean shooterHoodEnabled = false;
+	private static final boolean shooterHoodEnabled = true;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
 
@@ -87,8 +88,10 @@ public class RobotContainer {
 	private ShooterHoodSubsystem shooterHoodSubsystem;
 	private ShooterOnCommand shooterOnCommand;
 	private ShooterOffCommand shooterOffCommand;
-	private HoodOnCommand hoodOnCommand;
-	private HoodOffCommand hoodOffCommand;
+	//private HoodOnCommand hoodOnCommand;
+	//private HoodOffCommand hoodOffCommand;
+	private HoodManualCommand hoodManualUpCommand;
+	private HoodManualCommand hoodManualDownCommand;
 	private KickerCommand kickerCommand;
 
 	// Chomper
@@ -155,8 +158,10 @@ public class RobotContainer {
 		}
 		if (shooterHoodEnabled) {
 			shooterHoodSubsystem = ShooterHoodSubsystem.getInstance();
-			hoodOnCommand = new HoodOnCommand(shooterHoodSubsystem);
-			hoodOffCommand = new HoodOffCommand(shooterHoodSubsystem);
+			hoodManualUpCommand = new HoodManualCommand(shooterHoodSubsystem, true);
+			hoodManualDownCommand = new HoodManualCommand(shooterHoodSubsystem, false);
+			//hoodOnCommand = new HoodOnCommand(shooterHoodSubsystem);
+			//hoodOffCommand = new HoodOffCommand(shooterHoodSubsystem);
 		}
 		if(chomperEnabled) {
 			chomperSubsystem = ChomperSubsystem.getInstance();
@@ -216,8 +221,10 @@ public class RobotContainer {
 			secondary.buttonStickRight.whileHeld(kickerCommand);
 		}
 		if (shooterHoodEnabled) {
-			secondary.buttonY.whenPressed(hoodOnCommand);
-			secondary.buttonBumperRight.whenPressed(hoodOffCommand);
+			//secondary.buttonY.whenPressed(hoodOnCommand);
+			//secondary.buttonBumperRight.whenPressed(hoodOffCommand);
+			secondary.buttonPovUp.whileHeld(hoodManualUpCommand);
+			secondary.buttonPovDown.whileHeld(hoodManualDownCommand);
 		}
 		if (chomperEnabled) {
 			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);

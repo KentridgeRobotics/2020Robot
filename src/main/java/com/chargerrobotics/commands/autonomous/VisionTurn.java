@@ -29,7 +29,7 @@ public class VisionTurn extends PIDCommand {
   private static PIDController pid;
   private long startTime;
   private static final long delay = 250; // wait 250 ms for limelight to lock on
-  public final NetworkMapping<Double> kP = new NetworkMapping<Double>("vision_p", 0.1, val -> {
+  public final NetworkMapping<Double> kP = new NetworkMapping<Double>("vision_p", 0.004, val -> {
     setPIDP(val);
   });
   public final NetworkMapping<Double> kI = new NetworkMapping<Double>("vision_i", 0.0, val -> {

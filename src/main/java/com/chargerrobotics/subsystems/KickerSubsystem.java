@@ -24,7 +24,7 @@ public class KickerSubsystem extends SubsystemBase {
   public double speed;
   private WPI_TalonSRX kickerMotor;
 
-  public final NetworkMapping<Double> kP = new NetworkMapping<Double>("kicker_speed", 0.1, val -> {speed = val;});
+  public final NetworkMapping<Double> kP = new NetworkMapping<Double>("kicker_speed", 1.0, val -> {speed = val;});
 
   public static KickerSubsystem getInstance() {
     if (instance == null) {
@@ -42,7 +42,7 @@ public class KickerSubsystem extends SubsystemBase {
   public void setRunning(boolean isRunning) {
     this.isRunning = isRunning;
     //speed = SmartDashboard.getNumber("KickerMotor", 0.0);
-    kickerMotor.set(this.isRunning ? speed : 0.0);
+    kickerMotor.set(this.isRunning ? 1.0 : 0.0);
   }
 
   @Override
