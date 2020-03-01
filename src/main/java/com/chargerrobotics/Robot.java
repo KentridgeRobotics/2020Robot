@@ -9,6 +9,7 @@ package com.chargerrobotics;
 
 import java.util.Arrays;
 
+import com.chargerrobotics.subsystems.LEDSubsystem.LEDMode;
 import com.chargerrobotics.utils.ArduinoSerialReceiver;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -69,6 +70,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		robotContainer.setTeleop();
 		ArduinoSerialReceiver.start();
+		robotContainer.leds.setMode(LEDMode.TELEOP);
 	}
 
 	/**
@@ -85,6 +87,7 @@ public class Robot extends TimedRobot {
 	public void disabledInit() {
 		robotContainer.setDisabled();
 		ArduinoSerialReceiver.close();
+		robotContainer.leds.setMode(LEDMode.DISABLED);
 	}
 
 	/**
@@ -101,6 +104,7 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		robotContainer.setAutonomous();
 		ArduinoSerialReceiver.start();
+		robotContainer.leds.setMode(LEDMode.AUTONOMOUS);
 	}
 
 	/**
@@ -117,6 +121,7 @@ public class Robot extends TimedRobot {
 	public void testInit() {
 		CommandScheduler.getInstance().cancelAll();
 		ArduinoSerialReceiver.close();
+		robotContainer.leds.setMode(LEDMode.DISABLED);
 	}
 
 	/**

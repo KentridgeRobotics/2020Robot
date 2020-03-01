@@ -42,6 +42,7 @@ import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.KickerSubsystem;
+import com.chargerrobotics.subsystems.LEDSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 import com.chargerrobotics.subsystems.ShooterSubsystem;
@@ -115,6 +116,9 @@ public class RobotContainer {
 	public ScaleSerial scaleSensor = new ScaleSerial();
 	public GyroscopeSerial gyroscope = new GyroscopeSerial();
 	public BallSensorSerial ballSensor = new BallSensorSerial();
+	
+	// LEDs
+	public LEDSubsystem leds = new LEDSubsystem();
 
 	// controllers
 	public final static XboxController primary = new XboxController(Constants.primary);
