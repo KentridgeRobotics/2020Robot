@@ -23,11 +23,12 @@ public class VisionDrive extends PIDCommand {
 
   public VisionDrive(final LimelightSubsystem limelightSubsystem, DriveSubsystem driveSubsystem, double desiredDistance) {
     super(
-      new PIDController(0, 0, 0),
+      new PIDController(0.004, 0, 0),
       () -> limelightSubsystem.distance(),
       () -> desiredDistance,
       output -> {
         System.out.println(output);
+        driveSubsystem.arcadeDrive(output, 0);
       });
 
     this.limelightSubsystem = limelightSubsystem;
