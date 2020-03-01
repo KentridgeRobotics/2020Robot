@@ -7,6 +7,7 @@
 
 package com.chargerrobotics.commands.groups;
 
+import com.chargerrobotics.subsystems.DriveSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -18,8 +19,9 @@ public class VisionDrive extends PIDCommand {
    * Creates a new VisionDrive.
    */
   private static LimelightSubsystem limelightSubsystem;
+  private static DriveSubsystem driveSubsystem;
 
-  public VisionDrive(final LimelightSubsystem limelightSubsystem, double desiredDistance) {
+  public VisionDrive(final LimelightSubsystem limelightSubsystem, DriveSubsystem driveSubsystem, double desiredDistance) {
     super(
       new PIDController(0, 0, 0),
       () -> limelightSubsystem.distance(),
@@ -29,6 +31,7 @@ public class VisionDrive extends PIDCommand {
       });
 
     this.limelightSubsystem = limelightSubsystem;
+    this.driveSubsystem = driveSubsystem;
   }
 
   // Called when the command is initially scheduled.

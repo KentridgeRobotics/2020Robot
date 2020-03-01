@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.chargerrobotics.commands.Groups;
+package com.chargerrobotics.commands.groups;
 
 import com.chargerrobotics.commands.autonomous.AutoDriveLinear;
 import com.chargerrobotics.commands.chomper.ChomperCalibrateCommand;

@@ -36,6 +36,7 @@ import com.chargerrobotics.commands.drive.BoostCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
 import com.chargerrobotics.commands.drive.SlowCommand;
+import com.chargerrobotics.commands.groups.VisionDrive;
 import com.chargerrobotics.subsystems.ChomperSubsystem;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
@@ -70,6 +71,7 @@ public class RobotContainer {
 	private LimelightCommand limelightCommand;
 	// Align to the target
 	public VisionTurn alignToTarget;
+	public VisionDrive driveToTarget;
 
 	// Drive
 	private DriveSubsystem driveSubsystem;
@@ -141,6 +143,7 @@ public class RobotContainer {
 			if (driveEnabled) {
 				//Vision Testing
 				alignToTarget = new VisionTurn(limelightSubsystem, driveSubsystem);
+				driveToTarget = new VisionDrive(limelightSubsystem, driveSubsystem);
 			}
 		}
 		if (shooterEnabled) {
