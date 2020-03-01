@@ -143,7 +143,7 @@ public class RobotContainer {
 			if (driveEnabled) {
 				//Vision Testing
 				alignToTarget = new VisionTurn(limelightSubsystem, driveSubsystem);
-				driveToTarget = new VisionDrive(limelightSubsystem, driveSubsystem, 0);
+				driveToTarget = new VisionDrive(limelightSubsystem, driveSubsystem, 120);
 			}
 		}
 		if (shooterEnabled) {
@@ -201,7 +201,8 @@ public class RobotContainer {
 			primary.buttonPovLeft.whenPressed(autoDriveLinear);
 		}
 		if (limelightEnabled) {
-			primary.buttonY.whileHeld(alignToTarget);
+			primary.buttonX.whileHeld(alignToTarget);
+			primary.buttonY.whileHeld(driveToTarget);
 		}
 		if (climberEnabled) {
 			climberSubsystem.setStop();
