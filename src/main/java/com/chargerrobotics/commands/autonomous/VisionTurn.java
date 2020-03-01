@@ -46,7 +46,7 @@ public class VisionTurn extends PIDCommand {
 
     super(
         // The controller that the command will use
-        setPID(new PIDController(0.004, 0.0, 0.0)),
+        setPID(new PIDController(0.012, 0.0135, 0.00075)),
         // This should return the measurement
         () -> limelightSubsystem.getX(),
         // This should return the setpoint (can also be a constant)
@@ -66,10 +66,6 @@ public class VisionTurn extends PIDCommand {
     setPIDD(kD.getValue());
   }
 
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
 
   private static PIDController setPID(PIDController pid) {
     VisionTurn.pid = pid;
@@ -114,6 +110,4 @@ public class VisionTurn extends PIDCommand {
       super.execute();
     }
   }
-
-
 }

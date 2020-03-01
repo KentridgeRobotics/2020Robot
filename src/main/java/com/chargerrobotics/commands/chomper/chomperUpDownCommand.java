@@ -31,10 +31,10 @@ public class chomperUpDownCommand extends CommandBase {
   @Override
   public void execute() {
   if (isUp) {
-    ChomperSubsystem.getInstance().setUpDownSpeed(0.7);
+    ChomperSubsystem.getInstance().setUpDownSpeed(0.5);
   }
   else {
-    ChomperSubsystem.getInstance().setUpDownSpeed(-0.7);
+    ChomperSubsystem.getInstance().setUpDownSpeed(-0.5);
   }
   SmartDashboard.putNumber("Chomper Lifter Pos", ChomperSubsystem.getInstance().chomperUpDownPosition());
   }

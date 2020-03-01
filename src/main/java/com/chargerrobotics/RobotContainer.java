@@ -143,7 +143,7 @@ public class RobotContainer {
 			if (driveEnabled) {
 				//Vision Testing
 				alignToTarget = new VisionTurn(limelightSubsystem, driveSubsystem);
-				driveToTarget = new VisionDrive(limelightSubsystem, driveSubsystem);
+				driveToTarget = new VisionDrive(limelightSubsystem, driveSubsystem, 0);
 			}
 		}
 		if (shooterEnabled) {
