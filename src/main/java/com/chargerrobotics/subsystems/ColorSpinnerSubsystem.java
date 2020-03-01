@@ -33,7 +33,7 @@ public class ColorSpinnerSubsystem extends SubsystemBase {
 	public ColorSpinnerSubsystem() {
 		spinnerMotor = new WPI_TalonSRX(Constants.colorSpinner);
 		lifter = new REVSmartServo(Constants.colorSpinnerLifter);
-		setAngle(servoPos.getValue());
+		//setAngle(servoPos.getValue());
 	}
 	
 	public void setAngle(double deg) {
@@ -47,5 +47,6 @@ public class ColorSpinnerSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
+		
 	}
 }

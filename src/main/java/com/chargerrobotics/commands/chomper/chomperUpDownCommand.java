@@ -36,7 +36,6 @@ public class chomperUpDownCommand extends CommandBase {
   else {
     ChomperSubsystem.getInstance().setUpDownSpeed(-0.5);
   }
-  SmartDashboard.putNumber("Chomper Lifter Pos", ChomperSubsystem.getInstance().chomperUpDownPosition());
   }
 
   // Called once the command ends or is interrupted.

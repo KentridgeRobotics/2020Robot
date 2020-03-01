@@ -93,9 +93,9 @@ public class ChomperSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putString("Chomper", "In periodic");
     SmartDashboard.putBoolean("Is Chomper switch trig?", chomperLimitSwitch.get());
     SmartDashboard.putNumber("Chomp Target Up Position", getChomperTargetUp());
     SmartDashboard.putNumber("Chomp Target Down Position", getChomperTargetDown());
+    SmartDashboard.putNumber("Chomper updown position", chomperUpDownPosition());
   }
 }
