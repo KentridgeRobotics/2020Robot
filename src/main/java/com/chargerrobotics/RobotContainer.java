@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.chargerrobotics.commands.shooter.HoodOffCommand;
 import com.chargerrobotics.commands.shooter.HoodOnCommand;
+import com.chargerrobotics.commands.shooter.KickerCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
 import com.chargerrobotics.sensors.BallSensorSerial;
@@ -35,6 +36,7 @@ import com.chargerrobotics.commands.drive.BoostCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
 import com.chargerrobotics.commands.drive.SlowCommand;
+import com.chargerrobotics.commands.groups.VisionDrive;
 import com.chargerrobotics.subsystems.ChomperSubsystem;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
@@ -58,7 +60,7 @@ public class RobotContainer {
 
 	private static final boolean limelightEnabled = false;
 	private static final boolean driveEnabled = false;
-	private static final boolean chomperEnabled = true;
+	private static final boolean chomperEnabled = false;
 	private static final boolean shooterEnabled = false;
 	private static final boolean shooterHoodEnabled = false;
 	private static final boolean colorSpinnerEnabled = false;
@@ -69,6 +71,7 @@ public class RobotContainer {
 	private LimelightCommand limelightCommand;
 	// Align to the target
 	public VisionTurn alignToTarget;
+	public VisionDrive driveToTarget;
 
 	// Drive
 	private DriveSubsystem driveSubsystem;
@@ -86,6 +89,7 @@ public class RobotContainer {
 	private ShooterOffCommand shooterOffCommand;
 	private HoodOnCommand hoodOnCommand;
 	private HoodOffCommand hoodOffCommand;
+	private KickerCommand kickerCommand;
 
 	// Chomper
 	private ChomperSubsystem chomperSubsystem;
@@ -120,9 +124,9 @@ public class RobotContainer {
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
-//		ArduinoSerialReceiver.initialization(() -> {
-//			ballSensor.resetCount();
-//		});
+		ArduinoSerialReceiver.initialization(() -> {
+			ballSensor.resetCount();
+		});
 		Config.setup();
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
@@ -139,6 +143,7 @@ public class RobotContainer {
 			if (driveEnabled) {
 				//Vision Testing
 				alignToTarget = new VisionTurn(limelightSubsystem, driveSubsystem);
+				driveToTarget = new VisionDrive(limelightSubsystem, driveSubsystem);
 			}
 		}
 		if (shooterEnabled) {
@@ -146,6 +151,7 @@ public class RobotContainer {
 			shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
 			shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
 			kickerSubsystem = KickerSubsystem.getInstance();
+			kickerCommand = new KickerCommand(kickerSubsystem);
 		}
 		if (shooterHoodEnabled) {
 			shooterHoodSubsystem = ShooterHoodSubsystem.getInstance();
