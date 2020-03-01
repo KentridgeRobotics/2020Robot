@@ -27,6 +27,8 @@ public class VisionTurn extends PIDCommand {
   private static final Logger logger = LoggerFactory.getLogger(VisionTurn.class);
 
   private static PIDController pid;
+  private long startTime;
+  private static final long delay = 250; // wait 250 ms for limelight to lock on
   public final NetworkMapping<Double> kP = new NetworkMapping<Double>("vision_p", 0.1, val -> {
     setPIDP(val);
   });
@@ -50,8 +52,11 @@ public class VisionTurn extends PIDCommand {
         // This should return the setpoint (can also be a constant)
         () -> 0,
         // This uses the output to move the robot
-        output -> {driveSubsystem.setSpeeds(output, -output);
-       logger.info("Turn Target - Left: " + output + " Right: " + -output + " Distance: " + limelightSubsystem.distance() + " inches");}, limelightSubsystem);
+        output -> {
+          driveSubsystem.setSpeeds(output, -output);
+          logger.info("Turn Target - Left: " + output + " Right: " + -output + " Distance: "
+              + limelightSubsystem.distance() + " inches");
+        }, limelightSubsystem);
 
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
@@ -61,10 +66,6 @@ public class VisionTurn extends PIDCommand {
     setPIDD(kD.getValue());
   }
 
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
 
   private static PIDController setPID(PIDController pid) {
     VisionTurn.pid = pid;
@@ -92,6 +93,7 @@ public class VisionTurn extends PIDCommand {
     // TODO Auto-generated method stub
     super.initialize();
     limelight.setLEDStatus(true);
+    startTime = System.currentTimeMillis();
   }
 
   @Override
@@ -101,5 +103,11 @@ public class VisionTurn extends PIDCommand {
     limelight.setLEDStatus(false);
   }
 
-
+  @Override
+  public void execute() {
+    long now = System.currentTimeMillis();
+    if (now - startTime > delay) {
+      super.execute();
+    }
+  }
 }
