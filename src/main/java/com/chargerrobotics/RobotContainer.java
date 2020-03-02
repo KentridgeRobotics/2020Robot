@@ -26,7 +26,7 @@ import com.chargerrobotics.commands.autonomous.VisionTurn;
 import com.chargerrobotics.commands.chomper.ChomperCalibrateCommand;
 import com.chargerrobotics.commands.chomper.ChomperIntakeCommand;
 import com.chargerrobotics.commands.chomper.ChomperPIDCommand;
-import com.chargerrobotics.commands.chomper.chomperUpDownCommand;
+import com.chargerrobotics.commands.chomper.ChomperUpDownCommand;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -101,8 +101,8 @@ public class RobotContainer {
 	private ChomperIntakeCommand chomperIntakeCommand;
 	private ChomperPIDCommand chomperUpCommand; 
 	private ChomperPIDCommand chomperDownCommand; 
-	private chomperUpDownCommand manualchomperUpCommand;
-	private chomperUpDownCommand manualchomperDownCommand;
+	private ChomperUpDownCommand manualchomperUpCommand;
+	private ChomperUpDownCommand manualchomperDownCommand;
 
 	//Feeder
 	private FeedSubsystem feedSubsystem;
@@ -174,8 +174,8 @@ public class RobotContainer {
 			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem);
 			chomperUpCommand = new ChomperPIDCommand(true, chomperSubsystem);
 			chomperDownCommand = new ChomperPIDCommand(false, chomperSubsystem);
-			manualchomperUpCommand = new chomperUpDownCommand(true);
-			manualchomperDownCommand = new chomperUpDownCommand(false);
+			manualchomperUpCommand = new ChomperUpDownCommand(true);
+			manualchomperDownCommand = new ChomperUpDownCommand(false);
 		}
 		if(feedEnabled) {
 			feedSubsystem = FeedSubsystem.getInstance();
