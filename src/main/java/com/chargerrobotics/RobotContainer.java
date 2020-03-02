@@ -21,7 +21,6 @@ import com.chargerrobotics.sensors.BallSensorSerial;
 import com.chargerrobotics.sensors.ColorSensorSerial;
 import com.chargerrobotics.sensors.GyroscopeSerial;
 import com.chargerrobotics.sensors.ScaleSerial;
-import com.chargerrobotics.commands.LimelightCommand;
 import com.chargerrobotics.commands.autonomous.AutoDriveLinear;
 import com.chargerrobotics.commands.autonomous.VisionTurn;
 import com.chargerrobotics.commands.chomper.ChomperCalibrateCommand;
@@ -72,7 +71,7 @@ public class RobotContainer {
 
 	// Limelight
 	private LimelightSubsystem limelightSubsystem;
-	private LimelightCommand limelightCommand;
+
 	// Align to the target
 	public VisionTurn alignToTarget;
 	public VisionDrive driveToTarget;
@@ -150,8 +149,6 @@ public class RobotContainer {
 		}
 		if (limelightEnabled) {
 			limelightSubsystem = LimelightSubsystem.getInstance();
-			limelightCommand = new LimelightCommand(limelightSubsystem);
-			limelightSubsystem.setRunning(true);
 			if (driveEnabled) {
 				//Vision Testing
 				alignToTarget = new VisionTurn(limelightSubsystem, driveSubsystem);

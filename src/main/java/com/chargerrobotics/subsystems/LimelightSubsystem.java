@@ -22,7 +22,7 @@ public class LimelightSubsystem extends SubsystemBase {
 	 * Creates a new LimelightSubsystem.
 	 */
 	private NetworkTable table;
-	private NetworkTableEntry tx, ty, tv, leds;
+	private NetworkTableEntry tx, ty, tv, leds, camMode;
 	private boolean isRunning;
 	private static LimelightSubsystem instance;
 
@@ -34,6 +34,7 @@ public class LimelightSubsystem extends SubsystemBase {
 		ty = table.getEntry("ty");
 		tv = table.getEntry("tv");
 		leds = table.getEntry("ledMode");
+		camMode = table.getEntry("camMode");
 	}
 
 	public static LimelightSubsystem getInstance() {
@@ -46,13 +47,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
 	public void setLEDStatus(boolean enabled) {
 		leds.setDouble(enabled ? 0.0 : 1.0);
-	}
-
-	public void setRunning(boolean isRunning) {
-		this.isRunning = isRunning;
-		this.setLEDStatus(true);
-		
-		//if (v == 1.0) DriveSubsystem.getInstance().tankDrive(x, y);
+		camMode.setNumber(enabled ? 0 : 1);
 	}
 
 	public double getX() {
