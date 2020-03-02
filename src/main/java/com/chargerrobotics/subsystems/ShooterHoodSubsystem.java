@@ -91,6 +91,10 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         super.periodic();
+        if (shooterHood.get() > 0 && isLimitSwitchTriggered()) {
+            shooterHood.set(0);
+            resetShooterEncoder();
+        }
         SmartDashboard.putNumber("hoodCurrPos", shooterHood.getSensorCollection().getQuadraturePosition());
         SmartDashboard.putNumber("hood Current", shooterHood.getSupplyCurrent());
         SmartDashboard.putBoolean("HoodTriggered?", isLimitSwitchTriggered());

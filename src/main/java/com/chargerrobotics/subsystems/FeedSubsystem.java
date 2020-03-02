@@ -26,7 +26,7 @@ public class FeedSubsystem extends SubsystemBase {
     }
 
     public void setFeedRunning(boolean isRunning) {
-        feed.set(isRunning ? 0.2 : 0.0);
+        feed.set(isRunning ? -0.2 : 0.0);
     }
 
     @Override

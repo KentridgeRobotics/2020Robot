@@ -13,7 +13,7 @@ public class FeederCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        feedSubsystem.setFeedRunning(false);
+        feedSubsystem.setFeedRunning(true);
     }
 
     @Override

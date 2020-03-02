@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.chargerrobotics.commands.shooter.HoodCalibrateCommand;
 import com.chargerrobotics.commands.shooter.HoodManualCommand;
-import com.chargerrobotics.commands.shooter.HoodOffCommand;
-import com.chargerrobotics.commands.shooter.HoodOnCommand;
 import com.chargerrobotics.commands.shooter.KickerCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
@@ -63,10 +61,10 @@ import com.chargerrobotics.utils.XboxController;
  */
 public class RobotContainer {
 
-	private static final boolean limelightEnabled = false;
-	private static final boolean driveEnabled = false;
-	private static final boolean chomperEnabled = false;
-	private static final boolean feedEnabled = false;
+	private static final boolean limelightEnabled = true;
+	private static final boolean driveEnabled = true;
+	private static final boolean chomperEnabled = true;
+	private static final boolean feedEnabled = true;
 	private static final boolean shooterEnabled = true;
 	private static final boolean shooterHoodEnabled = true;
 	private static final boolean colorSpinnerEnabled = false;
@@ -93,8 +91,6 @@ public class RobotContainer {
 	private ShooterHoodSubsystem shooterHoodSubsystem;
 	private ShooterOnCommand shooterOnCommand;
 	private ShooterOffCommand shooterOffCommand;
-	//private HoodOnCommand hoodOnCommand;
-	//private HoodOffCommand hoodOffCommand;
 	private HoodManualCommand hoodManualUpCommand;
 	private HoodManualCommand hoodManualDownCommand;
 	private HoodCalibrateCommand hoodCalibrateCommand;
@@ -173,8 +169,6 @@ public class RobotContainer {
 			shooterHoodSubsystem = ShooterHoodSubsystem.getInstance();
 			hoodManualUpCommand = new HoodManualCommand(shooterHoodSubsystem, true);
 			hoodManualDownCommand = new HoodManualCommand(shooterHoodSubsystem, false);
-			//hoodOnCommand = new HoodOnCommand(shooterHoodSubsystem);
-			//hoodOffCommand = new HoodOffCommand(shooterHoodSubsystem);
 			hoodCalibrateCommand = new HoodCalibrateCommand(shooterHoodSubsystem);
 		}
 		if(chomperEnabled) {
@@ -239,22 +233,22 @@ public class RobotContainer {
 			secondary.buttonStickRight.whileHeld(kickerCommand);
 		}
 		if (shooterHoodEnabled) {
-			//secondary.buttonY.whenPressed(hoodOnCommand);
-			//secondary.buttonBumperRight.whenPressed(hoodOffCommand);
-			secondary.buttonMenu.whenPressed(hoodCalibrateCommand);
+			//secondary.buttonMenu.whenPressed(hoodCalibrateCommand);
 			secondary.buttonPovUp.whileHeld(hoodManualUpCommand);
 			secondary.buttonPovDown.whileHeld(hoodManualDownCommand);
 		}
 		if (chomperEnabled) {
 			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);
 			secondary.buttonBumperRight.whenPressed(chomperCalibrateCommand);
-			secondary.buttonY.whenPressed(chomperUpCommand);
-			secondary.buttonX.whenPressed(chomperDownCommand);
-			secondary.buttonA.whileHeld(manualchomperDownCommand);
-			secondary.buttonB.whileHeld(manualchomperUpCommand);
+			//secondary.buttonY.whenPressed(chomperUpCommand);
+			//secondary.buttonX.whenPressed(chomperDownCommand);
+			//secondary.buttonA.whileHeld(manualchomperDownCommand);
+			//secondary.buttonB.whileHeld(manualchomperUpCommand);
+			secondary.buttonX.whileHeld(manualchomperDownCommand);
+			secondary.buttonY.whileHeld(manualchomperUpCommand);
 		}
 		if (feedEnabled) {
-			secondary.buttonView.whileHeld(feederCommand);
+			secondary.buttonPovRight.whileHeld(feederCommand);
 		}
 		if (colorSpinnerEnabled) {
 			secondary.buttonX.whenPressed(colorTargetCommand);
