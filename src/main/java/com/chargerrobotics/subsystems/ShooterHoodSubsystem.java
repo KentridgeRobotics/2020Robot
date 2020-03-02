@@ -70,7 +70,10 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     public void setHoodSpeed(double speed) {
         shooterHood.set(speed);
     }
-	
+
+    public boolean isLimitSwitchTriggered() {
+        return !shooterLimitSwitch.get();
+    }
 
     public void setRunning(boolean isRunning) {
         this.isRunning = isRunning;
@@ -90,7 +93,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         super.periodic();
         SmartDashboard.putNumber("hoodCurrPos", shooterHood.getSensorCollection().getQuadraturePosition());
         SmartDashboard.putNumber("hood Current", shooterHood.getSupplyCurrent());
-        SmartDashboard.putBoolean("HoodTriggered?", shooterLimitSwitch.get());
+        SmartDashboard.putBoolean("HoodTriggered?", isLimitSwitchTriggered());
     }
 
 }

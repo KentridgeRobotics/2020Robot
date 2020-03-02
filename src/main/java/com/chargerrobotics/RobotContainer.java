@@ -12,6 +12,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import com.chargerrobotics.commands.shooter.HoodCalibrateCommand;
 import com.chargerrobotics.commands.shooter.HoodManualCommand;
 import com.chargerrobotics.commands.shooter.HoodOffCommand;
 import com.chargerrobotics.commands.shooter.HoodOnCommand;
@@ -93,6 +94,7 @@ public class RobotContainer {
 	//private HoodOffCommand hoodOffCommand;
 	private HoodManualCommand hoodManualUpCommand;
 	private HoodManualCommand hoodManualDownCommand;
+	private HoodCalibrateCommand hoodCalibrateCommand;
 	private KickerCommand kickerCommand;
 
 	// Chomper
@@ -166,6 +168,7 @@ public class RobotContainer {
 			hoodManualDownCommand = new HoodManualCommand(shooterHoodSubsystem, false);
 			//hoodOnCommand = new HoodOnCommand(shooterHoodSubsystem);
 			//hoodOffCommand = new HoodOffCommand(shooterHoodSubsystem);
+			hoodCalibrateCommand = new HoodCalibrateCommand(shooterHoodSubsystem);
 		}
 		if(chomperEnabled) {
 			chomperSubsystem = ChomperSubsystem.getInstance();
@@ -227,6 +230,7 @@ public class RobotContainer {
 		if (shooterHoodEnabled) {
 			//secondary.buttonY.whenPressed(hoodOnCommand);
 			//secondary.buttonBumperRight.whenPressed(hoodOffCommand);
+			secondary.buttonMenu.whenPressed(hoodCalibrateCommand);
 			secondary.buttonPovUp.whileHeld(hoodManualUpCommand);
 			secondary.buttonPovDown.whileHeld(hoodManualDownCommand);
 		}
