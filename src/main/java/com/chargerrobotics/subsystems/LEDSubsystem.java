@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LEDSubsystem extends SubsystemBase {
 	private static LEDSubsystem instance;
 
-	private static final int LED_COUNT = 16;
-	private static final int INTERVAL = 5;
+	private static final int LED_COUNT = 24;
+	private static final int INTERVAL = 3;
 	private static final int WAIT_INTERVAL = 10;
 
 	private LEDMode mode;
