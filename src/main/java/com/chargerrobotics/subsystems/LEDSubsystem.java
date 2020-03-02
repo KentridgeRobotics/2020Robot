@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LEDSubsystem extends SubsystemBase {
 	private static LEDSubsystem instance;
 
-	private static final int LED_COUNT = 8;
+	private static final int LED_COUNT = 16;
 	private static final int INTERVAL = 5;
 	private static final int WAIT_INTERVAL = 10;
 
@@ -45,7 +45,7 @@ public class LEDSubsystem extends SubsystemBase {
 			setAllRGB(0, 0, 0);
 			break;
 		case TELEOP:
-			setAllRGB(0, 155, 255);
+			setAllHSV(100, 255, 15);
 			break;
 		case AUTONOMOUS:
 			counter = -WAIT_INTERVAL;
@@ -57,11 +57,25 @@ public class LEDSubsystem extends SubsystemBase {
 		leds.setData(buffer);
 	}
 
+	  /**
+	   * Sets all leds in the buffer.
+	   *
+	   * @param r     the r value [0-255]
+	   * @param g     the g value [0-255]
+	   * @param b     the b value [0-255]
+	   */
 	private void setAllRGB(int r, int g, int b) {
 		for (int i = 0; i < LED_COUNT; i++)
 			buffer.setRGB(i, r, g, b);
 	}
 
+	  /**
+	   * Sets all leds in the buffer.
+	   *
+	   * @param h     the h value [0-180]
+	   * @param s     the s value [0-255]
+	   * @param v     the v value [0-255]
+	   */
 	private void setAllHSV(int h, int s, int v) {
 		if (s == 0) {
 			for (int i = 0; i < LED_COUNT; i++)
@@ -104,6 +118,11 @@ public class LEDSubsystem extends SubsystemBase {
 		}
 	}
 
+	  /**
+	   * Sets all LEDs in the buffer.
+	   *
+	   * @param color The color of the LED
+	   */
 	private void setAllLED(Color color) {
 		int r = (int) (color.red * 255);
 		int g = (int) (color.green * 255);
@@ -112,6 +131,11 @@ public class LEDSubsystem extends SubsystemBase {
 			buffer.setRGB(i, r, g, b);
 	}
 
+	  /**
+	   * Sets all LEDs in the buffer.
+	   *
+	   * @param color The color of the LED
+	   */
 	private void setAllLED(Color8Bit color) {
 		for (int i = 0; i < LED_COUNT; i++)
 			buffer.setRGB(i, color.red, color.green, color.blue);
