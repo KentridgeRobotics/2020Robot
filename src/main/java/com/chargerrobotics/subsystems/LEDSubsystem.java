@@ -3,6 +3,8 @@ package com.chargerrobotics.subsystems;
 import com.chargerrobotics.Constants;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -45,7 +47,12 @@ public class LEDSubsystem extends SubsystemBase {
 			setAllRGB(0, 0, 0);
 			break;
 		case TELEOP:
-			setAllHSV(100, 255, 15);
+			if (DriverStation.getInstance().getAlliance() == Alliance.Blue)
+				setAllHSV(100, 255, 15);
+			else if (DriverStation.getInstance().getAlliance() == Alliance.Red)
+				setAllHSV(0, 255, 15);
+			else
+				setAllHSV(55, 255, 15);
 			break;
 		case AUTONOMOUS:
 			counter = -WAIT_INTERVAL;
