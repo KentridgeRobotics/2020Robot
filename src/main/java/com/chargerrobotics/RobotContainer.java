@@ -38,11 +38,13 @@ import com.chargerrobotics.commands.drive.BoostCommand;
 import com.chargerrobotics.commands.drive.BrakeCommand;
 import com.chargerrobotics.commands.drive.ManualDriveCommand;
 import com.chargerrobotics.commands.drive.SlowCommand;
+import com.chargerrobotics.commands.feeder.FeederCommand;
 import com.chargerrobotics.commands.groups.VisionDrive;
 import com.chargerrobotics.subsystems.ChomperSubsystem;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 import com.chargerrobotics.subsystems.DriveSubsystem;
+import com.chargerrobotics.subsystems.FeedSubsystem;
 import com.chargerrobotics.subsystems.KickerSubsystem;
 import com.chargerrobotics.subsystems.LEDSubsystem;
 import com.chargerrobotics.subsystems.LimelightSubsystem;
@@ -64,6 +66,7 @@ public class RobotContainer {
 	private static final boolean limelightEnabled = true;
 	private static final boolean driveEnabled = true;
 	private static final boolean chomperEnabled = false;
+	private static final boolean feedEnabled = false;
 	private static final boolean shooterEnabled = true;
 	private static final boolean shooterHoodEnabled = true;
 	private static final boolean colorSpinnerEnabled = false;
@@ -105,6 +108,10 @@ public class RobotContainer {
 	private ChomperPIDCommand chomperDownCommand; 
 	private chomperUpDownCommand manualchomperUpCommand;
 	private chomperUpDownCommand manualchomperDownCommand;
+
+	//Feeder
+	private FeedSubsystem feedSubsystem;
+	private FeederCommand feederCommand;
 
 	// Color Spinner
 	private ColorSpinnerSubsystem colorSpinnerSubsystem;
@@ -179,6 +186,10 @@ public class RobotContainer {
 			manualchomperUpCommand = new chomperUpDownCommand(true);
 			manualchomperDownCommand = new chomperUpDownCommand(false);
 		}
+		if(feedEnabled) {
+			feedSubsystem = FeedSubsystem.getInstance();
+			feederCommand = new FeederCommand(feedSubsystem);
+		}
 		if (colorSpinnerEnabled) {
 			colorSpinnerSubsystem = ColorSpinnerSubsystem.getInstance();
 			colorSpinnerCommand = new ColorSpinnerCommand(colorSpinnerSubsystem);
@@ -241,6 +252,9 @@ public class RobotContainer {
 			secondary.buttonX.whenPressed(chomperDownCommand);
 			secondary.buttonA.whileHeld(manualchomperDownCommand);
 			secondary.buttonB.whileHeld(manualchomperUpCommand);
+		}
+		if (feedEnabled) {
+			secondary.buttonView.whileHeld(feederCommand);
 		}
 		if (colorSpinnerEnabled) {
 			secondary.buttonX.whenPressed(colorTargetCommand);
