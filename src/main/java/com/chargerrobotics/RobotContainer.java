@@ -63,10 +63,10 @@ import com.chargerrobotics.utils.XboxController;
  */
 public class RobotContainer {
 
-	private static final boolean limelightEnabled = false;
-	private static final boolean driveEnabled = false;
-	private static final boolean chomperEnabled = false;
-	private static final boolean feedEnabled = false;
+	private static final boolean limelightEnabled = true;
+	private static final boolean driveEnabled = true;
+	private static final boolean chomperEnabled = true;
+	private static final boolean feedEnabled = true;
 	private static final boolean shooterEnabled = true;
 	private static final boolean shooterHoodEnabled = true;
 	private static final boolean colorSpinnerEnabled = false;
@@ -128,7 +128,7 @@ public class RobotContainer {
 	public ScaleSerial scaleSensor = new ScaleSerial();
 	public GyroscopeSerial gyroscope = new GyroscopeSerial();
 	public BallSensorSerial ballSensor = new BallSensorSerial();
-	
+
 	// LEDs
 	public LEDSubsystem leds = new LEDSubsystem();
 

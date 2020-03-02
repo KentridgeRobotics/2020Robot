@@ -36,7 +36,14 @@ public class AutoDriveLinear extends CommandBase {
   private static final String KEY = "LinearAutoDistance";
   private PIDController rotationPid;
   private PIDController translationPid;
-
+  private double linRotP = SmartDashboard.getNumber("linRotP", 0.0);
+  private double linRotI = SmartDashboard.getNumber("linRotI", 0.0);
+  private double linRotD = SmartDashboard.getNumber("linRotD", 0.0);
+  private double linRotTolerance = SmartDashboard.getNumber("linRotTolerance", 0.0);
+  private double linTransP = SmartDashboard.getNumber("linTransP", 0.0);
+  private double linTransI = SmartDashboard.getNumber("linTransI", 0.0);
+  private double linTransD = SmartDashboard.getNumber("linTransD", 0.0);
+  private double linTransTolerance = SmartDashboard.getNumber("linTransTolerance", 0.0);
   /**
    * Creates a new AutoDriveLinear.
    */
@@ -45,15 +52,16 @@ public class AutoDriveLinear extends CommandBase {
     this.gyro = gyro;
     addRequirements(drive);
     SmartDashboard.putNumber(KEY, 0.0);
-    SmartDashboard.putNumber("linRotP", 0.0);
-    SmartDashboard.putNumber("linRotI", 0.0); 
-    SmartDashboard.putNumber("linRotD", 0.0);
-    SmartDashboard.putNumber("linRotTolerance", 1.0);
-    SmartDashboard.putNumber("linTransP", 0.0);
-    SmartDashboard.putNumber("linTransI", 0.0);
-    SmartDashboard.putNumber("linTransD", 0.0);
-    SmartDashboard.putNumber("linTransTolerance", 1.0);
+    SmartDashboard.putNumber("linRotP", linRotP);
+    SmartDashboard.putNumber("linRotI", linRotI); 
+    SmartDashboard.putNumber("linRotD",linRotD);
+    SmartDashboard.putNumber("linRotTolerance", linRotTolerance);
+    SmartDashboard.putNumber("linTransP", linTransP);
+    SmartDashboard.putNumber("linTransI", linTransI);
+    SmartDashboard.putNumber("linTransD", linTransD);
+    SmartDashboard.putNumber("linTransTolerance", linTransTolerance);
     this.rotationPid = new PIDController(0.0, 0.0, 0.0);
+    this.rotationPid.enableContinuousInput(0.0, 360.0);
     this.translationPid = new PIDController(0.0, 0.0, 0.0);
     
     // Use addRequirements() here to declare subsystem dependencies.
@@ -83,6 +91,7 @@ public class AutoDriveLinear extends CommandBase {
     translationPid.setSetpoint(desiredDistance);
     translationPid.setTolerance(SmartDashboard.getNumber("linTransTolerance", 1.0));
     odometry = new DifferentialDriveOdometry(getGyroHeading(), new Pose2d(0.0, 0.0, new Rotation2d(0.0)));
+    logger.info("Going the distance: "+desiredDistance);
   }
 
   private double getDistanceLeft() {
