@@ -51,8 +51,6 @@ private Object getController;
     SmartDashboard.putBoolean("ChomperPID running", false);
   
     this.getController().setTolerance(10,5);
-
-
   }
 
   // Returns true when the command should end.
