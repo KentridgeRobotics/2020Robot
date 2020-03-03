@@ -3,6 +3,8 @@ package com.chargerrobotics.subsystems;
 import com.chargerrobotics.Constants;
 import com.chargerrobotics.utils.NetworkMapping;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -22,8 +24,6 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     public final NetworkMapping<Double> kD = new NetworkMapping<Double>("hood_d", Constants.hoodD, val -> {setPIDD(val);});
     public final NetworkMapping<Double> kSetPoint = new NetworkMapping<Double>("hood_pos_setpoint", 0.0, val -> {setPIDTarget(val);});
 
-    private boolean isRunning;
-
     public static ShooterHoodSubsystem getInstance() {
         if (instance == null) {
             instance = new ShooterHoodSubsystem();
@@ -38,13 +38,13 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         shooterHood.setNeutralMode(NeutralMode.Brake);
         shooterHood.configPeakCurrentLimit(40);
         shooterHood.configContinuousCurrentLimit(30);
+        //shooterHood.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
         
 		setPIDP(kP.getValue());
 		setPIDI(kI.getValue());
         setPIDD(kD.getValue());
 
-        shooterLimitSwitch = new DigitalInput(1);
-        
+        shooterLimitSwitch = new DigitalInput(Constants.hoodLimitSwitch);
     }
 
     public void resetShooterEncoder() {
@@ -66,35 +66,26 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 	private void setPIDTarget(double setPoint) {
 		shooterHood.set(ControlMode.Position, setPoint);
     }
+	
+	public void setPosition(double setPoint) {
+		kSetPoint.setValue(setPoint);
+		setPIDTarget(setPoint);
+	}
     
     public void setHoodSpeed(double speed) {
         shooterHood.set(speed);
     }
 
     public boolean isLimitSwitchTriggered() {
+    	//return !shooterHood.getSensorCollection().isFwdLimitSwitchClosed();
         return !shooterLimitSwitch.get();
-    }
-
-    public void setRunning(boolean isRunning) {
-        this.isRunning = isRunning;
-        if (isRunning) {
-            setPIDTarget(kSetPoint.getValue());
-            setPIDP(kP.getValue());
-            setPIDI(kI.getValue());
-            setPIDD(kD.getValue());
-    
-        }
-        else
-            shooterHood.set(0.0);
     }
 
     @Override
     public void periodic() {
         super.periodic();
-        if (shooterHood.get() > 0 && isLimitSwitchTriggered()) {
-            shooterHood.set(0);
+        if (isLimitSwitchTriggered())
             resetShooterEncoder();
-        }
         SmartDashboard.putNumber("hoodCurrPos", shooterHood.getSensorCollection().getQuadraturePosition());
         SmartDashboard.putNumber("hood Current", shooterHood.getSupplyCurrent());
         SmartDashboard.putBoolean("HoodTriggered?", isLimitSwitchTriggered());
