@@ -19,16 +19,17 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class ChomperPIDCommand extends PIDCommand {
+public class ChomperUpPIDCommand extends PIDCommand {
   private static final Logger logger = LoggerFactory.getLogger(ChomperPIDCommand.class);
   private static final double kP = SmartDashboard.getNumber("ChomperP", 0.01);
   private static final double kI = SmartDashboard.getNumber("ChomperI", 0.0);
   private static final double kD = SmartDashboard.getNumber("ChomperD", 0.0);
+private Object getController;
 
   /**
    * Creates a new ChomperPIDCommand.
    */
-  public ChomperPIDCommand(final boolean goingUp, final ChomperSubsystem chomperSubsystem) {
+  public ChomperUpPIDCommand(final boolean goingUp, final ChomperSubsystem chomperSubsystem) {
     super(
         // The controller that the command will use
         new PIDController(kP, kI, kD),
@@ -48,8 +49,8 @@ public class ChomperPIDCommand extends PIDCommand {
     SmartDashboard.putNumber("ChomperI",kI);
     SmartDashboard.putNumber("ChomperD", kD);
     SmartDashboard.putBoolean("ChomperPID running", false);
-
-
+  
+    this.getController().setTolerance(10,5);
   }
 
   // Returns true when the command should end.

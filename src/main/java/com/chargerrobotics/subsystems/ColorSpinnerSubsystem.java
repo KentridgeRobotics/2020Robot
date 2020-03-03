@@ -44,5 +44,6 @@ public class ColorSpinnerSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
+		
 	}
 }
