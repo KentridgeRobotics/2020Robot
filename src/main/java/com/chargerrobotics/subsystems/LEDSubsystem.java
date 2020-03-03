@@ -17,6 +17,8 @@ public class LEDSubsystem extends SubsystemBase {
 	private static final int LED_COUNT = 24;
 	private static final int INTERVAL = 3;
 	private static final int WAIT_INTERVAL = 10;
+	private static final int AUTO_RED_VALUE = 255;
+	private static final int AUTO_DIM_RED_VALUE = 40;
 
 	private LEDMode mode;
 	private AddressableLED leds;
@@ -56,7 +58,7 @@ public class LEDSubsystem extends SubsystemBase {
 			break;
 		case AUTONOMOUS:
 			counter = -WAIT_INTERVAL;
-			buffer.setRGB(0, 255, 0, 0);
+			buffer.setRGB(0, AUTO_RED_VALUE, 0, 0);
 			for (int i = 1; i < LED_COUNT; i++)
 				buffer.setRGB(i, 0, 0, 0);
 			break;
@@ -166,8 +168,8 @@ public class LEDSubsystem extends SubsystemBase {
 				if (counter < INTERVAL * LED_COUNT) {
 					if ((counter / INTERVAL) - 2 >= 0)
 						buffer.setRGB((counter / INTERVAL) - 2, 0, 0, 0);
-					buffer.setRGB((counter / INTERVAL) - 1, 40, 0, 0);
-					buffer.setRGB(counter / INTERVAL, 255, 0, 0);
+					buffer.setRGB((counter / INTERVAL) - 1, AUTO_DIM_RED_VALUE, 0, 0);
+					buffer.setRGB(counter / INTERVAL, AUTO_RED_VALUE, 0, 0);
 				} else if (counter == INTERVAL * LED_COUNT) {
 					buffer.setRGB(LED_COUNT - 2, 0, 0, 0);
 				} else if (counter >= (LED_COUNT * INTERVAL * 2) + INTERVAL + WAIT_INTERVAL) {
@@ -177,8 +179,8 @@ public class LEDSubsystem extends SubsystemBase {
 				} else if (counter > (INTERVAL * LED_COUNT) + WAIT_INTERVAL) {
 					if ((LED_COUNT * 2 - 1) - ((counter - WAIT_INTERVAL) / INTERVAL) + 2 < LED_COUNT)
 						buffer.setRGB((LED_COUNT * 2 - 1) - ((counter - WAIT_INTERVAL) / INTERVAL) + 2, 0, 0, 0);
-					buffer.setRGB((LED_COUNT * 2 - 1) - ((counter - WAIT_INTERVAL) / INTERVAL) + 1, 40, 0, 0);
-					buffer.setRGB((LED_COUNT * 2 - 1) - ((counter - WAIT_INTERVAL) / INTERVAL), 255, 0, 0);
+					buffer.setRGB((LED_COUNT * 2 - 1) - ((counter - WAIT_INTERVAL) / INTERVAL) + 1, AUTO_DIM_RED_VALUE, 0, 0);
+					buffer.setRGB((LED_COUNT * 2 - 1) - ((counter - WAIT_INTERVAL) / INTERVAL), AUTO_RED_VALUE, 0, 0);
 				}
 			}
 			leds.setData(buffer);
