@@ -47,6 +47,7 @@ public final class Constants {
 
 	//PWM IDs
 	public static final int colorSpinnerLifter = 9;
+	public static final int leds = 1;
 
 	//Digital In/Out Ports
 	public static final int chomperLimitSwitch = 0;
@@ -85,13 +86,13 @@ public final class Constants {
 
 	// Limelight distance calculation constants
 	// Blitzen config:
-	public static final double targetHeight = 94.0; // inches
-	public static final double cameraHeight = 24.0; // inches
-	public static final double cameraAngle = 30.0; // degrees
+	//public static final double targetHeight = 94.0; // inches
+	//public static final double cameraHeight = 24.0; // inches
+	//public static final double cameraAngle = 30.0; // degrees
 
 	// 2020 bot config:
-	// public static final double targetHeight = 0.0; // inches
-	// public static final double cameraHeight = 0.0; // inches
-	// public static final double cameraAngle = 0.0; // degrees
+	public static final double targetHeight = 94.0; // inches
+	public static final double cameraHeight = 24.0; // inches
+	public static final double cameraAngle = 33.0; // degrees
 	public static final String comPortsFileName = "com.yml";
 }

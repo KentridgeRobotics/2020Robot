@@ -8,6 +8,7 @@
 package com.chargerrobotics.subsystems;
 
 import com.chargerrobotics.Constants;
+import com.chargerrobotics.utils.NetworkMapping;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,10 +24,12 @@ public class KickerSubsystem extends SubsystemBase {
   public double speed;
   private WPI_TalonSRX kickerMotor;
 
+  public final NetworkMapping<Double> kP = new NetworkMapping<Double>("kicker_speed", 1.0, val -> {speed = val;});
+
   public static KickerSubsystem getInstance() {
     if (instance == null) {
       instance = new KickerSubsystem();
-      SmartDashboard.putNumber("KickerMotor", 0.1);
+      //SmartDashboard.putNumber("KickerMotor", 0.1);
       CommandScheduler.getInstance().registerSubsystem(instance);
     }
     return instance;
@@ -38,8 +41,8 @@ public class KickerSubsystem extends SubsystemBase {
 
   public void setRunning(boolean isRunning) {
     this.isRunning = isRunning;
-    speed = SmartDashboard.getNumber("KickerMotor", 0.0);
-    kickerMotor.set(this.isRunning ? speed : 0.0);
+    //speed = SmartDashboard.getNumber("KickerMotor", 0.0);
+    kickerMotor.set(this.isRunning ? 1.0 : 0.0);
   }
 
   @Override

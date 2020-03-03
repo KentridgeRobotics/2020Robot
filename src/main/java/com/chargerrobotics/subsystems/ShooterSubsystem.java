@@ -87,8 +87,8 @@ public class ShooterSubsystem extends SubsystemBase {
 	}
 
 	private void setPIDTarget(double setPoint) {
-		shooterPIDController1.setReference(setPoint, ControlType.kVelocity);
-		shooterPIDController2.setReference(setPoint, ControlType.kVelocity);
+		shooterPIDController1.setReference(-setPoint, ControlType.kVelocity);
+		shooterPIDController2.setReference(-setPoint, ControlType.kVelocity);
 	}
 
 	public void setSetPoint(double val) {

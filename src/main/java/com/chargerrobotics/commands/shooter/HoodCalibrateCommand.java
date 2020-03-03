@@ -1,25 +1,30 @@
 package com.chargerrobotics.commands.shooter;
 
 import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class HoodOffCommand extends CommandBase {
+public class HoodCalibrateCommand extends CommandBase {
     private final ShooterHoodSubsystem shooterHoodSubsystem;
 
-    public HoodOffCommand(ShooterHoodSubsystem shooterHoodSubsystem) {
+    public HoodCalibrateCommand(ShooterHoodSubsystem shooterHoodSubsystem) {
         this.shooterHoodSubsystem = shooterHoodSubsystem;
     }
 
     @Override
     public void initialize() {
-        shooterHoodSubsystem.setRunning(false);
-        SmartDashboard.putString("Hey", "HoodCommand is off");
+        shooterHoodSubsystem.setHoodSpeed(0.25);
     }
 
     @Override
+    public void execute() {
+    }
+    
+    @Override
     public boolean isFinished() {
-        return true;
+        return shooterHoodSubsystem.isLimitSwitchTriggered();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
     }
 }
