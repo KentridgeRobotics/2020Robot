@@ -51,7 +51,7 @@ private Object getController;
     SmartDashboard.putBoolean("ChomperPID running", false);
    Object acceleration;
 Object velocity;
-this.getController.(setTolerance(acceleration,velocity));
+this.getController.(setTolerance(acceleration,velocity);
 
 
   }
