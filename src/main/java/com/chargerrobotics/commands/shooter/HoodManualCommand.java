@@ -15,7 +15,7 @@ public class HoodManualCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        shooterHoodSubsystem.setHoodSpeed(isGoingUp ? 0.25: -0.25);
+        shooterHoodSubsystem.setHoodSpeed(isGoingUp ? 0.25 : -0.25);
     }
 
     @Override

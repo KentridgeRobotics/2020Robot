@@ -60,11 +60,11 @@ import com.chargerrobotics.utils.XboxController;
  */
 public class RobotContainer {
 
-	private static final boolean limelightEnabled = true;
-	private static final boolean driveEnabled = true;
+	private static final boolean limelightEnabled = false;
+	private static final boolean driveEnabled = false;
 	private static final boolean chomperEnabled = true;
-	private static final boolean feedEnabled = true;
-	private static final boolean shooterEnabled = true;
+	private static final boolean feedEnabled = false;
+	private static final boolean shooterEnabled = false;
 	private static final boolean shooterHoodEnabled = true;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
@@ -230,7 +230,7 @@ public class RobotContainer {
 			secondary.buttonStickRight.whileHeld(kickerCommand);
 		}
 		if (shooterHoodEnabled) {
-			//secondary.buttonMenu.whenPressed(hoodCalibrateCommand);
+			secondary.buttonMenu.whenPressed(hoodCalibrateCommand);
 			secondary.buttonPovUp.whileHeld(hoodManualUpCommand);
 			secondary.buttonPovDown.whileHeld(hoodManualDownCommand);
 		}

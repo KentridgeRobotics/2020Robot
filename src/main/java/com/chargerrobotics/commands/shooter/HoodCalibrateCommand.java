@@ -26,5 +26,6 @@ public class HoodCalibrateCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        shooterHoodSubsystem.resetShooterEncoder();
     }
 }
