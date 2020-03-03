@@ -29,7 +29,7 @@ public class ColorSpinnerDeploy extends CommandBase {
   @Override
   public void initialize() {
     logger.info("initialize");
-    ColorSpinnerSubsystem.getInstance().setAngle(270.0);
+    //ColorSpinnerSubsystem.getInstance().setAngle(270.0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
