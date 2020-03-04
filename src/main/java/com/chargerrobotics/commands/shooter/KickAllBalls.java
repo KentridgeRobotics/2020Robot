@@ -5,17 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.chargerrobotics.commands.autonomous;
+package com.chargerrobotics.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class AutoKickAllBalls extends CommandBase {
+public class KickAllBalls extends CommandBase {
   /**
-   * Creates a new AutoKickAllBalls.
+   * Creates a new KickAllBalls.
    * 
-   * Kicks all balls in magazine until empty.
+   * Kicks all balls in magazine until empty.  Assumes that robot will be in the same
+   * position and in alignment with the target from first ball to last ball.
+   * 
+   * Made this a seperate command because of the interplay with the ball sensors
+   * and that you don't want the shooter to stop/start between each ball.  Also 
+   * consider that there may be 1-5 balls in the magazine.  We shouldn't assume
+   * there will only be 5 because of the limited number of balls on the field.
+   * 
+   * Also consider the feeder needs to be included in this to keep the balls moving.
    */
-  public AutoKickAllBalls() {
+  public KickAllBalls() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
