@@ -27,6 +27,8 @@ import com.chargerrobotics.commands.chomper.ChomperCalibrateCommand;
 import com.chargerrobotics.commands.chomper.ChomperIntakeCommand;
 import com.chargerrobotics.commands.chomper.ChomperPIDCommand;
 import com.chargerrobotics.commands.chomper.ChomperUpDownCommand;
+import com.chargerrobotics.commands.chomper.ChomperDownPIDCommand;
+import com.chargerrobotics.commands.chomper.ChomperUpPIDCommand;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -101,8 +103,8 @@ public class RobotContainer {
 	private ChomperSubsystem chomperSubsystem;
 	private ChomperCalibrateCommand chomperCalibrateCommand;
 	private ChomperIntakeCommand chomperIntakeCommand;
-	private ChomperPIDCommand chomperUpCommand; 
-	private ChomperPIDCommand chomperDownCommand; 
+	private ChomperUpPIDCommand chomperUpCommand;
+	private ChomperDownPIDCommand chomperDownCommand;
 	private ChomperUpDownCommand manualchomperUpCommand;
 	private ChomperUpDownCommand manualchomperDownCommand;
 
@@ -176,8 +178,8 @@ public class RobotContainer {
 			chomperSubsystem = ChomperSubsystem.getInstance();
 			chomperCalibrateCommand = new ChomperCalibrateCommand(chomperSubsystem);
 			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem, feedSubsystem);
-			chomperUpCommand = new ChomperPIDCommand(true, chomperSubsystem);
-			chomperDownCommand = new ChomperPIDCommand(false, chomperSubsystem);
+			chomperUpCommand = new ChomperUpPIDCommand(true, chomperSubsystem);
+			chomperDownCommand = new ChomperDownPIDCommand(false, chomperSubsystem);
 			manualchomperUpCommand = new ChomperUpDownCommand(true);
 			manualchomperDownCommand = new ChomperUpDownCommand(false);
 		}

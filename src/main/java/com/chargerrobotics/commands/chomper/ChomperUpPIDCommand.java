@@ -24,7 +24,7 @@ public class ChomperUpPIDCommand extends PIDCommand {
   private static final double kP = SmartDashboard.getNumber("ChomperP", 0.01);
   private static final double kI = SmartDashboard.getNumber("ChomperI", 0.0);
   private static final double kD = SmartDashboard.getNumber("ChomperD", 0.0);
-private Object getController;
+
 
   /**
    * Creates a new ChomperPIDCommand.
