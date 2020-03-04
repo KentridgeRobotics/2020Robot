@@ -164,7 +164,7 @@ public class RobotContainer {
 			shooterOnCommand = new ShooterOnCommand(shooterSubsystem);
 			shooterOffCommand = new ShooterOffCommand(shooterSubsystem);
 			kickerSubsystem = KickerSubsystem.getInstance();
-			kickerCommand = new KickerCommand(kickerSubsystem);
+			kickerCommand = new KickerCommand(kickerSubsystem, feedSubsystem);
 		}
 		if (shooterHoodEnabled) {
 			shooterHoodSubsystem = ShooterHoodSubsystem.getInstance();
@@ -175,7 +175,7 @@ public class RobotContainer {
 		if(chomperEnabled) {
 			chomperSubsystem = ChomperSubsystem.getInstance();
 			chomperCalibrateCommand = new ChomperCalibrateCommand(chomperSubsystem);
-			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem);
+			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem, feedSubsystem);
 			chomperUpCommand = new ChomperPIDCommand(true, chomperSubsystem);
 			chomperDownCommand = new ChomperPIDCommand(false, chomperSubsystem);
 			manualchomperUpCommand = new ChomperUpDownCommand(true);
