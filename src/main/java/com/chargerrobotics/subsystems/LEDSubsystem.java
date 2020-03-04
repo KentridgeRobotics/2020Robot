@@ -23,8 +23,10 @@ public class LEDSubsystem extends SubsystemBase {
 	private LEDMode mode;
 	private AddressableLED leds;
 	private AddressableLEDBuffer buffer;
+	private LED_STATE led_state; 
+	private int led_state_count; 
 
-	private int counter = -WAIT_INTERVAL;
+	private  int counter = WAIT_INTERVAL;
 
 	public static LEDSubsystem getInstance() {
 		if (instance == null) {
@@ -40,6 +42,8 @@ public class LEDSubsystem extends SubsystemBase {
 		leds.setLength(LED_COUNT);
 		setMode(LEDMode.DISABLED);
 		leds.start();
+		led_state = LED_STATE.LED_RIGHT; 
+		led_state_count = 0; 
 	}
 
 	public void setMode(LEDMode mode) {
@@ -163,29 +167,56 @@ public class LEDSubsystem extends SubsystemBase {
 		case TELEOP:
 			return;
 		case AUTONOMOUS:
-			counter++;
-			if (counter % INTERVAL == 0 && counter > 0) {
-				if (counter < INTERVAL * LED_COUNT) {
-					if ((counter / INTERVAL) - 2 >= 0)
-						buffer.setRGB((counter / INTERVAL) - 2, 0, 0, 0);
-					buffer.setRGB((counter / INTERVAL) - 1, AUTO_DIM_RED_VALUE, 0, 0);
-					buffer.setRGB(counter / INTERVAL, AUTO_RED_VALUE, 0, 0);
-				} else if (counter == INTERVAL * LED_COUNT) {
-					buffer.setRGB(LED_COUNT - 2, 0, 0, 0);
-				} else if (counter >= (LED_COUNT * INTERVAL * 2) + INTERVAL + WAIT_INTERVAL) {
-					counter = -WAIT_INTERVAL;
-				} else if (counter >= (LED_COUNT * INTERVAL * 2) + WAIT_INTERVAL) {
-					buffer.setRGB(1, 0, 0, 0);
-				} else if (counter > (INTERVAL * LED_COUNT) + WAIT_INTERVAL) {
-					if ((LED_COUNT * 2 - 1) - ((counter - WAIT_INTERVAL) / INTERVAL) + 2 < LED_COUNT)
-						buffer.setRGB((LED_COUNT * 2 - 1) - ((counter - WAIT_INTERVAL) / INTERVAL) + 2, 0, 0, 0);
-					buffer.setRGB((LED_COUNT * 2 - 1) - ((counter - WAIT_INTERVAL) / INTERVAL) + 1, AUTO_DIM_RED_VALUE, 0, 0);
-					buffer.setRGB((LED_COUNT * 2 - 1) - ((counter - WAIT_INTERVAL) / INTERVAL), AUTO_RED_VALUE, 0, 0);
+			if (counter % INTERVAL == 0) {
+				switch(led_state){
+					case LED_RIGHT:
+						onLedRight();
+						break;
+					case LED_LEFT:
+						onLedLeft();
+						break;
 				}
 			}
+			counter = (counter + 1) % INTERVAL;
 			leds.setData(buffer);
 			return;
 		}
+	}
+
+	private void clearBuffer(AddressableLEDBuffer buf){
+		for (int i = 0; i < buf.getLength(); i++){
+			buf.setRGB(i, 0, 0, 0);
+		}
+	}
+
+	private void onLedRight(){
+		clearBuffer(buffer);
+
+		buffer.setRGB(led_state_count, AUTO_DIM_RED_VALUE, 0, 0);
+		buffer.setRGB(led_state_count  + 1, AUTO_RED_VALUE, 0, 0);
+
+		led_state_count++;
+		if (led_state_count >= LED_COUNT - 1){
+			led_state_count = 0; 
+			led_state = LED_STATE.LED_LEFT; 
+		}
+	}
+
+	private void onLedLeft(){
+		clearBuffer(buffer); 
+
+		buffer.setRGB(LED_COUNT - led_state_count -1, AUTO_DIM_RED_VALUE, 0, 0);
+		buffer.setRGB(LED_COUNT - led_state_count -2, AUTO_RED_VALUE, 0, 0);
+
+		led_state_count++;
+		if (led_state_count >= LED_COUNT - 1){
+			led_state_count = 0; 
+			led_state = LED_STATE.LED_RIGHT; 
+		}
+	}
+
+	private static enum LED_STATE{
+		LED_LEFT, LED_RIGHT;
 	}
 
 	public static enum LEDMode {
