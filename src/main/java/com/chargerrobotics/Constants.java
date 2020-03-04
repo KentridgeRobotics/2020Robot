@@ -68,6 +68,8 @@ public final class Constants {
 	public static final double shooterVelocityGain = 0.0;
 	public static final double shooterMinOutput = -1.0;
 	public static final double shooterMaxOutput = 1.0;
+	
+	public static final double desiredDistance = 120.0;
 
 	// Shooter Hood Constants
 	public static final int hoodPIDLoopId = 0;
