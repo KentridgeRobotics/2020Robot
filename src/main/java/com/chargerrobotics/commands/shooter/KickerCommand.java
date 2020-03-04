@@ -7,24 +7,28 @@
 
 package com.chargerrobotics.commands.shooter;
 
+import com.chargerrobotics.subsystems.FeedSubsystem;
 import com.chargerrobotics.subsystems.KickerSubsystem;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class KickerCommand extends CommandBase {
+  private final FeedSubsystem feedSubsystem;
   /**
    * Creates a new KickerCommand.
    */
   private final KickerSubsystem kickerSubsystem;
 
-  public KickerCommand(KickerSubsystem kickerSubsystem) {
+  public KickerCommand(KickerSubsystem kickerSubsystem, FeedSubsystem feedSubsystem) {
     this.kickerSubsystem = kickerSubsystem;
+    this.feedSubsystem = feedSubsystem;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    feedSubsystem.setFeedRunning(true);
     SmartDashboard.putNumber("KickerMotor", 0.1);
     kickerSubsystem.setRunning(true);
   }
@@ -38,6 +42,7 @@ public class KickerCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     kickerSubsystem.setRunning(false);
+    feedSubsystem.setFeedRunning(false);
   }
 
   // Returns true when the command should end.
