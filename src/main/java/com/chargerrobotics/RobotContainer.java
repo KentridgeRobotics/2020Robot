@@ -245,8 +245,8 @@ public class RobotContainer {
 		if (chomperEnabled) {
 			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);
 			secondary.buttonBumperRight.whenPressed(chomperCalibrateCommand);
-			//secondary.buttonY.whenPressed(chomperUpCommand);
-			//secondary.buttonX.whenPressed(chomperDownCommand);
+			secondary.buttonView.whenPressed(chomperUpCommand);
+			secondary.buttonMenu.whenPressed(chomperDownCommand);
 			//secondary.buttonA.whileHeld(manualchomperDownCommand);
 			//secondary.buttonB.whileHeld(manualchomperUpCommand);
 			secondary.buttonX.whileHeld(manualchomperDownCommand);

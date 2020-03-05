@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class ChomperUpPIDCommand extends PIDCommand {
   private static final Logger logger = LoggerFactory.getLogger(ChomperPIDCommand.class);
-  private static final double kP = SmartDashboard.getNumber("ChomperP", 0.01);
-  private static final double kI = SmartDashboard.getNumber("ChomperI", 0.0);
+  private static final double kP = SmartDashboard.getNumber("ChomperP",0.0004);
+  private static final double kI = SmartDashboard.getNumber("ChomperI", 0.00014);
   private static final double kD = SmartDashboard.getNumber("ChomperD", 0.0);
 
 
@@ -50,7 +50,7 @@ public class ChomperUpPIDCommand extends PIDCommand {
     SmartDashboard.putNumber("ChomperD", kD);
     SmartDashboard.putBoolean("ChomperPID running", false);
   
-    this.getController().setTolerance(10,5);
+    this.getController().setTolerance(50);
   }
 
   // Returns true when the command should end.
@@ -61,7 +61,7 @@ public class ChomperUpPIDCommand extends PIDCommand {
       return true;
     }
     else {
-      return super.isFinished();
+      return this.getController().atSetpoint();
     }
   }
 
