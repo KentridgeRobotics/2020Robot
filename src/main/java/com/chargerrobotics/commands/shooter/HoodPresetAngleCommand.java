@@ -12,21 +12,20 @@ import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 
 public class HoodPresetAngleCommand extends CommandBase {
   private final ShooterHoodSubsystem shooterHoodSubsystem;
-  private final double hoodSpeed;
   private final double hoodSetPoint;
+  private final double hoodRetractSetPoint;
   /**
    * Creates a new HoodPresetAngleCommand.
    */
-  public HoodPresetAngleCommand(ShooterHoodSubsystem shooterHoodSubsystem, double hoodSpeed, double hoodSetPoint) {
+  public HoodPresetAngleCommand(ShooterHoodSubsystem shooterHoodSubsystem, double hoodSetPoint, double hoodRetractSetPoint) {
     this.shooterHoodSubsystem = shooterHoodSubsystem;
-    this.hoodSpeed = hoodSpeed;
     this.hoodSetPoint = hoodSetPoint;
+    this.hoodRetractSetPoint = hoodRetractSetPoint;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterHoodSubsystem.setHoodSpeed(hoodSpeed);
     shooterHoodSubsystem.setPosition(hoodSetPoint);
   }
 
@@ -38,8 +37,7 @@ public class HoodPresetAngleCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterHoodSubsystem.setHoodSpeed(hoodSpeed);
-    shooterHoodSubsystem.setPosition(0);
+    shooterHoodSubsystem.setPosition(hoodRetractSetPoint);
   }
 
   // Returns true when the command should end.
