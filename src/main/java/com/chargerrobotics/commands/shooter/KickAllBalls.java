@@ -7,30 +7,29 @@
 
 package com.chargerrobotics.commands.shooter;
 
-import com.chargerrobotics.subsystems.FeedSubsystem;
-import com.chargerrobotics.subsystems.KickerSubsystem;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class KickerCommand extends CommandBase {
-  private final FeedSubsystem feedSubsystem;
+public class KickAllBalls extends CommandBase {
   /**
-   * Creates a new KickerCommand.
+   * Creates a new KickAllBalls.
+   * 
+   * Kicks all balls in magazine until empty.  Assumes that robot will be in the same
+   * position and in alignment with the target from first ball to last ball.
+   * 
+   * Made this a seperate command because of the interplay with the ball sensors
+   * and that you don't want the shooter to stop/start between each ball.  Also 
+   * consider that there may be 1-5 balls in the magazine.  We shouldn't assume
+   * there will only be 5 because of the limited number of balls on the field.
+   * 
+   * Also consider the feeder needs to be included in this to keep the balls moving.
    */
-  private final KickerSubsystem kickerSubsystem;
-
-  public KickerCommand(KickerSubsystem kickerSubsystem, FeedSubsystem feedSubsystem) {
-    this.kickerSubsystem = kickerSubsystem;
-    this.feedSubsystem = feedSubsystem;
+  public KickAllBalls() {
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    feedSubsystem.setFeedRunning(true);
-    SmartDashboard.putNumber("KickerMotor", 0.1);
-    kickerSubsystem.setRunning(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,8 +40,6 @@ public class KickerCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    kickerSubsystem.setRunning(false);
-    feedSubsystem.setFeedRunning(false);
   }
 
   // Returns true when the command should end.

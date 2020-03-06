@@ -30,6 +30,7 @@ public class ColorSpinnerSubsystem extends SubsystemBase {
 
 	public ColorSpinnerSubsystem() {
 		spinnerMotor = new WPI_TalonSRX(Constants.colorSpinner);
+		spinnerMotor.setSafetyEnabled(false);
 		lifter = new REVSmartServo(Constants.colorSpinnerLifter, true);
 	}
 	
@@ -44,5 +45,6 @@ public class ColorSpinnerSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
+		
 	}
 }
