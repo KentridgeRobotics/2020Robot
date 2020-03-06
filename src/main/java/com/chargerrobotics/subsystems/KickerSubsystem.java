@@ -37,6 +37,7 @@ public class KickerSubsystem extends SubsystemBase {
 
   public KickerSubsystem() {
     kickerMotor = new WPI_TalonSRX(Constants.kicker);
+    kickerMotor.setSafetyEnabled(false);
   }
 
   public void setRunning(boolean isRunning) {

@@ -34,6 +34,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
     public ShooterHoodSubsystem() {
         shooterHood = new WPI_TalonSRX(Constants.shooterHood);
+        shooterHood.setSafetyEnabled(false);
         shooterHood.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder, Constants.hoodPIDLoopId, Constants.hoodTimeOutMs);
         shooterHood.setNeutralMode(NeutralMode.Brake);
         shooterHood.configPeakCurrentLimit(40);
