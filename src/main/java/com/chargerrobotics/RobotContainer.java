@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import com.chargerrobotics.commands.shooter.HoodCalibrateCommand;
 import com.chargerrobotics.commands.shooter.HoodManualCommand;
 import com.chargerrobotics.commands.shooter.HoodPresetAngleCommand;
+import com.chargerrobotics.commands.shooter.HoodRetractCommand;
 import com.chargerrobotics.commands.shooter.KickerCommand;
 import com.chargerrobotics.commands.shooter.ShooterOffCommand;
 import com.chargerrobotics.commands.shooter.ShooterOnCommand;
@@ -99,6 +100,7 @@ public class RobotContainer {
 	private HoodManualCommand hoodManualDownCommand;
 	private HoodCalibrateCommand hoodCalibrateCommand;
 	private HoodPresetAngleCommand hoodPresetAngleCommand;
+	private HoodRetractCommand hoodRetractCommand;
 	private KickerCommand kickerCommand;
 
 	// Chomper
@@ -175,7 +177,8 @@ public class RobotContainer {
 			hoodManualUpCommand = new HoodManualCommand(shooterHoodSubsystem, true);
 			hoodManualDownCommand = new HoodManualCommand(shooterHoodSubsystem, false);
 			hoodCalibrateCommand = new HoodCalibrateCommand(shooterHoodSubsystem);
-			hoodPresetAngleCommand = new HoodPresetAngleCommand(shooterHoodSubsystem, Constants.hoodPresetAngle, Constants.hoodRetractAngle);
+			hoodPresetAngleCommand = new HoodPresetAngleCommand(shooterHoodSubsystem, Constants.hoodPresetAngle);
+			hoodRetractCommand = new HoodRetractCommand(shooterHoodSubsystem, Constants.hoodRetractAngle);
 		}
 		if(chomperEnabled) {
 			chomperSubsystem = ChomperSubsystem.getInstance();
@@ -242,7 +245,8 @@ public class RobotContainer {
 		}
 		if (shooterHoodEnabled) {
 			//secondary.buttonMenu.whenPressed(hoodCalibrateCommand);
-			secondary.buttonPovUp.whileHeld(hoodPresetAngleCommand);
+			secondary.buttonPovUp.whenPressed(hoodPresetAngleCommand);
+			secondary.buttonPovDown.whenPressed(command)
 			//secondary.buttonPovDown.whileHeld(hoodManualDownCommand);
 		}
 		if (chomperEnabled) {
