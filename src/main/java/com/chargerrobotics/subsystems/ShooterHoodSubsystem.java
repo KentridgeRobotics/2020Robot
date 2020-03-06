@@ -82,6 +82,10 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         return !shooterLimitSwitch.get();
     }
 
+    public double getHoodPosition() {
+        return (double)shooterHood.getSensorCollection().getQuadraturePosition();
+    }
+
     @Override
     public void periodic() {
         super.periodic();

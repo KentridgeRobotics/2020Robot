@@ -10,15 +10,16 @@ package com.chargerrobotics.commands.shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 
-public class HoodPresetAngleCommand extends CommandBase {
+public class HoodRetractCommand extends CommandBase {
   private final ShooterHoodSubsystem shooterHoodSubsystem;
-  private final double hoodSetPoint;
+  private final double hoodRetractSetPoint;
   /**
-   * Creates a new HoodPresetAngleCommand.
+   * Creates a new HoodRetractCommand.
    */
-  public HoodPresetAngleCommand(ShooterHoodSubsystem shooterHoodSubsystem, double hoodSetPoint) {
+  public HoodRetractCommand(ShooterHoodSubsystem shooterHoodSubsystem, double hoodRetractSetPoint) {
+    // Use addRequirements() here to declare subsystem dependencies.
     this.shooterHoodSubsystem = shooterHoodSubsystem;
-    this.hoodSetPoint = hoodSetPoint;
+    this.hoodRetractSetPoint = hoodRetractSetPoint;
   }
 
   // Called when the command is initially scheduled.
@@ -29,7 +30,7 @@ public class HoodPresetAngleCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterHoodSubsystem.setPosition(hoodSetPoint);
+    shooterHoodSubsystem.setPosition(hoodRetractSetPoint);
   }
 
   // Called once the command ends or is interrupted.
