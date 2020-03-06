@@ -22,7 +22,7 @@ import com.chargerrobotics.sensors.ColorSensorSerial;
 import com.chargerrobotics.sensors.GyroscopeSerial;
 import com.chargerrobotics.sensors.ScaleSerial;
 import com.chargerrobotics.commands.autonomous.AutoDriveLinear;
-import com.chargerrobotics.commands.autonomous.VisionTurn;
+import com.chargerrobotics.commands.groups.VisionTurn;
 import com.chargerrobotics.commands.chomper.ChomperCalibrateCommand;
 import com.chargerrobotics.commands.chomper.ChomperIntakeCommand;
 import com.chargerrobotics.commands.chomper.ChomperPIDCommand;

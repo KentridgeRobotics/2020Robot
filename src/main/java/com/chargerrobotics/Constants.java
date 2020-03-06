@@ -81,6 +81,9 @@ public final class Constants {
 	public static final double hoodD = 0.0;
 	public static final double hoodF = 0.0;
 
+	public static final double hoodPresetAngle = 0;
+	public static final double defaultHoodSpeed = 12.0;
+
 
 	// File Names
 	public static final String dataStoragePath = "/home/lvuser";
