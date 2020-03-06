@@ -44,6 +44,7 @@ public class ChomperSubsystem extends SubsystemBase {
 
   private ChomperSubsystem() {
     chomperUpDown = new WPI_TalonSRX(Constants.chomperLift);
+    chomperUpDown.setSafetyEnabled(false);
     chomperFeed = new CANSparkMax(Constants.chomperFeed, MotorType.kBrushless);
   }
 

@@ -37,6 +37,9 @@ public class ClimberSubsystem extends SubsystemBase {
 		climbPush1 = new WPI_TalonFX(Constants.climbExtender);
 		climbPush2 = new WPI_TalonFX(Constants.climbPush2);
 		climbPull = new WPI_TalonSRX(Constants.climbPull);
+		climbPush1.setSafetyEnabled(false);
+		climbPush2.setSafetyEnabled(false);
+		climbPull.setSafetyEnabled(false);
 		climbPush1.setNeutralMode(NeutralMode.Brake);
 		climbPush2.setNeutralMode(NeutralMode.Brake);
 		climbPull.setNeutralMode(NeutralMode.Brake);

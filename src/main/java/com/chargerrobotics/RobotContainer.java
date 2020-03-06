@@ -24,7 +24,6 @@ import com.chargerrobotics.sensors.ColorSensorSerial;
 import com.chargerrobotics.sensors.GyroscopeSerial;
 import com.chargerrobotics.sensors.ScaleSerial;
 import com.chargerrobotics.commands.autonomous.AutoDriveLinear;
-import com.chargerrobotics.commands.groups.VisionTurn;
 import com.chargerrobotics.commands.chomper.ChomperCalibrateCommand;
 import com.chargerrobotics.commands.chomper.ChomperIntakeCommand;
 import com.chargerrobotics.commands.chomper.ChomperPIDCommand;
@@ -43,6 +42,7 @@ import com.chargerrobotics.commands.drive.ManualDriveCommand;
 import com.chargerrobotics.commands.drive.SlowCommand;
 import com.chargerrobotics.commands.feeder.FeederCommand;
 import com.chargerrobotics.commands.groups.VisionDrive;
+import com.chargerrobotics.commands.groups.VisionTurn;
 import com.chargerrobotics.subsystems.ChomperSubsystem;
 import com.chargerrobotics.subsystems.ClimberSubsystem;
 import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
@@ -72,7 +72,7 @@ public class RobotContainer {
 	private static final boolean feedEnabled = true;
 	private static final boolean shooterEnabled = true;
 	private static final boolean shooterHoodEnabled = true;
-	private static final boolean colorSpinnerEnabled = true;
+	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
 
 	// Limelight
@@ -149,6 +149,10 @@ public class RobotContainer {
 			ballSensor.resetCount();
 		});
 		Config.setup();
+		if(feedEnabled) {
+			feedSubsystem = FeedSubsystem.getInstance();
+			feederCommand = new FeederCommand(feedSubsystem);
+		}
 		if (driveEnabled) {
 			driveSubsystem = DriveSubsystem.getInstance();
 			manualDriveCommand = new ManualDriveCommand(driveSubsystem);
@@ -188,10 +192,6 @@ public class RobotContainer {
 			chomperDownCommand = new ChomperDownPIDCommand(false, chomperSubsystem);
 			manualchomperUpCommand = new ChomperUpDownCommand(true);
 			manualchomperDownCommand = new ChomperUpDownCommand(false);
-		}
-		if(feedEnabled) {
-			feedSubsystem = FeedSubsystem.getInstance();
-			feederCommand = new FeederCommand(feedSubsystem);
 		}
 		if (colorSpinnerEnabled) {
 			colorSpinnerSubsystem = ColorSpinnerSubsystem.getInstance();
@@ -252,22 +252,18 @@ public class RobotContainer {
 		if (chomperEnabled) {
 			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);
 			secondary.buttonBumperRight.whenPressed(chomperCalibrateCommand);
-			//secondary.buttonY.whenPressed(chomperUpCommand);
-			//secondary.buttonX.whenPressed(chomperDownCommand);
+			secondary.buttonView.whenPressed(chomperUpCommand);
+			secondary.buttonMenu.whenPressed(chomperDownCommand);
 			//secondary.buttonA.whileHeld(manualchomperDownCommand);
 			//secondary.buttonB.whileHeld(manualchomperUpCommand);
 			secondary.buttonX.whileHeld(manualchomperDownCommand);
 			secondary.buttonY.whileHeld(manualchomperUpCommand);
-		}
-		if (feedEnabled) {
-			secondary.buttonPovRight.whileHeld(feederCommand);
 		}
 		if (colorSpinnerEnabled) {
 			secondary.buttonPovLeft.whenPressed(colorTargetCommand);
 			secondary.buttonPovUp.whenPressed(colorSpinnerDeploy);
 			secondary.buttonPovDown.whenPressed(colorSpinnerRetract);
 		}
-		// secondary.buttonX.whenPressed(chomperCommand);
 	}
 
 	public void setDefaultDriveCommand() {
