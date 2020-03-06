@@ -70,7 +70,7 @@ public class RobotContainer {
 	private static final boolean feedEnabled = true;
 	private static final boolean shooterEnabled = true;
 	private static final boolean shooterHoodEnabled = true;
-	private static final boolean colorSpinnerEnabled = true;
+	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
 
 	// Limelight
@@ -238,7 +238,7 @@ public class RobotContainer {
 			secondary.buttonStickRight.whileHeld(kickerCommand);
 		}
 		if (shooterHoodEnabled) {
-			//secondary.buttonMenu.whenPressed(hoodCalibrateCommand);
+			secondary.buttonPovRight.whenPressed(hoodCalibrateCommand);
 			secondary.buttonPovUp.whileHeld(hoodManualUpCommand);
 			secondary.buttonPovDown.whileHeld(hoodManualDownCommand);
 		}
@@ -252,15 +252,11 @@ public class RobotContainer {
 			secondary.buttonX.whileHeld(manualchomperDownCommand);
 			secondary.buttonY.whileHeld(manualchomperUpCommand);
 		}
-		if (feedEnabled) {
-			secondary.buttonPovRight.whileHeld(feederCommand);
-		}
 		if (colorSpinnerEnabled) {
 			secondary.buttonPovLeft.whenPressed(colorTargetCommand);
 			secondary.buttonPovUp.whenPressed(colorSpinnerDeploy);
 			secondary.buttonPovDown.whenPressed(colorSpinnerRetract);
 		}
-		// secondary.buttonX.whenPressed(chomperCommand);
 	}
 
 	public void setDefaultDriveCommand() {
