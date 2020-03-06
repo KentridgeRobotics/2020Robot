@@ -8,24 +8,26 @@
 package com.chargerrobotics.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 
 public class HoodPresetAngleCommand extends CommandBase {
+  private final ShooterHoodSubsystem shooterHoodSubsystem;
+  private final double hoodSpeed;
+  private final double hoodSetPoint;
   /**
    * Creates a new HoodPresetAngleCommand.
-   * 
-   * Moves the hood to a preset angle specified in constants.  Will be used 
-   * until a mathmatical curve can be identified that can reliably set
-   * the hood angle at any reasonable distance.
-   * 
-   * TODO:  create constant for preset angle.
    */
-  public HoodPresetAngleCommand() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public HoodPresetAngleCommand(ShooterHoodSubsystem shooterHoodSubsystem, double hoodSpeed, double hoodSetPoint) {
+    this.shooterHoodSubsystem = shooterHoodSubsystem;
+    this.hoodSpeed = hoodSpeed;
+    this.hoodSetPoint = hoodSetPoint;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    shooterHoodSubsystem.setHoodSpeed(hoodSpeed);
+    shooterHoodSubsystem.setPosition(hoodSetPoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,6 +38,8 @@ public class HoodPresetAngleCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    shooterHoodSubsystem.setHoodSpeed(hoodSpeed);
+    shooterHoodSubsystem.setPosition(0);
   }
 
   // Returns true when the command should end.
