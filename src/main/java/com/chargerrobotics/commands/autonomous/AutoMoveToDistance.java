@@ -5,32 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.chargerrobotics.commands.shooter;
+package com.chargerrobotics.commands.autonomous;
 
-import com.chargerrobotics.subsystems.FeedSubsystem;
-import com.chargerrobotics.subsystems.KickerSubsystem;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import com.chargerrobotics.subsystems.LimelightSubsystem;
 
-public class KickerCommand extends CommandBase {
-  private final FeedSubsystem feedSubsystem;
+public class AutoMoveToDistance extends CommandBase {
   /**
-   * Creates a new KickerCommand.
+   * Creates a new AutoMoveToDistance.
+   * 
+   * Until we figure out how to fit the hood angle to a curve as f(distance) this 
+   * command will move the robot forward/back to a specified distance using 
+   * the distance method in the LimeLightSubsystem.
+   * 
+   * The distance should be far enough to "exit the infinite verticle volume"
+   * referenced in section 4.2 of the game manual.
+   * 
+   * TODO:  create a constant for the target distance
    */
-  private final KickerSubsystem kickerSubsystem;
-
-  public KickerCommand(KickerSubsystem kickerSubsystem, FeedSubsystem feedSubsystem) {
-    this.kickerSubsystem = kickerSubsystem;
-    this.feedSubsystem = feedSubsystem;
+  public AutoMoveToDistance() {
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    feedSubsystem.setFeedRunning(true);
-    SmartDashboard.putNumber("KickerMotor", 0.1);
-    kickerSubsystem.setRunning(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,8 +40,6 @@ public class KickerCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    kickerSubsystem.setRunning(false);
-    feedSubsystem.setFeedRunning(false);
   }
 
   // Returns true when the command should end.

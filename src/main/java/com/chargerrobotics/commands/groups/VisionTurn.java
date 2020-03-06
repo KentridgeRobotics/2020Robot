@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.chargerrobotics.commands.autonomous;
+package com.chargerrobotics.commands.groups;
 
 import java.util.function.DoubleSupplier;
 

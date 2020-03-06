@@ -5,32 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.chargerrobotics.commands.shooter;
+package com.chargerrobotics.commands.colorspinner;
 
-import com.chargerrobotics.subsystems.FeedSubsystem;
-import com.chargerrobotics.subsystems.KickerSubsystem;
+import com.chargerrobotics.subsystems.ColorSpinnerSubsystem;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class KickerCommand extends CommandBase {
-  private final FeedSubsystem feedSubsystem;
+public class ColorSpinnerDeploy extends CommandBase {
+  private static final Logger logger = LoggerFactory.getLogger(ColorSpinnerDeploy.class);
   /**
-   * Creates a new KickerCommand.
+   * Creates a new ColorSpinnerDeploy.
    */
-  private final KickerSubsystem kickerSubsystem;
+  public ColorSpinnerDeploy() {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(ColorSpinnerSubsystem.getInstance());
 
-  public KickerCommand(KickerSubsystem kickerSubsystem, FeedSubsystem feedSubsystem) {
-    this.kickerSubsystem = kickerSubsystem;
-    this.feedSubsystem = feedSubsystem;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    feedSubsystem.setFeedRunning(true);
-    SmartDashboard.putNumber("KickerMotor", 0.1);
-    kickerSubsystem.setRunning(true);
+    logger.info("initialize");
+    //ColorSpinnerSubsystem.getInstance().setAngle(270.0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,13 +40,12 @@ public class KickerCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    kickerSubsystem.setRunning(false);
-    feedSubsystem.setFeedRunning(false);
+    logger.info("end");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

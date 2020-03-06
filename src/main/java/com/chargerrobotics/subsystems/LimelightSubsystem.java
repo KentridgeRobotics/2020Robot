@@ -51,6 +51,10 @@ public class LimelightSubsystem extends SubsystemBase {
 	}
 
 	public double getX() {
+		/** 
+		 * If there is no target (v == 0) then return 0.0 for angle...
+		 * don't want robot to turn to a target that doesn't exist
+		*/
 		if (v == 0) {
 			return 0.0;
 		} else {
@@ -71,6 +75,15 @@ public class LimelightSubsystem extends SubsystemBase {
 		if (v == 0) {
 			return -1.0;
 		} else {
+			/**
+			 * Note:  Math.tan takes radians...thus the conversion.
+			 * 
+			 * Note:  Constants must be set precisely to the robots configuration
+			 * or the distance calculations will be wrong.  If all of a sudden the distance 
+			 * is off from one match to another, check the angle of the LimeLight camera.  
+			 * If it gets bumped and the angle changes then everything will be off.  That is
+			 * really the main variable that can get bumped.
+			 */
 			return ((Constants.targetHeight - Constants.cameraHeight)/Math.tan(((Constants.cameraAngle + y)*Math.PI)/180));
 		}
 	}

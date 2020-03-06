@@ -19,16 +19,19 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class ChomperPIDCommand extends PIDCommand {
+public class ChomperUpPIDCommand extends PIDCommand {
+  private static final String name = "ChomperUp";
+
   private static final Logger logger = LoggerFactory.getLogger(ChomperPIDCommand.class);
-  private static final double kP = SmartDashboard.getNumber("ChomperP", 0.01);
-  private static final double kI = SmartDashboard.getNumber("ChomperI", 0.0);
-  private static final double kD = SmartDashboard.getNumber("ChomperD", 0.0);
+  private static final double kP = SmartDashboard.getNumber(name+"P",0.0004);
+  private static final double kI = SmartDashboard.getNumber(name+"I", 0.00014);
+  private static final double kD = SmartDashboard.getNumber(name+"D", 0.0);
+
 
   /**
    * Creates a new ChomperPIDCommand.
    */
-  public ChomperPIDCommand(final boolean goingUp, final ChomperSubsystem chomperSubsystem) {
+  public ChomperUpPIDCommand(final boolean goingUp, final ChomperSubsystem chomperSubsystem) {
     super(
         // The controller that the command will use
         new PIDController(kP, kI, kD),
@@ -44,12 +47,12 @@ public class ChomperPIDCommand extends PIDCommand {
         });
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
-    SmartDashboard.putNumber("ChomperP", kP);
-    SmartDashboard.putNumber("ChomperI",kI);
-    SmartDashboard.putNumber("ChomperD", kD);
+    SmartDashboard.putNumber(name+"P", kP);
+    SmartDashboard.putNumber(name+"I",kI);
+    SmartDashboard.putNumber(name+"D", kD);
     SmartDashboard.putBoolean("ChomperPID running", false);
-
-
+  
+    this.getController().setTolerance(50);
   }
 
   // Returns true when the command should end.
@@ -60,7 +63,7 @@ public class ChomperPIDCommand extends PIDCommand {
       return true;
     }
     else {
-      return super.isFinished();
+      return this.getController().atSetpoint();
     }
   }
 
@@ -76,9 +79,9 @@ public class ChomperPIDCommand extends PIDCommand {
   public void initialize() {
     // TODO Auto-generated method stub
     super.initialize();
-    this.getController().setP(SmartDashboard.getNumber("ChomperP", 0));
-    this.getController().setI(SmartDashboard.getNumber("ChomperI", 0));
-    this.getController().setD(SmartDashboard.getNumber("ChomperD", 0));
+    this.getController().setP(SmartDashboard.getNumber(name+"P", 0));
+    this.getController().setI(SmartDashboard.getNumber(name+"I", 0));
+    this.getController().setD(SmartDashboard.getNumber(name+"D", 0));
     logger.info("Started Chomper PID Command");
     SmartDashboard.putBoolean("ChomperPID running", true);
   }
