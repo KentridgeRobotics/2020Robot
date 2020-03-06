@@ -28,6 +28,11 @@ public class ShooterSubsystem extends SubsystemBase {
 	I = .00000001
 	D = 0
 	*/
+
+
+	// P: 0.001
+	// I: 0.0000005
+	// D: 0.012
     private CANPIDController shooterPIDController1;
     private CANPIDController shooterPIDController2;
     public double kIz, kMaxOutput, kMinOutput, maxRPM;
