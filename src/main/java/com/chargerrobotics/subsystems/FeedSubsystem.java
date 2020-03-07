@@ -23,10 +23,11 @@ public class FeedSubsystem extends SubsystemBase {
     public FeedSubsystem() {
         feed = new WPI_TalonSRX(Constants.feedStage);
         feed.setNeutralMode(NeutralMode.Brake);
+        feed.setSafetyEnabled(false);
     }
 
     public void setFeedRunning(boolean isRunning) {
-        feed.set(isRunning ? 0.2 : 0.0);
+        feed.set(isRunning ? -0.2 : 0.0);
     }
 
     @Override

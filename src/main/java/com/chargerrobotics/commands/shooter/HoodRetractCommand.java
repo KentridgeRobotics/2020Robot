@@ -5,21 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.chargerrobotics.commands.chomper;
+package com.chargerrobotics.commands.shooter;
 
-import com.chargerrobotics.subsystems.ChomperSubsystem;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 
-public class chomperUpDownCommand extends CommandBase {
-  private boolean isUp;
+public class HoodRetractCommand extends CommandBase {
+  private final ShooterHoodSubsystem shooterHoodSubsystem;
+  private final double hoodRetractSetPoint;
   /**
-   * Creates a new chomperUpDownCommand.
+   * Creates a new HoodRetractCommand.
    */
-  public chomperUpDownCommand(boolean isUp) {
-    this.isUp = isUp;
+  public HoodRetractCommand(ShooterHoodSubsystem shooterHoodSubsystem, double hoodRetractSetPoint) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.shooterHoodSubsystem = shooterHoodSubsystem;
+    this.hoodRetractSetPoint = hoodRetractSetPoint;
   }
 
   // Called when the command is initially scheduled.
@@ -30,19 +30,12 @@ public class chomperUpDownCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  if (isUp) {
-    ChomperSubsystem.getInstance().setUpDownSpeed(0.5);
-  }
-  else {
-    ChomperSubsystem.getInstance().setUpDownSpeed(-0.5);
-  }
-  SmartDashboard.putNumber("Chomper Lifter Pos", ChomperSubsystem.getInstance().chomperUpDownPosition());
+    shooterHoodSubsystem.setPosition(hoodRetractSetPoint);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    ChomperSubsystem.getInstance().setUpDownSpeed(0.0);
   }
 
   // Returns true when the command should end.

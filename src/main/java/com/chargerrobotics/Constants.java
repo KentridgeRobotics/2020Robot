@@ -46,28 +46,30 @@ public final class Constants {
 	public static final int climbPull = 53;
 
 	//PWM IDs
-	public static final int colorSpinnerLifter = 0;
+	public static final int colorSpinnerLifter = 9;
 	public static final int leds = 1;
 
 	//Digital In/Out Ports
-	public static final int chomperLimitSwitch = 0;
+	public static final int chomperLimitSwitch = 9;
 	public static final int hoodLimitSwitch = 1;
 
 	//Chomper Constants
-	public static final int chomperDistToDown = 479;
-	public static final int chomperDistBottomToUp = 1882;
+	public static final int chomperDistToDown = 550;
+	public static final int chomperDistBottomToUp = 1999;
 
 	// Shooter Constants
-	public static final double shooterTargetRPM = 3000.0;
+	public static final double shooterTargetRPM = 2500.0;
 	public static final double shooterP = 0.001;
-	public static final double shooterI = 0.0000004;
-	public static final double shooterD = 0.2;
+	public static final double shooterI = 0.00000047;
+	public static final double shooterD = 0.012;
 	public static final int shooterCurrentLimit = 40;
 	public static final double shooterFeedForward = 0.0;
 	public static final double shooterStaticGain = 0.0;
 	public static final double shooterVelocityGain = 0.0;
 	public static final double shooterMinOutput = -1.0;
 	public static final double shooterMaxOutput = 1.0;
+	
+	public static final double desiredDistance = 120.0;
 
 	// Shooter Hood Constants
 	public static final int hoodPIDLoopId = 0;
@@ -78,6 +80,10 @@ public final class Constants {
 	public static final double hoodI = 0.006;
 	public static final double hoodD = 0.0;
 	public static final double hoodF = 0.0;
+
+	public static final double hoodPresetAngle = 500;
+	public static final double hoodRetractAngle = 1800;
+	public static final double defaultHoodSpeed = 0.30;
 
 
 	// File Names
