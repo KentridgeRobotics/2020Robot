@@ -7,6 +7,7 @@
 
 package com.chargerrobotics.commands.shooter;
 
+import com.chargerrobotics.Constants;
 import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 import com.chargerrobotics.utils.NetworkMapping;
 
@@ -20,21 +21,21 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 public class HoodPIDCommand extends PIDCommand {
   private ShooterHoodSubsystem shooterHoodSubsystem;
   private static PIDController pid;
-  private static int setPoint;
+  private static double setPoint;
 
-  public static final NetworkMapping<Double> kP = new NetworkMapping<Double>("hood_p", 0.0, val -> {
+  public static final NetworkMapping<Double> kP = new NetworkMapping<Double>("hood_p", Constants.hoodP, val -> { //so far:0.00065
     setPIDP(val);
   });
 
-  public static final NetworkMapping<Double> kI = new NetworkMapping<Double>("hood_i", 0.0, val -> {
-    setPIDP(val);
+  public static final NetworkMapping<Double> kI = new NetworkMapping<Double>("hood_i", Constants.hoodI, val -> { //so far: 0.00038
+    setPIDI(val);
   });
 
-  public static final NetworkMapping<Double> kD = new NetworkMapping<Double>("hood_d", 0.0, val -> {
-    setPIDP(val);
+  public static final NetworkMapping<Double> kD = new NetworkMapping<Double>("hood_d", Constants.hoodD, val -> {
+    setPIDD(val);
   });
 
-  public static final NetworkMapping<Integer> hood_setPoint = new NetworkMapping<Integer>("hood_SetPointDegrees", 50, val -> {
+  public static final NetworkMapping<Double> hood_setPoint = new NetworkMapping<Double>("hood_SetPointDegrees", 28.0, val -> {
     setPoint = val;
   });
 
@@ -48,7 +49,7 @@ public class HoodPIDCommand extends PIDCommand {
         // This should return the measurement
         () -> shooterHoodSubsystem.getHoodPosition(),
         // This should return the setpoint (can also be a constant)
-        () -> shooterHoodSubsystem.findHoodTargetTicks(setPoint),
+        () -> shooterHoodSubsystem.findHoodTargetTicks(hood_setPoint.getValue()),
         // This uses the output
         output -> {
           shooterHoodSubsystem.setHoodSpeed(-output);
@@ -60,8 +61,8 @@ public class HoodPIDCommand extends PIDCommand {
     setPIDP(kP.getValue());
     setPIDI(kI.getValue());
     setPIDD(kD.getValue());
-    getController().setSetpoint(shooterHoodSubsystem.findHoodTargetTicks(setPoint));
-    getController().setTolerance(0);
+    getController().setSetpoint(shooterHoodSubsystem.findHoodTargetTicks(hood_setPoint.getValue()));
+    getController().setTolerance(50);
   }
 
   private static PIDController setPID(PIDController pid) {
@@ -90,7 +91,11 @@ public class HoodPIDCommand extends PIDCommand {
   public void execute() {
     super.execute();
     SmartDashboard.putNumber("hoodError", getController().getPositionError());
-    SmartDashboard.putNumber("hoodSetpointTicks", shooterHoodSubsystem.findHoodTargetTicks(setPoint));
+    //SmartDashboard.putNumber("hoodSetpointTicks", setPoint);
+    SmartDashboard.putNumber("hoodControllerSetpointTicks", getController().getSetpoint());
+    SmartDashboard.putNumber("ControllerP", getController().getP());
+    SmartDashboard.putNumber("ControllerI", getController().getI());
+    SmartDashboard.putNumber("ControllerD", getController().getD());
   }
 
   // Returns true when the command should end.

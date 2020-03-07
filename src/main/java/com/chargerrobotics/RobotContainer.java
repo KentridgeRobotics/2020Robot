@@ -247,10 +247,11 @@ public class RobotContainer {
 			secondary.buttonStickRight.whileHeld(kickerCommand);
 		}
 		if (shooterHoodEnabled) {
-			//secondary.buttonMenu.whenPressed(hoodCalibrateCommand);
-			secondary.buttonPovUp.whenPressed(hoodPresetAngleCommand);
-			secondary.buttonPovDown.whenPressed(command)
-			//secondary.buttonPovDown.whileHeld(hoodManualDownCommand);
+			secondary.buttonMenu.whenPressed(hoodCalibrateCommand);
+			secondary.buttonView.whenPressed(hoodPIDCommand);
+			//secondary.buttonPovUp.whenPressed(hoodPresetAngleCommand);
+			secondary.buttonPovUp.whileHeld(hoodManualUpCommand);
+			secondary.buttonPovDown.whileHeld(hoodManualDownCommand);
 		}
 		if (chomperEnabled) {
 			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);

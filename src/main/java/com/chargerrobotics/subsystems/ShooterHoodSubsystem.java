@@ -44,18 +44,14 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         shooterHood.set(speed);
     }
 
-    public int findHoodTargetTicks(double targetHoodAngDegrees) {
+    public double findHoodTargetTicks(double targetHoodAngDegrees) {
         double outPut = -34.217*targetHoodAngDegrees + 2532.087;
-        return (int) outPut;
+        return outPut;
     }
 
     public boolean isLimitSwitchTriggered() {
     	return shooterHood.getSensorCollection().isFwdLimitSwitchClosed();
         //return !shooterLimitSwitch.get();
-    }
-
-    public int getHoodPosition() {
-        return shooterHood.getSensorCollection().getQuadraturePosition();
     }
 
     public double getHoodPosition() {

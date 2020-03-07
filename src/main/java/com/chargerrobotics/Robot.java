@@ -9,6 +9,7 @@ package com.chargerrobotics;
 
 import java.util.Arrays;
 
+import com.chargerrobotics.subsystems.LimelightSubsystem;
 import com.chargerrobotics.subsystems.LEDSubsystem.LEDMode;
 import com.chargerrobotics.utils.ArduinoSerialReceiver;
 
@@ -71,6 +72,7 @@ public class Robot extends TimedRobot {
 		robotContainer.setTeleop();
 		ArduinoSerialReceiver.start();
 		robotContainer.leds.setMode(LEDMode.TELEOP);
+		LimelightSubsystem.getInstance().setLEDStatus(false);
 	}
 
 	/**
@@ -105,6 +107,7 @@ public class Robot extends TimedRobot {
 		robotContainer.setAutonomous();
 		ArduinoSerialReceiver.start();
 		robotContainer.leds.setMode(LEDMode.AUTONOMOUS);
+		LimelightSubsystem.getInstance().setLEDStatus(false);
 	}
 
 	/**
