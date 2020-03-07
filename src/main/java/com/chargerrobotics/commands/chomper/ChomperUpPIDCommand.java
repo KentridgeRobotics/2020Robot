@@ -52,7 +52,7 @@ public class ChomperUpPIDCommand extends PIDCommand {
     SmartDashboard.putNumber(name+"D", kD);
     SmartDashboard.putBoolean("ChomperPID running", false);
   
-    this.getController().setTolerance(50);
+    this.getController().setTolerance(100);
   }
 
   // Returns true when the command should end.

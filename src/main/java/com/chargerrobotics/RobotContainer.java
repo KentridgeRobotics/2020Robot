@@ -31,6 +31,7 @@ import com.chargerrobotics.commands.chomper.ChomperPIDCommand;
 import com.chargerrobotics.commands.chomper.ChomperUpDownCommand;
 import com.chargerrobotics.commands.chomper.ChomperDownPIDCommand;
 import com.chargerrobotics.commands.chomper.ChomperUpPIDCommand;
+import com.chargerrobotics.commands.chomper.ChomperVomitCommand;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -67,11 +68,11 @@ import com.chargerrobotics.utils.XboxController;
  */
 public class RobotContainer {
 
-	private static final boolean limelightEnabled = false;
-	private static final boolean driveEnabled = false;
-	private static final boolean chomperEnabled = false;
-	private static final boolean feedEnabled = false;
-	private static final boolean shooterEnabled = false;
+	private static final boolean limelightEnabled = true;
+	private static final boolean driveEnabled = true;
+	private static final boolean chomperEnabled = true;
+	private static final boolean feedEnabled = true;
+	private static final boolean shooterEnabled = true;
 	private static final boolean shooterHoodEnabled = true;
 	private static final boolean colorSpinnerEnabled = false;
 	private static final boolean climberEnabled = false;
@@ -109,6 +110,7 @@ public class RobotContainer {
 	private ChomperSubsystem chomperSubsystem;
 	private ChomperCalibrateCommand chomperCalibrateCommand;
 	private ChomperIntakeCommand chomperIntakeCommand;
+	private ChomperVomitCommand chomperVomitCommand;
 	private ChomperUpPIDCommand chomperUpCommand;
 	private ChomperDownPIDCommand chomperDownCommand;
 	private ChomperUpDownCommand manualchomperUpCommand;
@@ -191,6 +193,7 @@ public class RobotContainer {
 			chomperSubsystem = ChomperSubsystem.getInstance();
 			chomperCalibrateCommand = new ChomperCalibrateCommand(chomperSubsystem);
 			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem, feedSubsystem);
+			chomperVomitCommand = new ChomperVomitCommand(chomperSubsystem);
 			chomperUpCommand = new ChomperUpPIDCommand(true, chomperSubsystem);
 			chomperDownCommand = new ChomperDownPIDCommand(false, chomperSubsystem);
 			manualchomperUpCommand = new ChomperUpDownCommand(true);
@@ -240,11 +243,18 @@ public class RobotContainer {
 			primary.buttonPovUp.whileHeld(climberUpCommand);
 			primary.buttonPovDown.whileHeld(climberDownCommand);
 		}
+		if (chomperEnabled) {
+			primary.buttonPovUp.whenPressed(chomperUpCommand);
+			primary.buttonPovDown.whenPressed(chomperDownCommand);
+			primary.buttonMenu.whenPressed(chomperCalibrateCommand);
+			primary.buttonPovRight.whileHeld(manualchomperUpCommand);
+			
+		}
 		// secondary
 		if (shooterEnabled) {
 			secondary.buttonA.whenPressed(shooterOnCommand);
 			secondary.buttonB.whenPressed(shooterOffCommand);
-			secondary.buttonStickRight.whileHeld(kickerCommand);
+			secondary.buttonStickLeft.whileHeld(kickerCommand);
 		}
 		if (shooterHoodEnabled) {
 			secondary.buttonMenu.whenPressed(hoodCalibrateCommand);
@@ -255,13 +265,14 @@ public class RobotContainer {
 		}
 		if (chomperEnabled) {
 			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);
-			secondary.buttonBumperRight.whenPressed(chomperCalibrateCommand);
-			secondary.buttonView.whenPressed(chomperUpCommand);
-			secondary.buttonMenu.whenPressed(chomperDownCommand);
+			secondary.buttonStickRight.whileHeld(chomperVomitCommand);
+			//secondary.buttonBumperRight.whenPressed(chomperCalibrateCommand);
+			//secondary.buttonView.whenPressed(chomperUpCommand);
+			//secondary.buttonMenu.whenPressed(chomperDownCommand);
 			//secondary.buttonA.whileHeld(manualchomperDownCommand);
 			//secondary.buttonB.whileHeld(manualchomperUpCommand);
-			secondary.buttonX.whileHeld(manualchomperDownCommand);
-			secondary.buttonY.whileHeld(manualchomperUpCommand);
+			//secondary.buttonX.whileHeld(manualchomperDownCommand);
+			//secondary.buttonY.whileHeld(manualchomperUpCommand);
 		}
 		if (colorSpinnerEnabled) {
 			secondary.buttonPovLeft.whenPressed(colorTargetCommand);

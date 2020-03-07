@@ -97,8 +97,13 @@ public final class Constants {
 	//public static final double cameraAngle = 30.0; // degrees
 
 	// 2020 bot config:
-	public static final double targetHeight = 94.0; // inches
-	public static final double cameraHeight = 24.0; // inches
-	public static final double cameraAngle = 33.0; // degrees
+	public static final double targetHeight = 91.5; // inches
+	public static final double cameraHeight = 23.75; // inches
+	public static final double cameraAngle = 29.0; // degrees
 	public static final String comPortsFileName = "com.yml";
+
+	/*
+	Tests at Tahoma
+	Front bumper on the line: 3000 RPM, 55 degrees hood, distance 131 inches
+	*/
 }

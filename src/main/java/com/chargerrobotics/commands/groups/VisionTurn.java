@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -108,6 +109,7 @@ public class VisionTurn extends PIDCommand {
     long now = System.currentTimeMillis();
     if (now - startTime > delay) {
       super.execute();
+      SmartDashboard.putNumber("VisionError", getController().getPositionError());
     }
   }
 }
