@@ -59,9 +59,9 @@ public final class Constants {
 
 	// Shooter Constants
 	public static final double shooterTargetRPM = 2500.0;
-	public static final double shooterP = 0.001;
+	public static final double shooterP = 0.0005;
 	public static final double shooterI = 0.00000047;
-	public static final double shooterD = 0.012;
+	public static final double shooterD = 0.014;
 	public static final int shooterCurrentLimit = 40;
 	public static final double shooterFeedForward = 0.0;
 	public static final double shooterStaticGain = 0.0;
