@@ -137,7 +137,7 @@ public class RobotContainer {
 	public ScaleSerial scaleSensor = new ScaleSerial();
 	public GyroscopeSerial gyroscope = new GyroscopeSerial();
 	public BallSensorSerial ballSensor = new BallSensorSerial();
-	
+
 	// LEDs
 	public LEDSubsystem leds = new LEDSubsystem();
 
