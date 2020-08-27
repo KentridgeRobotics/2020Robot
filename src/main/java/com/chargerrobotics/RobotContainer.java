@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.chargerrobotics.commands.shooter.HoodCalibrateCommand;
 import com.chargerrobotics.commands.shooter.HoodManualCommand;
+import com.chargerrobotics.commands.shooter.HoodPIDCommand;
 import com.chargerrobotics.commands.shooter.HoodPresetAngleCommand;
 import com.chargerrobotics.commands.shooter.HoodRetractCommand;
 import com.chargerrobotics.commands.shooter.KickerCommand;
@@ -30,6 +31,7 @@ import com.chargerrobotics.commands.chomper.ChomperPIDCommand;
 import com.chargerrobotics.commands.chomper.ChomperUpDownCommand;
 import com.chargerrobotics.commands.chomper.ChomperDownPIDCommand;
 import com.chargerrobotics.commands.chomper.ChomperUpPIDCommand;
+import com.chargerrobotics.commands.chomper.ChomperVomitCommand;
 import com.chargerrobotics.commands.climber.ClimberDownCommand;
 import com.chargerrobotics.commands.climber.ClimberUpCommand;
 import com.chargerrobotics.commands.colorspinner.ColorSpinnerCommand;
@@ -99,6 +101,7 @@ public class RobotContainer {
 	private HoodManualCommand hoodManualUpCommand;
 	private HoodManualCommand hoodManualDownCommand;
 	private HoodCalibrateCommand hoodCalibrateCommand;
+	private HoodPIDCommand hoodPIDCommand;
 	private HoodPresetAngleCommand hoodPresetAngleCommand;
 	private HoodRetractCommand hoodRetractCommand;
 	private KickerCommand kickerCommand;
@@ -107,6 +110,7 @@ public class RobotContainer {
 	private ChomperSubsystem chomperSubsystem;
 	private ChomperCalibrateCommand chomperCalibrateCommand;
 	private ChomperIntakeCommand chomperIntakeCommand;
+	private ChomperVomitCommand chomperVomitCommand;
 	private ChomperUpPIDCommand chomperUpCommand;
 	private ChomperDownPIDCommand chomperDownCommand;
 	private ChomperUpDownCommand manualchomperUpCommand;
@@ -181,6 +185,7 @@ public class RobotContainer {
 			hoodManualUpCommand = new HoodManualCommand(shooterHoodSubsystem, true);
 			hoodManualDownCommand = new HoodManualCommand(shooterHoodSubsystem, false);
 			hoodCalibrateCommand = new HoodCalibrateCommand(shooterHoodSubsystem);
+			hoodPIDCommand = new HoodPIDCommand(shooterHoodSubsystem);
 			hoodPresetAngleCommand = new HoodPresetAngleCommand(shooterHoodSubsystem, Constants.hoodPresetAngle);
 			hoodRetractCommand = new HoodRetractCommand(shooterHoodSubsystem, Constants.hoodRetractAngle);
 		}
@@ -188,6 +193,7 @@ public class RobotContainer {
 			chomperSubsystem = ChomperSubsystem.getInstance();
 			chomperCalibrateCommand = new ChomperCalibrateCommand(chomperSubsystem);
 			chomperIntakeCommand = new ChomperIntakeCommand(chomperSubsystem, feedSubsystem);
+			chomperVomitCommand = new ChomperVomitCommand(chomperSubsystem);
 			chomperUpCommand = new ChomperUpPIDCommand(true, chomperSubsystem);
 			chomperDownCommand = new ChomperDownPIDCommand(false, chomperSubsystem);
 			manualchomperUpCommand = new ChomperUpDownCommand(true);
@@ -237,27 +243,36 @@ public class RobotContainer {
 			primary.buttonPovUp.whileHeld(climberUpCommand);
 			primary.buttonPovDown.whileHeld(climberDownCommand);
 		}
+		if (chomperEnabled) {
+			primary.buttonPovUp.whenPressed(chomperUpCommand);
+			primary.buttonPovDown.whenPressed(chomperDownCommand);
+			primary.buttonMenu.whenPressed(chomperCalibrateCommand);
+			primary.buttonPovRight.whileHeld(manualchomperUpCommand);
+			
+		}
 		// secondary
 		if (shooterEnabled) {
 			secondary.buttonA.whenPressed(shooterOnCommand);
 			secondary.buttonB.whenPressed(shooterOffCommand);
-			secondary.buttonStickRight.whileHeld(kickerCommand);
+			secondary.buttonStickLeft.whileHeld(kickerCommand);
 		}
 		if (shooterHoodEnabled) {
-			//secondary.buttonMenu.whenPressed(hoodCalibrateCommand);
-			secondary.buttonPovUp.whenPressed(hoodPresetAngleCommand);
-			secondary.buttonPovDown.whenPressed(command)
-			//secondary.buttonPovDown.whileHeld(hoodManualDownCommand);
+			secondary.buttonMenu.whenPressed(hoodCalibrateCommand);
+			secondary.buttonView.whenPressed(hoodPIDCommand);
+			//secondary.buttonPovUp.whenPressed(hoodPresetAngleCommand);
+			secondary.buttonPovUp.whileHeld(hoodManualUpCommand);
+			secondary.buttonPovDown.whileHeld(hoodManualDownCommand);
 		}
 		if (chomperEnabled) {
 			secondary.buttonBumperLeft.whileHeld(chomperIntakeCommand);
-			secondary.buttonBumperRight.whenPressed(chomperCalibrateCommand);
-			secondary.buttonView.whenPressed(chomperUpCommand);
-			secondary.buttonMenu.whenPressed(chomperDownCommand);
+			secondary.buttonStickRight.whileHeld(chomperVomitCommand);
+			//secondary.buttonBumperRight.whenPressed(chomperCalibrateCommand);
+			//secondary.buttonView.whenPressed(chomperUpCommand);
+			//secondary.buttonMenu.whenPressed(chomperDownCommand);
 			//secondary.buttonA.whileHeld(manualchomperDownCommand);
 			//secondary.buttonB.whileHeld(manualchomperUpCommand);
-			secondary.buttonX.whileHeld(manualchomperDownCommand);
-			secondary.buttonY.whileHeld(manualchomperUpCommand);
+			//secondary.buttonX.whileHeld(manualchomperDownCommand);
+			//secondary.buttonY.whileHeld(manualchomperUpCommand);
 		}
 		if (colorSpinnerEnabled) {
 			secondary.buttonPovLeft.whenPressed(colorTargetCommand);

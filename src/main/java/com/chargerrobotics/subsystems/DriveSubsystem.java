@@ -54,6 +54,11 @@ public class DriveSubsystem extends SubsystemBase {
 		rightRear.setSmartCurrentLimit(40);
 		rightFront.setSmartCurrentLimit(40);
 
+		leftRear.setOpenLoopRampRate(0.4);
+		leftFront.setOpenLoopRampRate(0.4);
+		rightRear.setOpenLoopRampRate(0.4);
+		rightFront.setOpenLoopRampRate(0.4);
+
 		leftDriveGroup = new SpeedControllerGroup(leftFront, leftRear);
 		leftDriveGroup.setInverted(true);
 		rightDriveGroup = new SpeedControllerGroup(rightFront, rightRear);

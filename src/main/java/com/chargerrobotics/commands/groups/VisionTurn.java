@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -29,13 +30,13 @@ public class VisionTurn extends PIDCommand {
   private static PIDController pid;
   private long startTime;
   private static final long delay = 250; // wait 250 ms for limelight to lock on
-  public final NetworkMapping<Double> kP = new NetworkMapping<Double>("vision_p", 0.004, val -> {
+  public final NetworkMapping<Double> kP = new NetworkMapping<Double>("vision_p", 0.015, val -> {
     setPIDP(val);
   });
   public final NetworkMapping<Double> kI = new NetworkMapping<Double>("vision_i", 0.0, val -> {
     setPIDI(val);
   });
-  public final NetworkMapping<Double> kD = new NetworkMapping<Double>("vision_d", 0.0, val -> {
+  public final NetworkMapping<Double> kD = new NetworkMapping<Double>("vision_d", 0.0001, val -> {
     setPIDD(val);
   });
 
@@ -46,7 +47,7 @@ public class VisionTurn extends PIDCommand {
 
     super(
         // The controller that the command will use
-        setPID(new PIDController(0.004, 0.0, 0.0)),
+        setPID(new PIDController(0.015, 0.0, 0.0001)),
         // This should return the measurement
         () -> limelightSubsystem.getX(),
         // This should return the setpoint (can also be a constant)
@@ -108,6 +109,7 @@ public class VisionTurn extends PIDCommand {
     long now = System.currentTimeMillis();
     if (now - startTime > delay) {
       super.execute();
+      SmartDashboard.putNumber("VisionError", getController().getPositionError());
     }
   }
 }

@@ -30,7 +30,7 @@ public class HoodRetractCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterHoodSubsystem.setPosition(hoodRetractSetPoint);
+    //shooterHoodSubsystem.setPosition(hoodRetractSetPoint);
   }
 
   // Called once the command ends or is interrupted.

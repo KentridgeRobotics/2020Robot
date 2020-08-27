@@ -5,36 +5,39 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.chargerrobotics.commands.shooter;
+package com.chargerrobotics.commands.chomper;
 
+import com.chargerrobotics.subsystems.ChomperSubsystem;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import com.chargerrobotics.subsystems.ShooterHoodSubsystem;
 
-public class HoodPresetAngleCommand extends CommandBase {
-  private final ShooterHoodSubsystem shooterHoodSubsystem;
-  private final double hoodSetPoint;
+public class ChomperVomitCommand extends CommandBase {
+  private ChomperSubsystem chomperSubsystem;
   /**
-   * Creates a new HoodPresetAngleCommand.
+   * Creates a new ChomperVomitCommand.
    */
-  public HoodPresetAngleCommand(ShooterHoodSubsystem shooterHoodSubsystem, double hoodSetPoint) {
-    this.shooterHoodSubsystem = shooterHoodSubsystem;
-    this.hoodSetPoint = hoodSetPoint;
+  public ChomperVomitCommand(ChomperSubsystem chomperSubsystem) {
+    this.chomperSubsystem = chomperSubsystem;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    chomperSubsystem.setChomperReverseRunning(true);
+    SmartDashboard.putString("Chomper Intake", "Vomiting");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //shooterHoodSubsystem.setPosition(hoodSetPoint);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    chomperSubsystem.setChomperReverseRunning(false);
+    SmartDashboard.putString("Chomper Intake", "Stopped");
   }
 
   // Returns true when the command should end.

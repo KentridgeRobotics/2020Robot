@@ -24,6 +24,7 @@ public class ChomperSubsystem extends SubsystemBase {
   private boolean isUpDownRunning;
   private boolean isCalibrated;
   private boolean isFeedRunning;
+  private boolean isReverseFeedRunning;
   private WPI_TalonSRX chomperUpDown;
   private CANSparkMax chomperFeed;
 
@@ -74,6 +75,16 @@ public class ChomperSubsystem extends SubsystemBase {
     isFeedRunning = isRunning;
     if(isFeedRunning) {
       setFeedSpeed(1);
+    }
+    else {
+      setFeedSpeed(0.0);
+    }
+  }
+
+  public void setChomperReverseRunning(boolean isRunning){
+    isReverseFeedRunning = isRunning;
+    if(isReverseFeedRunning) {
+      setFeedSpeed(-1);
     }
     else {
       setFeedSpeed(0.0);

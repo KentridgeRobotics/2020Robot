@@ -59,9 +59,9 @@ public final class Constants {
 
 	// Shooter Constants
 	public static final double shooterTargetRPM = 2500.0;
-	public static final double shooterP = 0.001;
+	public static final double shooterP = 0.0005;
 	public static final double shooterI = 0.00000047;
-	public static final double shooterD = 0.012;
+	public static final double shooterD = 0.014;
 	public static final int shooterCurrentLimit = 40;
 	public static final double shooterFeedForward = 0.0;
 	public static final double shooterStaticGain = 0.0;
@@ -76,8 +76,8 @@ public final class Constants {
 	public static final int hoodGainSlot = 0;
 	public static final int hoodTimeOutMs = 30;
 	public static final int ticksPerRev = 0;
-	public static final double hoodP = 0.5;
-	public static final double hoodI = 0.006;
+	public static final double hoodP = 0.0007;
+	public static final double hoodI = 0.00038;
 	public static final double hoodD = 0.0;
 	public static final double hoodF = 0.0;
 
@@ -97,8 +97,13 @@ public final class Constants {
 	//public static final double cameraAngle = 30.0; // degrees
 
 	// 2020 bot config:
-	public static final double targetHeight = 94.0; // inches
-	public static final double cameraHeight = 24.0; // inches
-	public static final double cameraAngle = 33.0; // degrees
+	public static final double targetHeight = 91.5; // inches
+	public static final double cameraHeight = 23.75; // inches
+	public static final double cameraAngle = 29.0; // degrees
 	public static final String comPortsFileName = "com.yml";
+
+	/*
+	Tests at Tahoma
+	Front bumper on the line: 3000 RPM, 55 degrees hood, distance 131 inches
+	*/
 }

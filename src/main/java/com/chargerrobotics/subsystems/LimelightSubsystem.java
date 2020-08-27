@@ -84,19 +84,19 @@ public class LimelightSubsystem extends SubsystemBase {
 			 * If it gets bumped and the angle changes then everything will be off.  That is
 			 * really the main variable that can get bumped.
 			 */
-			return ((Constants.targetHeight - Constants.cameraHeight)/Math.tan(((Constants.cameraAngle + y)*Math.PI)/180));
+			return ((Constants.targetHeight - Constants.cameraHeight)/Math.tan(Math.toRadians(Constants.cameraAngle + y)));
 		}
 	}
 
 	@Override
 	public void periodic() {
 		super.periodic();
-		if (isRunning) {
-			x = tx.getDouble(0.0);
-			y = ty.getDouble(0.0);
-			v = tv.getDouble(0.0);
-			SmartDashboard.putNumber("LimelightX", x);
-			SmartDashboard.putNumber("LimelightY", y);
-		}
+		x = tx.getDouble(0.0);
+		y = ty.getDouble(0.0);
+		v = tv.getDouble(0.0);
+		SmartDashboard.putNumber("LimelightX", x);
+		SmartDashboard.putNumber("LimelightY", y);
+		SmartDashboard.putNumber("Limelightdistance", distance());
+		
 	}
 }
